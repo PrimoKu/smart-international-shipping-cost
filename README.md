@@ -85,14 +85,23 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+Team BlueJay is developing an international shipping app intended to reduce individual overseas shipping costs by bundling them in a group!
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
+This idea was inspired by Shichang, and her experiences with ordering international products. She found that by grouping various orders together in one package for overseas shipping, this would reduce the price for all involved, and the initial solution was to use an Excel spreadsheet to track each person's order cost, weight, and payment status. 
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
+This app is an extension of that idea, where users can do the same thing, but through a dynamic interface that allows users to (subject to change):
+* register to join and manage groups
+* organize orders more efficiently, and send the information to all members
+* calculate shipping costs automatically using our algorithm
+* receive payment and delivery deadlines and notifications
+* And more!
+
+Again, this is just a basic sketch for Iteration 1:
+We're also hoping to add features such as:
+* a chatbot for automated customer service
+* admin management of shipping routes
+* coupons to encourage good deals
+* account/user moderation for a better comunity
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -100,16 +109,9 @@ Of course, no one template will serve all projects since your needs may be diffe
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+Here's what we've used so far for Iteration 1:
 
-* [![Next][Next.js]][Next-url]
 * [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -118,34 +120,27 @@ This section should list any major frameworks/libraries used to bootstrap your p
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+Here's how to get started (subject to change):
+1) Clone the GitHub repository (git clone **given link**)
+2) cd to the local directory
+3) Install all prerequisites below under 'Prerequisites'
+4) Type in 'yarn dev'
+5) Access the localhost link provided in the terminal
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+* npm 
   ```sh
   npm install npm@latest -g
+  ```
+* all other packages listed in package.json 
+  ```sh
+  npm install / yarn (SUBJECT TO CHANGE)
   ```
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+If you've followed the steps above, it should be installed and ready to use!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -154,9 +149,12 @@ _Below is an example of how you can instruct your audience on installing and set
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+Iteration 1: 
+1) The first page you will encounter is the login. For now, feel free to enter anything or just enter the app, as there is currently no user authentication.
+2) The second page is the Order Management tab. From here, you can add/remove users from your order, and view your order's status.
+3) Once you decide to check out, the app will automatically calculate your order cost, and if your entire group is ready, then you may place your order.
+4) The app will confirm your order with the date and order price. 
+5) That's all for now! 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -165,13 +163,11 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+- [ ] Iteration 1
+- [ ] Basic UI elements to achieve user story
+- [ ] Navigation between UI elements
+- [ ] MongoDB backend integration
+- [ ] UML diagram and SRS documentation 
 
 See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
 
@@ -199,7 +195,7 @@ Don't forget to give the project a star! Thanks again!
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Team BlueJay via Slack
 
 Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
 
@@ -210,16 +206,9 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
+Shichang, for inspiring the project.
 
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
+Professor Darvish and his TA's, for helping us along the way.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
