@@ -72,12 +72,21 @@ We're also hoping to add features such as:
 ### Built With
 
 Here's what we've used so far for Iteration 1:
-
+* [![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)](https://expressjs.com/)
+* [![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/en)
 * [![React][React.js]][React-url]
+* [![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+* [![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)](https://jwt.io/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
+### Main Technologies Used:
+- Express.js: \
+A minimalist web framework for Node.js, allowing us to set up middleware to respond to HTTP requests, define routing, and interact with our database seamlessly.
+- React: \
+An efficient and flexible JavaScript library from Facebook, designed for building dynamic and responsive user interfaces, with optimized rendering through a virtual DOM.
+- MongoDB: \
+A NoSQL database that stores data in JSON-like format. It's highly scalable and flexible, ensuring reliable storage and retrieval of our application data.
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -89,28 +98,42 @@ Here's how to get started (subject to change):
 4) Type in 'yarn dev'
 5) Access the localhost link provided in the terminal
 
-### Prerequisites
+### Installing NPM:
+NPM (Node Package Manager) is essential for managing dependencies in this project. Here's how to get it:
 
-* npm 
-  ```sh
-  npm install npm@latest -g
-  ```
-* all other packages listed in package.json 
-  ```sh
-  npm install
-  ```
-  or
-  ```sh
-  yarn
-  ```
+#### - Windows & Mac:
+1. Install Node.js: \
+Download the installer from **[Node.js official website](https://nodejs.org/en)**. This will install both Node.js and npm. Follow the prompts in the installer to complete the installation.
 
-### Installation
+2. Verify Installation:
+    - Open your terminal or command prompt.
+    - Enter `node -v` and `npm -v`.
+    - If both commands return a version number, you're good to go!
 
-If you've followed the steps above, it should be installed and ready to use!
+#### - Linux:
+1. Using Package Manager:
+    - For Debian and Ubuntu based destributions, use:
+        ```bash
+        sudo apt update
+        sudo apt install nodejs npm
+        ```
+    - For Red Hat based distributions, use:
+        ```bash
+        sudo yum install nodejs npm
+        ```
+2. Verify Installation:
+    - Open your terminal.
+    - Enter `node -v` and `npm -v`.
+    - If both commands return a version number, the installation was successful!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
+### Setup:
+#### 1. Installing Dependencies:
+Once you've cloned the repository and have `npm` installed, navigate into the project's directory and install the dependencies.
+```bash
+npm install
+```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
