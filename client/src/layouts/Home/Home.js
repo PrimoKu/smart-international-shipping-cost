@@ -1,10 +1,27 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardTitle, Button } from 'reactstrap';
-
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import logo from 'assets/img/react-logo.png';
 
+
+
 function Home() {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/orders/', { withCredentials: true });
+        console.log(response);
+        setData(response.data);
+
+      } catch (error) {
+        console.error("An error occurred while fetching data", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className='wrapper'>
       <div className='main-panel'>
@@ -38,6 +55,16 @@ function Home() {
               </Link>
             </CardBody>
           </Card>
+          <div className="App">
+            <h1>All Order Information</h1>
+            <ul>
+              {data.map(item => (
+                <li key={item._id}> Name: {item.name}, Weight: {item.weight}, Price: {item.price} </li>
+              
+              ))}
+            </ul>
+          </div>
+
         </div>
       </div>
     </div>
