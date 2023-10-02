@@ -1,4 +1,5 @@
 import Dashboard from 'views/Dashboard.js';
+import Checkout from "views/Checkout.js";
 import Icons from 'views/Icons.js';
 import Map from 'views/Map.js';
 import Notifications from 'views/Notifications.js';
@@ -51,9 +52,16 @@ var routes = [
     layout: '/admin',
   },
   {
-    path: '/tables',
-    name: 'Table List',
-    icon: 'tim-icons icon-puzzle-10',
+    path: "/checkout",
+    name: "Checkout",
+    icon: "tim-icons icon-cart",
+    component: <Checkout />,
+    layout: "/admin",
+  },
+  {
+    path: "/tables",
+    name: "Table List",
+    icon: "tim-icons icon-puzzle-10",
     component: <TableList />,
     layout: '/admin',
   },
