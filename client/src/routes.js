@@ -1,4 +1,5 @@
 import Dashboard from "views/Dashboard.js";
+import Checkout from "views/Checkout.js";
 import Icons from "views/Icons.js";
 import Map from "views/Map.js";
 import Notifications from "views/Notifications.js";
@@ -40,6 +41,13 @@ var routes = [
     name: "User Profile",
     icon: "tim-icons icon-single-02",
     component: <UserProfile />,
+    layout: "/admin",
+  },
+  {
+    path: "/checkout",
+    name: "Checkout",
+    icon: "tim-icons icon-cart",
+    component: <Checkout />,
     layout: "/admin",
   },
   {
