@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-free": "6.4.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@fortawesome/fontawesome-free": "6.4.0",
+    "axios": "^1.5.1",
     "bootstrap": "4.6.2",
     "chart.js": "3.9.1",
     "classnames": "2.3.2",
@@ -18,8 +19,8 @@
     "react-notification-alert": "0.0.13",
     "react-router-dom": "6.11.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4",
-    "sass": "1.62.1"
+    "sass": "1.62.1",
+    "web-vitals": "^2.1.4"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
@@ -32,6 +33,7 @@
     "compile-scss": "sass src/assets/scss/black-dashboard-react.scss src/assets/css/black-dashboard-react.css",
     "dev": "nodemon index.js"
   },
+  "proxy": "http://localhost:8080/",
   "eslintConfig": {
     "extends": [
       "react-app",
