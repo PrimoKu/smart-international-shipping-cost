@@ -1,9 +1,9 @@
 
-import React from "react";
-// nodejs library that concatenates classes
+import React, { useState } from "react";
+import axios from 'axios';
 import classNames from "classnames";
+import { useAuth } from "contexts/AuthContext.js";
 
-// reactstrap components
 import {
   Button,
   Collapse,
@@ -20,12 +20,17 @@ import {
   Container,
   Modal,
   NavbarToggler,
-  ModalHeader,
+  ModalHeader, ModalBody, ModalFooter,
 } from "reactstrap";
 
 function AdminNavbar(props) {
+  const { user, setUser, isAuthenticated, setIsAuthenticated } = useAuth();
   const [collapseOpen, setcollapseOpen] = React.useState(false);
   const [modalSearch, setmodalSearch] = React.useState(false);
+  const [modal, setModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalContent, setModalContent] = useState("");
+  const [modalCancelable, setModalCancelable] = useState(true);
   const [color, setcolor] = React.useState("navbar-transparent");
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);
@@ -55,6 +60,33 @@ function AdminNavbar(props) {
   const toggleModalSearch = () => {
     setmodalSearch(!modalSearch);
   };
+
+  const toggleModal = () => {
+    if (modalCancelable) {
+      setModal(!modal);
+    }
+  };
+  const showModal = (title, content, cancelable = true) => {
+    setModalTitle(title);
+    setModalContent(content);
+    setModalCancelable(cancelable);
+    setModal(true);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axios.get('http://localhost:8080/api/users/logout', { withCredentials: true });
+      showModal("BlueJay", "Logout succeeded!", true);
+    } catch (error) {
+      if (error.response && error.response.data) {
+        console.error('Error during logout', error);
+      }
+    }
+  };
+
+  const handleModalClosed = () => {
+    window.location.assign('/');
+  }
   return (
     <>
       <Navbar className={classNames("navbar-absolute", color)} expand="lg">
@@ -107,52 +139,72 @@ function AdminNavbar(props) {
                   </NavLink>
                 </DropdownMenu>
               </UncontrolledDropdown>
-              <UncontrolledDropdown nav>
-                <DropdownToggle
-                  caret
-                  color="default"
-                  nav
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <div className="photo">
-                    <img alt="..." src={require("assets/img/anime3.png")} />
+              {isAuthenticated 
+                ? 
+                <UncontrolledDropdown nav>
+                  <DropdownToggle caret color="default" nav onClick={(e) => e.preventDefault()}>
+                    <div className="photo">
+                      <img alt="..." src={require("assets/img/anime3.png")} />
+                    </div>
+                    <b className="caret d-none d-lg-block d-xl-block" />
+                    <p className="d-lg-none">Log out</p>
+                  </DropdownToggle>
+                  <DropdownMenu className="dropdown-navbar" right tag="ul">
+                    <NavLink tag="li">
+                      <DropdownItem className="nav-item">Profile</DropdownItem>
+                    </NavLink>
+                    <NavLink tag="li">
+                      <DropdownItem className="nav-item">Settings</DropdownItem>
+                    </NavLink>
+                    <DropdownItem divider tag="li" />
+                    <NavLink tag="li">
+                      <DropdownItem className="nav-item" onClick={ handleLogout }> Log out </DropdownItem>
+                    </NavLink>
+                  </DropdownMenu>
+                </UncontrolledDropdown> 
+                :
+                <UncontrolledDropdown nav>
+                <DropdownToggle caret color="default" nav onClick={(e) => e.preventDefault()}>
+                  <div>
+                    <i className="tim-icons icon-single-02" />
                   </div>
                   <b className="caret d-none d-lg-block d-xl-block" />
-                  <p className="d-lg-none">Log out</p>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-navbar" right tag="ul">
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">Profile</DropdownItem>
+                    <DropdownItem className="nav-item">
+                      <a className="text-dark" href="/login">Login</a>
+                    </DropdownItem>
                   </NavLink>
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">Settings</DropdownItem>
-                  </NavLink>
-                  <DropdownItem divider tag="li" />
-                  <NavLink tag="li">
-                    <DropdownItem className="nav-item">Log out</DropdownItem>
+                    <DropdownItem className="nav-item">
+                      <a className="text-dark" href="/register">Register</a>
+                    </DropdownItem>
                   </NavLink>
                 </DropdownMenu>
-              </UncontrolledDropdown>
+                </UncontrolledDropdown>
+              }
               <li className="separator d-lg-none" />
             </Nav>
           </Collapse>
         </Container>
       </Navbar>
-      <Modal
-        modalClassName="modal-search"
-        isOpen={modalSearch}
-        toggle={toggleModalSearch}
-      >
+      <Modal modalClassName="modal-search" isOpen={modalSearch} toggle={toggleModalSearch} >
         <ModalHeader>
           <Input placeholder="SEARCH" type="text" />
-          <button
-            aria-label="Close"
-            className="close"
-            onClick={toggleModalSearch}
-          >
+          <button aria-label="Close" className="close" onClick={toggleModalSearch} >
             <i className="tim-icons icon-simple-remove" />
           </button>
         </ModalHeader>
+      </Modal>
+      <Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
+        <ModalHeader toggle={toggleModal}>
+            <div className="text-dark mb-0" style={{fontSize: '30px'}}>{modalTitle}</div>
+        </ModalHeader>
+        <ModalBody style={{height: '75px'}}><p style={{fontSize: '20px'}}>{modalContent}</p></ModalBody>
+        <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+            <Button color="secondary" onClick={toggleModal} style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
+        </ModalFooter>
       </Modal>
     </>
   );
