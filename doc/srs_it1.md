@@ -1,4 +1,4 @@
-﻿**\*Software Requirement Specification\***
+**\*Software Requirement Specification\***
 
 **Problem Statement:** A few sentences to describe the problem you are trying to solve, i.e., justify why this software is needed.
 
@@ -14,12 +14,12 @@
 - As a member of a group, I want to be able to upload an order and my items so I can contribute to a group order.
 - As a member of a group, I want to be able to view the information (name, address, contact info, etc.) of other members so we can better coordinate our order.
 - As a member of a group, I want to be able to register an account and login/logout so I can begin using the app.
-
-**Joiner’s perspective:**
-
 - As a small business owner, I want to be able to lower the cost of shipping in order to provide higher-quality and cheaper service to my customers.
 - As an international student, I want to buy products at a low price from my homeland if I am homesick or missing a specific item only available there.
 - As a time-sensitive or busy person, I want to locate shipping companies and ship my items quickly and conveniently, in order to avoid having to spend time or money to use international shipping.
+
+**Joiner’s perspective:**
+
 - As a Group Order joiner, I want to be able to join and leave groups to be able to place discounted orders.
 - As a Group Order joiner, I want to be able to enter payment information so I will be able to pay for my order online, manually or automatically.
 - As a Group Order joiner, I want to be able to keep track of the Group Orders I joined and be notified on time when it’s time to pay for shipping so that I don’t miss a deadline.
@@ -32,6 +32,7 @@
 - As a Group Order manager, I want to automate payment collection and joiners’ info collection so that I don’t have to manually input them into an Excel sheet.
 - As a Group Order manager, I want to automate the calculation of shipping payment per joiner depending on the weight of their claims so that I can be fair when charging my joiners.
 - As a Group Order manager, I want to be able to set deadlines for orders so the group can get their packages in a timely manner.
+- As a Group Order manager, I want to be able to checkout my group once everyone is ready so I can begin the shipping process to receive our packages.
 
 **Shipper’s perspective (separate from member (Joiner/Manager):**
 
@@ -48,7 +49,7 @@
 
 Example workflow:
 
-![](Aspose.Words.903f26e3-1946-4d76-b688-ace3c8cab05c.001.jpeg)
+![](Aspose.Words.be700b61-8aa7-4393-b714-9a3d3e0c1147.001.jpeg)
 
 **Functional Requirements:** List the (functional) requirements that software needs to have in order to solve the problem stated above. List these in role-goal-benefit format. It is useful to try to group the requirements into those that are essential (must have), and those which are non-essential (but nice to have).
 
