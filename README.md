@@ -143,7 +143,7 @@ For the `server`, navigate into the `server` directory and run the command:
 npm install
 ```
 
-#### 2. Setting Up the .env File:
+#### 2. Setting Up the `.env` File:
 Configuration variables, such as database connection strings, or secret keys, are stored in `.env` file, which you can locate it in `server` folder.
 - Start by copying the provided `.env.example` file to create your own `.env` file.
 - Populate the `.env` file based on the guildlines below:
