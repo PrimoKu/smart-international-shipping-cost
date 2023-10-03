@@ -130,10 +130,38 @@ Download the installer from **[Node.js official website](https://nodejs.org/en)*
 
 ### Setup:
 #### 1. Installing Dependencies:
-Once you've cloned the repository and have `npm` installed, navigate into the project's directory and install the dependencies.
+Once you've cloned the repository and have `npm` installed, navigate into the project's directory and install the dependencies.\
+
+This project consists of two parts: `client` and `server`. Each part has its own set of dependencies, which is why you need to install them individually to ensure the correct functioning of both the client and server sides.\
+For the `client`, navigate into the `client` directory and run the command:
+```bash
+npm install --legacy-peer-deps
+```
+For the `server`, navigate into the `server` directory and run the command:
 ```bash
 npm install
 ```
+
+#### 2. Setting Up the .env File:
+Configuration variables, such as database connection strings, or secret keys, are stored in `.env` file, which you can locate it in `server` folder.
+- Start by copying the provided `.env.example` file to create your own `.env` file.
+- Populate the `.env` file based on the guildlines below:
+    - `DB_CONNECTION_STRING`: \
+    This is the connection string for MongoDB. The connection string for MongoDB is provided in the `.env.example` file. You can use it directly to connect to the provided database.
+    - `ACCESS_TOKEN_SECRET`: \
+    This is a secret key for token-based authentication. To generate a secret, run the command provided in `.env.example`:
+        ```bash
+        node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+        ```
+        Copy the output and paste it as the value for `ACCESS_TOKEN_SECRET`.
+
+#### 3. Starting App
+To launch the app correctly, you need to start both the `client` and `server` individually. \
+Navigate to both `client` and `server` directories with two terminals, run both of them using this command:
+```bash
+npm start
+```
+
 
 <!-- USAGE EXAMPLES -->
 ## Usage
