@@ -24,7 +24,6 @@ import {
   CardHeader,
   CardBody,
   CardTitle,
-  Label,
   Table,
   Row,
   Col,

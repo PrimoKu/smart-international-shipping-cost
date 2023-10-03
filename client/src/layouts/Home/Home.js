@@ -4,8 +4,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import logo from 'assets/img/react-logo.png';
 
-
-
 function Home() {
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -14,7 +12,6 @@ function Home() {
         const response = await axios.get('http://localhost:8080/api/orders/', { withCredentials: true });
         console.log(response);
         setData(response.data);
-
       } catch (error) {
         console.error("An error occurred while fetching data", error);
       }
@@ -28,7 +25,6 @@ function Home() {
         <div className='navbar'>
           <h1 className='brand-text'>Welcome</h1>
         </div>
-        {/* Content for the main panel */}
         <div className='center-content'>
           <Card className='text-center'>
             <CardBody>
@@ -57,14 +53,17 @@ function Home() {
           </Card>
           <div className="App">
             <h1>All Order Information</h1>
+             <Link to='/checkout'>
+                <Button color='info' size='lg' className='mr-3'>
+                  Checkout
+                </Button>
+              </Link>
             <ul>
               {data.map(item => (
                 <li key={item._id}> Name: {item.name}, Weight: {item.weight}, Price: {item.price} </li>
-              
               ))}
             </ul>
           </div>
-
         </div>
       </div>
     </div>
