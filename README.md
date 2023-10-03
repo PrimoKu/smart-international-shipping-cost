@@ -90,13 +90,11 @@ A NoSQL database that stores data in JSON-like format. It's highly scalable and 
 
 <!-- GETTING STARTED -->
 ## Getting Started
-
-Here's how to get started (subject to change):
-1) Clone the GitHub repository (git clone **given link**)
-2) cd to the local directory
-3) Install all prerequisites below under 'Prerequisites'
-4) Type in 'yarn dev'
-5) Access the localhost link provided in the terminal
+### Cloning the Repository:
+Clone the repository using the command:
+```bash
+git clone https://github.com/jhu-oose-f23/team-BlueJay.git
+```
 
 ### Installing NPM:
 NPM (Node Package Manager) is essential for managing dependencies in this project. Here's how to get it:
