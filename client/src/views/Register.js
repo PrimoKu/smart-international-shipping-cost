@@ -70,7 +70,7 @@ function Register() {
         formData.append('email', email);
         formData.append('password', password);
 
-        axios.post('http://localhost:8080/api/users/register', formData)
+        axios.post('http://localhost:8080/api/users/register', formData, { withCredentials: true })
         .then(response => {
             showModal("BlueJay", "Register succeeded!", true);
         })

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import {
   Card,
   CardBody,
@@ -9,6 +10,7 @@ import {
   Label,
   Input,
   Button,
+  Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
 
 function CreateOrder() {
@@ -18,19 +20,44 @@ function CreateOrder() {
     weight: '',
     date: '',
   });
+  const [modal, setModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalContent, setModalContent] = useState("");
+  const [modalCancelable, setModalCancelable] = useState(true);
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
-    if (Object.values(order).every((field) => field !== '')) {
-      // Store the order information
-      // For now, just console log
-      console.log('Order:', order);
-
-      // Redirect to dashboard
-      navigate('/admin/dashboard');
+  const toggleModal = () => {
+    if (modalCancelable) {
+      setModal(!modal);
     }
   };
+  const showModal = (title, content, cancelable = true) => {
+    setModalTitle(title);
+    setModalContent(content);
+    setModalCancelable(cancelable);
+    setModal(true);
+  };
+  const handleSubmit = async () => {
+    let formData = new FormData();
+    formData.append('name', order.name);
+    formData.append('price', order.price);
+    formData.append('weight', order.weight);
 
+    axios.post('http://localhost:8080/api/orders', formData, { withCredentials: true })
+    .then(response => {
+        showModal("Order", "Create succeeded!", true);
+    })
+    .catch((error) => {
+        if (error.response && error.response.data) {
+            console.log(error.response);
+        }
+    });
+  };
+
+    
+  const handleModalClosed = () => {
+    window.location.assign('/');
+  }
   return (
     <div className='wrapper'>
       <div className='main-panel'>
@@ -72,7 +99,7 @@ function CreateOrder() {
                     onChange={(e) => setOrder({ ...order, weight: e.target.value })}
                   />
                 </FormGroup>
-                <FormGroup>
+                {/* <FormGroup>
                   <Label for='date'>Date</Label>
                   <Input
                     type='date'
@@ -80,13 +107,22 @@ function CreateOrder() {
                     value={order.date}
                     onChange={(e) => setOrder({ ...order, date: e.target.value })}
                   />
-                </FormGroup>
+                </FormGroup> */}
                 <Button color='info' size='lg' block onClick={handleSubmit}>
                   Submit
                 </Button>
               </Form>
             </CardBody>
           </Card>
+          <Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
+            <ModalHeader toggle={toggleModal}>
+                <div className="text-dark mb-0" style={{fontSize: '30px'}}>{modalTitle}</div>
+            </ModalHeader>
+            <ModalBody style={{height: '75px'}}><p style={{fontSize: '20px'}}>{modalContent}</p></ModalBody>
+            <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+                <Button color="secondary" onClick={toggleModal} style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
+            </ModalFooter>
+          </Modal>
         </div>
       </div>
     </div>

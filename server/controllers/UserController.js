@@ -37,7 +37,7 @@ class UserController {
                     httpOnly: true,
                     maxAge: 10000000,
                     signed: true,
-                    sameSite: true
+                    sameSite: 'Strict'
                 });
                 res.status(201).json({ _id: user.id, email: user.email});
             } else {
