@@ -130,9 +130,10 @@ Download the installer from **[Node.js official website](https://nodejs.org/en)*
 
 ### Setup:
 #### 1. Installing Dependencies:
-Once you've cloned the repository and have `npm` installed, navigate into the project's directory and install the dependencies.\
+Once you've cloned the repository and have `npm` installed, navigate into the project's directory and install the dependencies.
 
-This project consists of two parts: `client` and `server`. Each part has its own set of dependencies, which is why you need to install them individually to ensure the correct functioning of both the client and server sides.\
+This project consists of two parts: `client` and `server`. Each part has its own set of dependencies, which is why you need to install them individually to ensure the correct functioning of both the client and server sides.
+
 For the `client`, navigate into the `client` directory and run the command:
 ```bash
 npm install --legacy-peer-deps
