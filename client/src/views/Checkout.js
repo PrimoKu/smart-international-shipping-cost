@@ -1,23 +1,5 @@
-/*!
-
-=========================================================
-* Black Dashboard React v1.2.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from "react";
-
-// reactstrap components
+import React, { useState } from 'react';
+import ConfirmationPopup from '../components/ConfirmationPopup';
 import {
   Button,
   Card,
@@ -35,6 +17,11 @@ import {
 } from "reactstrap";
 
 function Checkout() {
+  const [showPopup, setShowPopup] = useState(false);
+
+  const togglePopup = () => {
+    setShowPopup(!showPopup);
+  };
   const orders = [
     {
       "name": "John Doe",
@@ -111,7 +98,8 @@ function Checkout() {
               </CardBody>
             </Card>
           </Col>
-          <Button disabled>Submit Order</Button>
+          <Button onClick={togglePopup}>Submit Order</Button>
+          <ConfirmationPopup show={showPopup} toggle={togglePopup} />
           <ButtonGroup>
     <UncontrolledDropdown>
       <DropdownToggle caret>
