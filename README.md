@@ -166,11 +166,10 @@ npm start
 ## Usage
 
 Iteration 1: 
-1) The first page you will encounter is the login. For now, feel free to enter anything or just enter the app, as there is currently no user authentication.
-2) The second page is the Order Management tab. From here, you can add/remove users from your order, and view your order's status.
-3) Once you decide to check out, the app will automatically calculate your order cost, and if your entire group is ready, then you may place your order.
-4) The app will confirm your order with the date and order price. 
-5) That's all for now! 
+1) The main page contains all elements currently accessible via our routes. 
+2) So far, you can create an order, and login/register. Your data in both cases will be stored in our MongoDB database.
+3) Login and register will take you to separate pages for those specific functions.
+4) "Create order" creates a modal, which allows you to upload orders to the interface and the database.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
