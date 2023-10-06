@@ -178,11 +178,14 @@ Iteration 1:
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Iteration 1
+- [x] Iteration 1
 - [ ] Basic UI elements to achieve user story
 - [ ] Navigation between UI elements
 - [ ] MongoDB backend integration
-- [ ] UML diagram and SRS documentation 
+- [x] UML diagram and SRS documentation
+- [ ] Iteration 2
+- [ ] Adding group functionality
+- [ ] Create a home page for order management
 
 See the [open issues](https://github.com/jhu-oose-f23/team-BlueJay/issues) for a full list of proposed features (and known issues).
 
