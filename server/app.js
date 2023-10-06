@@ -27,6 +27,7 @@ app.use(upload.array());
 
 app.use('/api/users', require("./routes/UserRoutes"));
 app.use('/api/orders', require("./routes/OrderRoutes"));
+app.use('/api/groupOrders', require("./routes/GroupOrderRoutes"));
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

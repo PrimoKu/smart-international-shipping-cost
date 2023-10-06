@@ -7,7 +7,7 @@ class OrderController {
     //@route GET /api/orders
     //@access private
     getOrders = asyncHandler( async (req, res) => {
-        const orders = await Order.find().sort({ 'updatedAt': -1 }).exec();
+        const orders = await Order.find({user_id: req.user.id}).sort({ 'updatedAt': -1 }).exec();
         res.status(200).json(orders);
     });
 
@@ -18,7 +18,7 @@ class OrderController {
         const { name, weight, price } = req.body;
         let order;
         try {
-            order = await Order.create({ name, weight, price });
+            order = await Order.create({ user_id: req.user.id, name, weight, price });
             if(order) {
                 res.status(201).json(order);
             } else {
@@ -31,14 +31,17 @@ class OrderController {
         }
     });
 
-    //@des Get order by if
+    //@des Get order by id
     //@route GET /api/orders/:id
     //@access private
     getOrder = asyncHandler( async (req, res) => {
         const order = await Order.findById(req.params.id);
         try {
             if(!order) {
-                res.status(404).json({ message: "Job not found!" });
+                res.status(404).json({ message: "Order not found!" });
+            }
+            if (order.user_id.toString() !== req.user.id) {
+                res.status(403).json({ message: "User don't have permission to update other user's order" });
             }
             res.status(200).json(order);
         } catch (error) {
@@ -56,9 +59,9 @@ class OrderController {
             if(!order) {
                 res.status(404).json({ message: "Order not found!" });
             } 
-            // if (order.user_id.toString() !== req.user.id) {
-            //     res.status(403).json({ message: "User don't have permission to update other user contacts" });
-            // }
+            if (order.user_id.toString() !== req.user.id) {
+                res.status(403).json({ message: "User don't have permission to update other user's order" });
+            }
             const updatedOrder = await Order.findByIdAndUpdate( req.params.id, req.body, { new: true });
             res.status(200).json(updatedOrder);
     
