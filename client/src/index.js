@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
-import CreateOrder from './components/CreateOrder/CreateOrder.js';
-import Home from './layouts/Home/Home.js';
+import CreateOrder from './views/CreateOrder.js';
+import Home from './views/Home.js';
 import AdminLayout from "./layouts/Admin/Admin.js";
 import Login from "./views/Login.js";
 import Register from "./views/Register.js";
