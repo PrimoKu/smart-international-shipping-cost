@@ -10,7 +10,7 @@ require("dotenv").config();
 
 connectDb();
 const app = express();
-const port = 8080;
+const port = process.env.LocalHostPort;
 
 app.set('trust proxy', true);
 const corsOptions = {

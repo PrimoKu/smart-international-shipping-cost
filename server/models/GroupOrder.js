@@ -10,6 +10,10 @@ const groupOrderSchema = mongoose.Schema({
             type: String,
             required: [true, "Please add group order name"],
         },
+        country: {
+            type: String,
+            required: [true, "Please add group order country"],
+        },
         deadline: {
             type: Date,
             required: false,
