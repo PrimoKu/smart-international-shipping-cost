@@ -6,6 +6,11 @@ const orderSchema = mongoose.Schema({
             required: true,
             ref: "User",
         },
+        groupOrder_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "GroupOrder",
+        },
         name: {
             type: String,
             required: [true, "Please add order name"],

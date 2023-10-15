@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const GroupOrder = require("../models/GroupOrder");
+const groupOrderRepo = require("../repositories/GroupOrderRepository");
+const { OrderStatus, OrderStatusList } = require("../enums/OrderStatusEnums");
 
 class GroupOrderController {
 
@@ -7,7 +9,7 @@ class GroupOrderController {
     //@route GET /api/groupOrders
     //@access private
     getGroupOrders = asyncHandler( async (req, res) => {
-        const groupOrders = await GroupOrder.find().sort({ 'updatedAt': -1 }).exec();
+        const groupOrders = await groupOrderRepo.getAll(req.user.id); 
         res.status(200).json(groupOrders);
     });
 
@@ -18,14 +20,13 @@ class GroupOrderController {
         const { name, country } = req.body;
         let groupOrder;
         try {
-            groupOrder = await GroupOrder.create({ manager_id: req.user.id, name, country });
+            groupOrder = await groupOrderRepo.create(req.user.id, name, country);
             if(groupOrder) {
                 res.status(201).json(groupOrder);
             } else {
                 res.status(442).json({ message: "Create order failed!" });
             }
         } catch (error) {
-            console.log(error);
             res.status(500);
             throw new Error("Server Error!");
         }
@@ -35,16 +36,20 @@ class GroupOrderController {
     //@route GET /api/groupOrders/:id
     //@access private
     getGroupOrder = asyncHandler( async (req, res) => {
-        const groupOrder = await GroupOrder.findById(req.params.id);
         try {
+            const groupOrder = await groupOrderRepo.getGroupOrderWithDetails(req.params.id);
             if(!groupOrder) {
                 res.status(404).json({ message: "Group Order not found!" });
             }
-            if (groupOrder.manager_id.toString() !== req.user.id) {
+            if (!groupOrder.users.some(user => user._id.toString() === req.user.id) && groupOrder.manager[0]._id.toString() !== req.user.id) {
                 res.status(403).json({ message: "User don't have permission to update other user's order" });
             }
-            res.status(200).json(groupOrder);
+            res.status(200).json({
+                GroupOrder: groupOrder,
+                OrderStatusList: OrderStatusList
+            });
         } catch (error) {
+            console.error(error);
             res.status(500);
             throw new Error("Server Error!");
         }
@@ -54,7 +59,7 @@ class GroupOrderController {
     //@route PUT /api/groupOrders/:id
     //@access private
     updateGroupOrder = asyncHandler( async (req, res) => { 
-        const groupOrder = await GroupOrder.findById(req.params.id);
+        const groupOrder = await groupOrderRepo.get(req.params.id);
         try {
             if(!groupOrder) {
                 res.status(404).json({ message: "Group Order not found!" });
@@ -62,8 +67,8 @@ class GroupOrderController {
             if (groupOrder.manager_id.toString() !== req.user.id) {
                 res.status(403).json({ message: "User don't have permission to update other user's order" });
             }
-            const updatedOrder = await GroupOrder.findByIdAndUpdate( req.params.id, req.body, { new: true });
-            res.status(200).json(updatedOrder);
+            const updatedGroupOrder = await groupOrderRepo.update(req.params.id, req.body);
+            res.status(200).json(updatedGroupOrder);
     
         } catch (error) {
             res.status(500);
