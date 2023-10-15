@@ -172,13 +172,13 @@ function AdminNavbar(props) {
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-navbar" right tag="ul">
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">
-                      <a className="text-dark" href="/login">Login</a>
+                    <DropdownItem className="nav-item text-dark" href="/login">
+                      Login
                     </DropdownItem>
                   </NavLink>
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">
-                      <a className="text-dark" href="/register">Register</a>
+                    <DropdownItem className="nav-item text-dark" href="/register">
+                      Register
                     </DropdownItem>
                   </NavLink>
                 </DropdownMenu>

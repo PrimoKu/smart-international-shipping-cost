@@ -7,6 +7,7 @@ import TableList from 'views/TableList.js';
 import Typography from 'views/Typography.js';
 import UserProfile from 'views/UserProfile.js';
 import Home from 'views/Home.js';
+import GroupOrder from 'views/GroupOrder';
 
 var routes = [
   {
@@ -21,6 +22,13 @@ var routes = [
     name: 'Dashboard',
     icon: 'tim-icons icon-chart-pie-36',
     component: <Dashboard />,
+    layout: '/admin',
+  },
+  {
+    path: '/groupOrder/:id',
+    name: 'GroupOrder',
+    icon: 'tim-icons icon-chart-pie-36',
+    component: <GroupOrder />,
     layout: '/admin',
   },
   {

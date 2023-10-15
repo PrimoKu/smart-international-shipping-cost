@@ -18,7 +18,8 @@ const AuthProvider = ({ children }) => {
                 } else {
                     // console.log("No User");
                     setUser(null);
-                    setIsAuthenticated(res.data !== null);
+                    setIsAuthenticated(res.data === null);
+                    window.location.assign('/');
                 }
             } catch (error) {
                 // console.error('Error fetching current user', error);
