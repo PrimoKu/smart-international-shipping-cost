@@ -24,9 +24,9 @@ class OrderController {
             order = await orderRepo.create(req.user.id, groupOrder_id, name, weight, price);
             if(order) {
                 const groupOrder = await groupOrderRepo.update(groupOrder_id, { $push: { order_ids: order._id }});
-                res.status(201).json({Order: order, GroupOrder: groupOrder});
+                return res.status(201).json({Order: order, GroupOrder: groupOrder});
             } else {
-                res.status(442).json({ message: "Create order failed!" });
+                return res.status(442).json({ message: "Create order failed!" });
             }
         } catch (error) {
             res.status(500);
@@ -41,10 +41,10 @@ class OrderController {
         const order = await orderRepo.get(req.params.id);
         try {
             if(!order) {
-                res.status(404).json({ message: "Order not found!" });
+                return res.status(404).json({ message: "Order not found!" });
             }
             if (order.user_id.toString() !== req.user.id) {
-                res.status(403).json({ message: "User don't have permission to update other user's order" });
+                return res.status(403).json({ message: "User don't have permission to update other user's order" });
             }
             res.status(200).json(order);
         } catch (error) {
@@ -60,10 +60,10 @@ class OrderController {
         const order = await orderRepo.get(req.params.id);
         try {
             if(!order) {
-                res.status(404).json({ message: "Order not found!" });
+                return res.status(404).json({ message: "Order not found!" });
             } 
             if (order.user_id.toString() !== req.user.id) {
-                res.status(403).json({ message: "User don't have permission to update other user's order" });
+                return res.status(403).json({ message: "User don't have permission to update other user's order" });
             }
             const updatedOrder = await orderRepo.update(req.params.id, req.body);
             res.status(200).json(updatedOrder);
@@ -80,12 +80,12 @@ class OrderController {
         const order = await orderRepo.get(req.params.id);
         try {
             if(!order) {
-                res.status(404).json({ message: "Order not found!" });
+                return res.status(404).json({ message: "Order not found!" });
             } 
-            
-            // if (order.user_id.toString() !== req.user.id) {
-            //     res.status(403).json({ message: "User don't have permission to update other user's order" });
-            // }
+            const groupOrder = await groupOrderRepo.get(order.groupOrder_id);
+            if (groupOrder.manager_id.toString() !== req.user.id) {
+                return res.status(403).json({ message: "User is not manager." });
+            }
             const updatedOrder = await orderRepo.update(req.params.id, {status: OrderStatus.PENDING});
             res.status(200).json(updatedOrder);
         } catch (error) {
@@ -101,12 +101,12 @@ class OrderController {
         const order = await orderRepo.get(req.params.id);
         try {
             if(!order) {
-                res.status(404).json({ message: "Order not found!" });
+                return res.status(404).json({ message: "Order not found!" });
             } 
-            
-            // if (order.user_id.toString() !== req.user.id) {
-            //     res.status(403).json({ message: "User don't have permission to update other user's order" });
-            // }
+            const groupOrder = await groupOrderRepo.get(order.groupOrder_id);
+            if (groupOrder.manager_id.toString() !== req.user.id) {
+                return res.status(403).json({ message: "User is not manager." });
+            }
             const updatedOrder = await orderRepo.update(req.params.id, {status: OrderStatus.APPROVED});
             res.status(200).json(updatedOrder);
         } catch (error) {
@@ -124,10 +124,10 @@ class OrderController {
             if(!order) {
                 res.status(404).json({ message: "Order not found!" });
             } 
-            
-            // if (order.user_id.toString() !== req.user.id) {
-            //     res.status(403).json({ message: "User don't have permission to update other user's order" });
-            // }
+            const groupOrder = await groupOrderRepo.get(order.groupOrder_id);
+            if (groupOrder.manager_id.toString() !== req.user.id) {
+                res.status(403).json({ message: "User is not manager." });
+            }
             const updatedOrder = await orderRepo.update(req.params.id, {status: OrderStatus.CANCELED});
             res.status(200).json(updatedOrder);
         } catch (error) {

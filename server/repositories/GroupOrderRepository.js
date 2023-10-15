@@ -16,7 +16,12 @@ const get = async (id) => {
     return groupOrder;
 }
 
-const getGroupOrderWithDetails = async (id) => {
+const update = async (id, data) => {
+    const groupOrder = await GroupOrder.findByIdAndUpdate(id, data, { new: true });
+    return groupOrder;
+}
+
+const getWithDetails = async (id) => {
     const groupOrderId = new ObjectId(id);
     const results = await GroupOrder.aggregate([
         {
@@ -72,15 +77,32 @@ const getGroupOrderWithDetails = async (id) => {
     return groupOrder;
 }
 
-const update = async (id, data) => {
-    const groupOrder = await GroupOrder.findByIdAndUpdate(id, data, { new: true });
+const getWithManager = async (id) => {
+    const groupOrderId = new ObjectId(id);
+    const results = await GroupOrder.aggregate([
+        {
+            $match: { _id: groupOrderId }
+        },
+        {
+            $lookup: {
+                from: 'users', 
+                localField: 'manager_id',
+                foreignField: '_id',
+                as: 'manager' 
+            }
+        }
+    ]);
+    const groupOrder = results && results.length ? results[0] : null;
+
     return groupOrder;
 }
+
 
 module.exports = {
     getAll,
     create,
     get,
-    getGroupOrderWithDetails,
     update,
+    getWithDetails,
+    getWithManager,
 }
