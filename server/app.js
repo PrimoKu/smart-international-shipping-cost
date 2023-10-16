@@ -10,7 +10,7 @@ require("dotenv").config();
 
 connectDb();
 const app = express();
-const port = 8080;
+const port = process.env.LocalHostPort;
 
 app.set('trust proxy', true);
 const corsOptions = {
@@ -26,7 +26,9 @@ app.use(cookieParser('12345678'));
 app.use(upload.array());
 
 app.use('/api/users', require("./routes/UserRoutes"));
+app.use('/api/shipments', require("./routes/ShipmentRoutes"));
 app.use('/api/orders', require("./routes/OrderRoutes"));
+app.use('/api/groupOrders', require("./routes/GroupOrderRoutes"));
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

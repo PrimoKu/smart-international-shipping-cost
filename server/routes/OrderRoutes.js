@@ -3,9 +3,13 @@ router = express.Router();
 const OrderController = require('../controllers/OrderController');
 const orderController = new OrderController();
 const { OrderCreateValidator, OrderUpdateValidator } = require('../middlewares/Validators');
-// const { requireAuth, checkUser } = require('../middlewares/AuthMiddleware');
+const { requireAuth } = require('../middlewares/AuthMiddleware');
   
-router.route('/').get(orderController.getOrders).post(OrderCreateValidator, orderController.createOrder);
-router.route('/:id').get(orderController.getOrder).put(OrderUpdateValidator, orderController.updateOrder);
+router.route('/').get(requireAuth, orderController.getOrders).post(requireAuth, OrderCreateValidator, orderController.createOrder);
+router.route('/:id').get(requireAuth, orderController.getOrder).put(requireAuth, OrderUpdateValidator, orderController.updateOrder);
+
+router.route('/pend/:id').put(requireAuth, orderController.pendOrder);
+router.route('/approve/:id').put(requireAuth, orderController.approveOrder);
+router.route('/cancel/:id').put(requireAuth, orderController.cancelOrder);
 
 module.exports = router;
