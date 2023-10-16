@@ -10,22 +10,12 @@ import { useAuth } from "contexts/AuthContext.js";
 
 import {
   Button,
-  ButtonGroup,
   Card,
   CardHeader,
   CardBody,
-  CardTitle,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  Label,
-  FormGroup,
-  Input,
-  Table,
   Row,
   Col,
-  UncontrolledTooltip,
+  CardFooter,
 } from 'reactstrap';
 
 function Dashboard(props) {
@@ -45,24 +35,24 @@ function Dashboard(props) {
 
   function getManagerOrders(data) {
     var managed = data.filter(order => order.manager_id === user._id);
-    if (managed.length >= 3) {
-      managed = managed.slice(0, 3);
-    }
+    //if (managed.length >= 3) {
+    //  managed = managed.slice(0, 3);
+    //}
     return managed;
   }
 
   function getJoinerOrders(data) {
     var joined = data.filter(order => order.manager_id !== user._id);
-    if (joined.length >= 3) {
-      joined = joined.slice(0, 3);
-    }
+    //if (joined.length >= 3) {
+    //  joined = joined.slice(0, 3);
+    //}
     return joined;
   }
 
   function ordersEmpty(data, isManager) {
     if (getManagerOrders(data).length == 0 && isManager) {
       return (
-      <Card className='card-chart'>
+      <Card className='card-chart' style={{minHeight: '400px'}}>
         <CardHeader>
           <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Manage</h5>
         </CardHeader>
@@ -72,7 +62,7 @@ function Dashboard(props) {
       </Card>);
     } else if (getJoinerOrders(data).length == 0 && !isManager) {
       return (
-        <Card className='card-chart'>
+        <Card className='card-chart' style={{minHeight: '400px'}}>
           <CardHeader>
             <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Joined</h5>
           </CardHeader>
@@ -83,7 +73,7 @@ function Dashboard(props) {
     } else {
       if (isManager) {
         return (
-        <Card className='card-chart'>
+        <Card className='card-chart' style={{minHeight: '400px'}}>
           <CardHeader>
             <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Manage</h5>
           </CardHeader>
@@ -96,7 +86,7 @@ function Dashboard(props) {
         </Card>);
       } else {
         return (
-        <Card className='card-chart'>
+        <Card className='card-chart' style={{minHeight: '400px'}}>
           <CardHeader>
             <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Joined</h5>
           </CardHeader>
@@ -106,6 +96,11 @@ function Dashboard(props) {
                             updatedAt={order.updatedAt} createdAt={order.createdAt} status={order.status} weight={order.weight} />
             ))}
           </CardBody>
+          <CardFooter>
+            <Link>
+              See All
+            </Link>
+          </CardFooter>
         </Card>);
       }
     }

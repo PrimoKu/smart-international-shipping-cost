@@ -38,9 +38,6 @@ function OrderList({ data }) {
     }
   }
 
-  if (data.length >= 3) {
-    data = data.slice(0, 3);
-  }
   return (
     <div>
       <div>
