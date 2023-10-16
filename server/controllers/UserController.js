@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const userRepo = require("../repositories/UserRepository");
 
 class UserController {
 
@@ -105,7 +106,17 @@ class UserController {
     //@route GET /api/users/current
     //@access private
     currentUser = asyncHandler(async (req, res) => {
-        res.json(req.user);
+        try {
+            const user = await userRepo.getWithDetails(req.user.id);
+            if(!user) {
+                return res.status(404).json({ message: "User not found!" });
+            }
+            res.status(200).json(user);
+        } catch (error) {
+            console.log(error);
+            res.status(500);
+            throw new Error("Server Error!");
+        }
     });
 
     //@desc Update user

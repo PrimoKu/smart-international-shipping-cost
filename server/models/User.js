@@ -13,7 +13,17 @@ const userSchema = mongoose.Schema({
         password: {
             type: String,
             required: [true, "Please add user password"],
-        }
+        },
+        shipment_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: false,
+            ref: "Shipment",
+        },
+        payment_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: false,
+            ref: "Payment",
+        },
     }, 
     {
         timestamps: true,

@@ -1,5 +1,6 @@
 const {check, validationResult} = require('express-validator');
 const GroupOrder = require("../models/GroupOrder");
+const { USStates } = require("../enums/USStatesEnum");
 
 exports.OrderCreateValidator = [
     check('name')
@@ -91,6 +92,78 @@ exports.GroupOrderCreateValidator = [
         .bail()
         .isLength({min: 3})
         .withMessage('Group Order country requires a minimum 3 of characters!')
+        .bail(),
+   (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+            return res.status(400).json({errors: errors.array()});
+        next();
+    },
+];
+
+exports.ShipmentCreateValidator = [
+    check('firstName')
+        .escape()
+        .not()
+        .isEmpty()
+        .withMessage('First name can not be empty!')
+        .bail()
+        .isLength({min: 3})
+        .withMessage('First name requires a minimum 3 of characters!')
+        .bail(),
+    check('lastName')
+        .escape()
+        .not()
+        .isEmpty()
+        .withMessage('Last name can not be empty!')
+        .bail()
+        .isLength({min: 3})
+        .withMessage('Last name requires a minimum 3 of characters!')
+        .bail(),
+    check('address1')
+        .escape()
+        .not()
+        .isEmpty()
+        .withMessage('Address 1 can not be empty!')
+        .bail()
+        .isLength({min: 3})
+        .withMessage('Address 1 requires a minimum 3 of characters!')
+        .bail(),
+    check('address2')
+        .escape()
+        .optional()
+        .isEmpty()
+        .isLength({min: 3})
+        .withMessage('Address 2 requires a minimum 3 of characters!')
+        .bail(),
+    check('state')
+        .escape()
+        .not()
+        .isEmpty()
+        .withMessage('State can not be empty!')
+        .bail()
+        .custom((value) => {
+            return USStates.includes(value);
+        })
+        .withMessage('Invalid state provided!')
+        .bail(),
+    check('city')
+        .escape()
+        .not()
+        .isEmpty()
+        .withMessage('City can not be empty!')
+        .bail()
+        .isLength({min: 3})
+        .withMessage('City requires a minimum 3 of characters!')
+        .bail(),
+    check('zipCode')
+        .escape()
+        .not()
+        .isEmpty()
+        .withMessage('Zip code can not be empty!')
+        .bail()
+        .isLength({min: 5})
+        .withMessage('Zip code requires a minimum 5 of characters!')
         .bail(),
    (req, res, next) => {
         const errors = validationResult(req);

@@ -26,6 +26,7 @@ app.use(cookieParser('12345678'));
 app.use(upload.array());
 
 app.use('/api/users', require("./routes/UserRoutes"));
+app.use('/api/shipments', require("./routes/ShipmentRoutes"));
 app.use('/api/orders', require("./routes/OrderRoutes"));
 app.use('/api/groupOrders', require("./routes/GroupOrderRoutes"));
 
