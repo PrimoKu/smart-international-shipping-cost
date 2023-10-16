@@ -20,12 +20,13 @@ function UserProfile() {
   const [showUserEdit, setShowUserEdit] = useState(false);
   const [showPaymentEdit, setShowPaymentEdit] = useState(false);
   const [data, setData] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/users/login', { withCredentials: true });
+        const response = await axios.get('http://localhost:8080/users/current', { withCredentials: true });
         console.log(response);
-        setData(response.data);
+        setData(response.data.user); // Adjusted based on response structure
       } catch (error) {
         console.error("An error occurred while fetching data", error);
       }
@@ -46,15 +47,16 @@ function UserProfile() {
               <CardBody>
                 {!showUserEdit ? (
                   <div>
-                  <p>User ID: {data._id || 'Loading...'}</p>
-                  <p>User Name: {data.name || 'Loading...'}</p>
-                  <p>Email: {data.email || 'Loading...'}</p>
-                  <p>Password: [Your Password]</p>
-                  <p>Legal Name: [Your Legal Name]</p>
-                  <p>Legal ID: [Your Legal ID]</p>
-                  <p>Gender: [Your Gender]</p>
-                  <p>Birth Date: [Your Birth Date]</p>
-                </div>
+                    <p>User ID: {data._id || 'Loading...'}</p>
+                    <p>User Name: {data.name || 'Loading...'}</p>
+                    <p>Email: {data.email || 'Loading...'}</p>
+                    {/* The below fields are just placeholders as they were not provided in the given API */}
+                    <p>Password: [Your Password]</p>
+                    <p>Legal Name: [Your Legal Name]</p>
+                    <p>Legal ID: [Your Legal ID]</p>
+                    <p>Gender: [Your Gender]</p>
+                    <p>Birth Date: [Your Birth Date]</p>
+                  </div>
                 ) : (
                 <Form>
                     <Row>
@@ -143,15 +145,16 @@ function UserProfile() {
               <CardBody>
                 {!showPaymentEdit ? (
                   <div>
+                  {/* The below fields are just placeholders as they were not provided in the given API */}
                   <p>Credit Card Type: [Your Credit Card Type]</p>
                   <p>Bank Name: [Your Bank Name]</p>
                   <p>Bank Account Number: [Your Bank Account Number]</p>
                   <p>Payment: [Your Payment]</p>
-                  <p>Address 1: [Your Address 1]</p>
-                  <p>Address 2: [Your Address 2]</p>
-                  <p>State: [Your State]</p>
-                  <p>City: [Your City]</p>
-                  <p>Zip Code: [Your Zip Code]</p>
+                  <p>Address 1: {data.shipment && data.shipment[0] ? data.shipment[0].address_1 : 'Loading...'}</p>
+                  <p>Address 2: {data.shipment && data.shipment[0] ? data.shipment[0].address_2 : 'Loading...'}</p>
+                  <p>State: {data.shipment && data.shipment[0] ? data.shipment[0].state : 'Loading...'}</p>
+                  <p>City: {data.shipment && data.shipment[0] ? data.shipment[0].city : 'Loading...'}</p>
+                  <p>Zip Code: {data.shipment && data.shipment[0] ? data.shipment[0].zip_code : 'Loading...'}</p>
                 </div>
                 ) : (
                   <Form>
