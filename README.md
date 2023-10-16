@@ -96,6 +96,8 @@ Clone the repository using the command:
 git clone https://github.com/jhu-oose-f23/team-BlueJay.git
 ```
 
+API documentation can be found under '/docs'.
+
 ### Installing NPM:
 NPM (Node Package Manager) is essential for managing dependencies in this project. Here's how to get it:
 
@@ -171,6 +173,11 @@ Iteration 1:
 3) Login and register will take you to separate pages for those specific functions.
 4) "Create order" creates a modal, which allows you to upload orders to the interface and the database.
 
+Iteration 2:
+1) The main interface is now accessible and connected to the order management interface
+2) User registration / information has been updated, and checkout has been improved
+3) Additional API functionality has been added, see the documentation or just explore :^)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -179,13 +186,16 @@ Iteration 1:
 ## Roadmap
 
 - [x] Iteration 1
-- [ ] Basic UI elements to achieve user story
-- [ ] Navigation between UI elements
-- [ ] MongoDB backend integration
+- [x] Basic UI elements
+- [x] Navigation between UI elements
+- [x] MongoDB backend integration
 - [x] UML diagram and SRS documentation
-- [ ] Iteration 2
+- [x] Iteration 2
+- [x] Additional views to allow for user input (payment, personal details, etc.)
 - [ ] Adding group functionality
-- [ ] Create a home page for order management
+- [x] Create a home page for order management
+- [ ] Iteration 3
+- [ ] Enforcing styling among multiple interfaces
 
 See the [open issues](https://github.com/jhu-oose-f23/team-BlueJay/issues) for a full list of proposed features (and known issues).
 
