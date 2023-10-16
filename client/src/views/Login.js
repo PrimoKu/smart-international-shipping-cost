@@ -29,7 +29,7 @@ function Login() {
         axios.post('http://localhost:8080/api/users/login', formData, { withCredentials: true })
         .then(res => {
             console.log(res);
-            window.location.assign('/');
+            window.location.assign('/admin/dashboard');
         })
         .catch((error) => {
             if (error.response && error.response.data) {
