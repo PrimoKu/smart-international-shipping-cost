@@ -43,10 +43,10 @@ function Home() {
           </Card>
           <Card className='text-center'>
             <CardBody>
-              <CardTitle tag='h3'>Create a shipping order</CardTitle>
-              <Link to='/createorder'>
+              <CardTitle tag='h3'>Manage Your Orders</CardTitle>
+              <Link to='/main'>
                 <Button color='info' size='lg' className='mr-3'>
-                  Create
+                  Orders
                 </Button>
               </Link>
             </CardBody>
