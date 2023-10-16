@@ -36,6 +36,23 @@ const getWithDetails = async (id) => {
             }
         },
         {
+            $unwind: '$manager' 
+        },
+        {
+            $project: {
+                name: 1,
+                country: 1,
+                deadline: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                __v: 1,
+                order_ids: 1,
+                'manager._id': 1,
+                'manager.name': 1,
+                'manager.email': 1
+            }
+        },
+        {
             $lookup: {
                 from: 'orders', 
                 localField: 'order_ids',
