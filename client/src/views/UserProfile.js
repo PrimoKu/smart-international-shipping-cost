@@ -1,210 +1,324 @@
-/*!
+import React, { useEffect, useState } from "react";
+import axios from 'axios';
 
-=========================================================
-* Black Dashboard React v1.2.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from "react";
-
-// reactstrap components
 import {
   Button,
   Card,
   CardHeader,
   CardBody,
   CardFooter,
-  CardText,
+  CardText,  // <-- Make sure this line is here
   FormGroup,
   Form,
   Input,
+  Label,
   Row,
   Col,
 } from "reactstrap";
 
 function UserProfile() {
+  const [showUserEdit, setShowUserEdit] = useState(false);
+  const [showPaymentEdit, setShowPaymentEdit] = useState(false);
+  const [data, setData] = useState([]);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address1, setAddress1] = useState("");
+  const [address2, setAddress2] = useState("");
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
+  const [zipCode, setZipCode] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/users/current', { withCredentials: true });
+        console.log(response);
+        setData(response.data.user);
+      } catch (error) {
+        console.error("An error occurred while fetching data", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const submitShipmentData = async () => {
+    try {
+        const response = await axios.post('http://localhost:8080/shipments', {
+            firstName,
+            lastName,
+            address1,
+            address2,
+            state,
+            city,
+            zipCode
+        }, { withCredentials: true });
+
+        console.log(response.data);
+    } catch (error) {
+        console.error("Error posting shipment data", error);
+    }
+};
+
   return (
     <>
       <div className="content">
         <Row>
           <Col md="8">
+            {/* User Information Card */}
             <Card>
               <CardHeader>
-                <h5 className="title">Edit Profile</h5>
+                <h2 className="title">User Information</h2>
               </CardHeader>
               <CardBody>
+                {!showUserEdit ? (
+                  <div>
+                    <p>User ID: {data._id || 'Loading...'}</p>
+                    <p>User Name: {data.name || 'Loading...'}</p>
+                    <p>Email: {data.email || 'Loading...'}</p>
+                    {/* The below fields are just placeholders as they were not provided in the given API */}
+                    {/* <p>Password: [Your Password]</p> */}
+                    <p>Legal First Name: {data.firstName || 'Loading...'}</p>
+                    <p>Legal Last Name: {data.lastName || 'Loading...'}</p>
+                    <p>Legal ID: [Your Legal ID]</p>
+                    <p>Gender: [Your Gender]</p>
+                    <p>Birth Date: [Your Birth Date]</p>
+                  </div>
+                ) : (
                 <Form>
-                  <Row>
-                    <Col className="pr-md-1" md="5">
-                      <FormGroup>
-                        <label>Company (disabled)</label>
-                        <Input
-                          defaultValue="Creative Code Inc."
-                          disabled
-                          placeholder="Company"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col className="px-md-1" md="3">
-                      <FormGroup>
-                        <label>Username</label>
-                        <Input
-                          defaultValue="michael23"
-                          placeholder="Username"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col className="pl-md-1" md="4">
-                      <FormGroup>
-                        <label htmlFor="exampleInputEmail1">
-                          Email address
-                        </label>
-                        <Input placeholder="mike@email.com" type="email" />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col className="pr-md-1" md="6">
-                      <FormGroup>
-                        <label>First Name</label>
-                        <Input
-                          defaultValue="Mike"
-                          placeholder="Company"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col className="pl-md-1" md="6">
-                      <FormGroup>
-                        <label>Last Name</label>
-                        <Input
-                          defaultValue="Andrew"
-                          placeholder="Last Name"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md="12">
-                      <FormGroup>
-                        <label>Address</label>
-                        <Input
-                          defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                          placeholder="Home Address"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col className="pr-md-1" md="4">
-                      <FormGroup>
-                        <label>City</label>
-                        <Input
-                          defaultValue="Mike"
-                          placeholder="City"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col className="px-md-1" md="4">
-                      <FormGroup>
-                        <label>Country</label>
-                        <Input
-                          defaultValue="Andrew"
-                          placeholder="Country"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col className="pl-md-1" md="4">
-                      <FormGroup>
-                        <label>Postal Code</label>
-                        <Input placeholder="ZIP Code" type="number" />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md="8">
-                      <FormGroup>
-                        <label>About Me</label>
-                        <Input
-                          cols="80"
-                          defaultValue="Lamborghini Mercy, Your chick she so thirsty, I'm in
-                            that two seat Lambo."
-                          placeholder="Here can be your description"
-                          rows="4"
-                          type="textarea"
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
+                    <Row>
+                        {/* User ID & User Name */}
+                        <Col className="pr-md-1" md="6">
+                            <FormGroup>
+                                <Label>User ID</Label>
+                                <Input placeholder="User ID" type="text" />
+                            </FormGroup>
+                        </Col>
+                        <Col className="pl-md-1" md="6">
+                            <FormGroup>
+                                <Label>User Name</Label>
+                                <Input placeholder="User Name" type="text" />
+                            </FormGroup>
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        {/* Email & Password */}
+                        <Col className="pr-md-1" md="6">
+                            <FormGroup>
+                                <Label>Email</Label>
+                                <Input placeholder="Email" type="email" />
+                            </FormGroup>
+                        </Col>
+                        <Col className="pl-md-1" md="6">
+                            <FormGroup>
+                                <Label>Password</Label>
+                                <Input placeholder="Password" type="password" />
+                            </FormGroup>
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        {/* Legal Name & Legal ID */}
+                        <Col className="pr-md-1" md="6">
+                            <FormGroup>
+                                <Label>Legal First Name</Label>
+                                <Input placeholder="Legal First Name" type="text" />
+                            </FormGroup>
+                        </Col>
+                        <Col className="pr-md-1" md="6">
+                            <FormGroup>
+                                <Label>Legal Last Name</Label>
+                                <Input placeholder="Legal Last Name" type="text" />
+                            </FormGroup>
+                        </Col>
+                        <Col className="pl-md-1" md="6">
+                            <FormGroup>
+                                <Label>Legal ID</Label>
+                                <Input placeholder="Legal ID" type="text" />
+                            </FormGroup>
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        {/* Gender & Birth Date */}
+                        <Col className="pr-md-1" md="6">
+                            <FormGroup>
+                                <Label>Gender</Label>
+                                <Input type="select">
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
+                                </Input>
+                            </FormGroup>
+                        </Col>
+                        <Col className="pl-md-1" md="6">
+                            <FormGroup>
+                                <Label>Birth Date</Label>
+                                <Input type="date" />
+                            </FormGroup>
+                        </Col>
+                    </Row>
                 </Form>
+                )}
               </CardBody>
               <CardFooter>
-                <Button className="btn-fill" color="primary" type="submit">
-                  Save
+                <Button onClick={() => setShowUserEdit(!showUserEdit)}>
+                  {showUserEdit ? "Cancel" : "Edit"}
                 </Button>
+                {showUserEdit && <Button onClick={() => setShowUserEdit(false)}>Confirm</Button>}
               </CardFooter>
             </Card>
-          </Col>
-          <Col md="4">
-            <Card className="card-user">
+
+            {/* Payment Information Card */}
+            <Card>
+              <CardHeader>
+                <h2 className="title">Payment Information</h2>
+              </CardHeader>
               <CardBody>
-                <CardText />
-                <div className="author">
-                  <div className="block block-one" />
-                  <div className="block block-two" />
-                  <div className="block block-three" />
-                  <div className="block block-four" />
-                  <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                    <img
-                      alt="..."
-                      className="avatar"
-                      src={require("assets/img/emilyz.jpg")}
-                    />
-                    <h5 className="title">Mike Andrew</h5>
-                  </a>
-                  <p className="description">Ceo/Co-Founder</p>
-                </div>
-                <div className="card-description">
-                  Do not be scared of the truth because we need to restart the
-                  human foundation in truth And I love you like Kanye loves
-                  Kanye I love Rick Owens’ bed design but the back is...
-                </div>
+                {!showPaymentEdit ? (
+                  <div>
+                    {/* Displaying the shipment data if it exists */}
+                    <p>Credit Card Type: [Your Credit Card Type]</p>
+                    <p>Bank Name: [Your Bank Name]</p>
+                    <p>Bank Account Number: [Your Bank Account Number]</p>
+                    <p>Payment: [Your Payment]</p>
+                    <p>Address 1: {data.shipment && data.shipment.length > 0 ? data.shipment[0].address_1 : 'Loading...'}</p>
+                    <p>Address 2: {data.shipment && data.shipment.length > 0 ? data.shipment[0].address_2 : 'Loading...'}</p>
+                    <p>State: {data.shipment && data.shipment.length > 0 ? data.shipment[0].state : 'Loading...'}</p>
+                    <p>City: {data.shipment && data.shipment.length > 0 ? data.shipment[0].city : 'Loading...'}</p>
+                    <p>Zip Code: {data.shipment && data.shipment.length > 0 ? data.shipment[0].zip_code : 'Loading...'}</p>
+                  </div>
+                ) : (
+                  <Form onSubmit={(e) => {
+                      e.preventDefault();
+                      const shipmentData = {
+                        address1, address2, state, city, zipCode
+                      };
+                      submitShipmentData(shipmentData);
+                    }}>
+                    <Row>
+                      <Col className="pr-md-1" md="5">
+                        <FormGroup>
+                          <Label>Credit Card Type</Label>
+                          {/* <Input
+                            value={creditCardType}
+                            onChange={e => setCreditCardType(e.target.value)}
+                            placeholder="Credit Card Type"
+                            type="text"
+                          /> */}
+                        </FormGroup>
+                      </Col>
+                      <Col className="px-md-1" md="3">
+                        <FormGroup>
+                          <Label>Bank Name</Label>
+                          {/* <Input
+                            value={bankName}
+                            onChange={e => setBankName(e.target.value)}
+                            placeholder="Bank Name"
+                            type="text"
+                          /> */}
+                        </FormGroup>
+                      </Col>
+                      <Col className="pl-md-1" md="4">
+                        <FormGroup>
+                          <Label>Bank Account Number</Label>
+                          {/* <Input
+                            value={bankAccountNumber}
+                            onChange={e => setBankAccountNumber(e.target.value)}
+                            placeholder="Bank Account Number"
+                            type="text"
+                          /> */}
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col className="pr-md-1" md="5">
+                        <FormGroup>
+                          <Label>Payment</Label>
+                          {/* <Input
+                            value={payment}
+                            onChange={e => setPayment(e.target.value)}
+                            placeholder="Payment"
+                            type="text"
+                          /> */}
+                        </FormGroup>
+                      </Col>
+                      <Col className="px-md-1" md="7">
+                        <FormGroup>
+                          <Label>Address 1</Label>
+                          <Input
+                            value={address1}
+                            onChange={e => setAddress1(e.target.value)}
+                            placeholder="Address 1"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col className="pr-md-1" md="5">
+                        <FormGroup>
+                          <Label>Address 2</Label>
+                          <Input
+                            value={address2}
+                            onChange={e => setAddress2(e.target.value)}
+                            placeholder="Address 2 (optional)"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col className="px-md-1" md="3">
+                        <FormGroup>
+                          <Label>State</Label>
+                          <Input
+                            value={state}
+                            onChange={e => setState(e.target.value)}
+                            placeholder="State"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col className="pl-md-1" md="4">
+                        <FormGroup>
+                          <Label>City</Label>
+                          <Input
+                            value={city}
+                            onChange={e => setCity(e.target.value)}
+                            placeholder="City"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col className="pr-md-1" md="5">
+                        <FormGroup>
+                          <Label>Zip Code</Label>
+                          <Input
+                            value={zipCode}
+                            onChange={e => setZipCode(e.target.value)}
+                            placeholder="Zip Code"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </Form>
+                )}
               </CardBody>
               <CardFooter>
-                <div className="button-container">
-                  <Button className="btn-icon btn-round" color="facebook">
-                    <i className="fab fa-facebook" />
-                  </Button>
-                  <Button className="btn-icon btn-round" color="twitter">
-                    <i className="fab fa-twitter" />
-                  </Button>
-                  <Button className="btn-icon btn-round" color="google">
-                    <i className="fab fa-google-plus" />
-                  </Button>
-                </div>
+                <Button onClick={() => setShowPaymentEdit(!showPaymentEdit)}>
+                  {showPaymentEdit ? "Cancel" : "Edit"}
+                </Button>
+                {showPaymentEdit && <Button type="submit" onClick={() => setShowPaymentEdit(false)}>Confirm</Button>}
               </CardFooter>
-            </Card>
-          </Col>
-        </Row>
-      </div>
-    </>
-  );
+              </Card>
+              </Col>
+              </Row>
+              </div>
+              </>
+              );
 }
 
 export default UserProfile;
