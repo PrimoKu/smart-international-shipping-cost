@@ -10,22 +10,12 @@ import { useAuth } from "contexts/AuthContext.js";
 
 import {
   Button,
-  ButtonGroup,
   Card,
   CardHeader,
   CardBody,
   CardTitle,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  Label,
-  FormGroup,
-  Input,
-  Table,
   Row,
   Col,
-  UncontrolledTooltip,
 } from 'reactstrap';
 
 function GroupOrder(props) {
@@ -52,10 +42,9 @@ function GroupOrder(props) {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/groupOrders/${id}`, { withCredentials: true })
-                console.log(response.data);
                 setGroupOrder(response.data.GroupOrder);
                 setOrderStatusList(response.data.OrderStatusList);
-                setManager(response.data.GroupOrder.manager[0]);
+                setManager(response.data.GroupOrder.manager);
                 setUsers(response.data.GroupOrder.users);
                 const pendingOrders = response.data.GroupOrder.orders.filter(order => order.status === 0);
                 const approvedOrders = response.data.GroupOrder.orders.filter(order => order.status === 1);
