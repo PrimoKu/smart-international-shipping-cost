@@ -1,20 +1,70 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
+import { Card, CardBody, CardTitle, Button } from 'reactstrap';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import logo from 'assets/img/react-logo.png';
 
 function Home() {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/orders/', { withCredentials: true });
+        console.log(response);
+        setData(response.data);
+      } catch (error) {
+        console.error("An error occurred while fetching data", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
-    <div className='home-page'>
-      <h1>Welcome to the Dashboard App</h1>
-      <div className='buttons-container'>
-        <Link to='/login'>
-          <button className='btn btn-primary'>Login</button>
-        </Link>
-        <Link to='/register'>
-          <button className='btn btn-success'>Register</button>
-        </Link>
-        <Link to='/create-order'>
-          <button className='btn btn-info'>Create Shipping Order</button>
-        </Link>
+    <div className='wrapper'>
+      <div className='main-panel'>
+        <div className='navbar'>
+          <h1 className='brand-text'>Welcome</h1>
+        </div>
+        <div className='center-content'>
+          <Card className='text-center'>
+            <CardBody>
+              <CardTitle tag='h3'>Get Started</CardTitle>
+              <Link to='/login'>
+                <Button color='info' size='lg' className='mr-3'>
+                  Login
+                </Button>
+              </Link>
+              <Link to='/register'>
+                <Button color='success' size='lg'>
+                  Register
+                </Button>
+              </Link>
+            </CardBody>
+          </Card>
+          <Card className='text-center'>
+            <CardBody>
+              <CardTitle tag='h3'>Create a shipping order</CardTitle>
+              <Link to='/createorder'>
+                <Button color='info' size='lg' className='mr-3'>
+                  Create
+                </Button>
+              </Link>
+            </CardBody>
+          </Card>
+          <div className="App">
+            <h1>All Order Information</h1>
+             <Link to='/checkout'>
+                <Button color='info' size='lg' className='mr-3'>
+                  Checkout
+                </Button>
+              </Link>
+            <ul>
+              {data.map(item => (
+                <li key={item._id}> Name: {item.name}, Weight: {item.weight}, Price: {item.price} </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );
