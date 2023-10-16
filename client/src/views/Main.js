@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import OrderList from '../components/OrderList';
 import axios from 'axios';
+import '../assets/css/OrderItem.css';
 
 function Main() {
   const [data, setData] = useState([]);

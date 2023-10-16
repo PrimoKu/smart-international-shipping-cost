@@ -8,9 +8,6 @@ import '../assets/css/OrderItem.css';
 
 function OrderList({ data }) {
 
-  function notificationsEmpty() {
-  }
-
   function ordersEmpty(data, isManager) {
     if (data.length == 0) {
       if (isManager) {

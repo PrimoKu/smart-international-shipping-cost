@@ -22,7 +22,7 @@
 .container-left {
   display: inline-block;
   width: 35%;
-  background-color: white;
+  background-color: #344675;
   height: fit-content;
   overflow: hidden;
   padding: 10px;
@@ -35,7 +35,7 @@
   display: inline-block;
   width: 80%;
   margin-top: 20px;
-  background-color: white;
+  background-color: #344675;
   height: fit-content;
   overflow: hidden;
   padding: 10px;
@@ -49,7 +49,7 @@
   width: 35%;
   align-items: center;
   margin-left: 10%;
-  background-color: white;
+  background-color: #344675;
   height: fit-content;
   overflow: hidden;
   padding: 10px;
@@ -171,7 +171,7 @@
 .order-time {
   width: 100%;
   display:block;
-  font-size: 20px;
+  font-size: small;
   background-color: black;
 }
 
@@ -180,16 +180,15 @@
   display:block;
   font-size: 10px;
   color: white;
-  border: black 1px;
 }
 
 .item:hover {
-  background-color: lightgray;
+  background-color: #344675;
   border-radius:10px;
 }
 
 .item {
-  background-color: white;
+  background-color: #27293d;
   color: black;
   overflow:hidden;
   border: hidden;
