@@ -124,6 +124,9 @@ function CreateOrder() {
             </ModalFooter>
           </Modal>
         </div>
+        <Link to='/home'>
+        <Button>Return to Home</Button>
+        </Link>
       </div>
     </div>
   );
