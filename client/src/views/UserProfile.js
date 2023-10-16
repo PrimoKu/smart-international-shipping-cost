@@ -21,18 +21,44 @@ function UserProfile() {
   const [showPaymentEdit, setShowPaymentEdit] = useState(false);
   const [data, setData] = useState([]);
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address1, setAddress1] = useState("");
+  const [address2, setAddress2] = useState("");
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
+  const [zipCode, setZipCode] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/users/current', { withCredentials: true });
+        const response = await axios.get('/users/current', { withCredentials: true });
         console.log(response);
-        setData(response.data.user); // Adjusted based on response structure
+        setData(response.data.user);
       } catch (error) {
         console.error("An error occurred while fetching data", error);
       }
     };
     fetchData();
   }, []);
+
+  const submitShipmentData = async () => {
+    try {
+        const response = await axios.post('http://localhost:8080/shipments', {
+            firstName,
+            lastName,
+            address1,
+            address2,
+            state,
+            city,
+            zipCode
+        }, { withCredentials: true });
+
+        console.log(response.data);
+    } catch (error) {
+        console.error("Error posting shipment data", error);
+    }
+};
 
   return (
     <>
@@ -51,8 +77,9 @@ function UserProfile() {
                     <p>User Name: {data.name || 'Loading...'}</p>
                     <p>Email: {data.email || 'Loading...'}</p>
                     {/* The below fields are just placeholders as they were not provided in the given API */}
-                    <p>Password: [Your Password]</p>
-                    <p>Legal Name: [Your Legal Name]</p>
+                    {/* <p>Password: [Your Password]</p> */}
+                    <p>Legal First Name: {data.firstName || 'Loading...'}</p>
+                    <p>Legal Last Name: {data.lastName || 'Loading...'}</p>
                     <p>Legal ID: [Your Legal ID]</p>
                     <p>Gender: [Your Gender]</p>
                     <p>Birth Date: [Your Birth Date]</p>
@@ -95,8 +122,14 @@ function UserProfile() {
                         {/* Legal Name & Legal ID */}
                         <Col className="pr-md-1" md="6">
                             <FormGroup>
-                                <Label>Legal Name</Label>
-                                <Input placeholder="Legal Name" type="text" />
+                                <Label>Legal First Name</Label>
+                                <Input placeholder="Legal First Name" type="text" />
+                            </FormGroup>
+                        </Col>
+                        <Col className="pr-md-1" md="6">
+                            <FormGroup>
+                                <Label>Legal Last Name</Label>
+                                <Input placeholder="Legal Last Name" type="text" />
                             </FormGroup>
                         </Col>
                         <Col className="pl-md-1" md="6">
@@ -145,36 +178,57 @@ function UserProfile() {
               <CardBody>
                 {!showPaymentEdit ? (
                   <div>
-                  {/* The below fields are just placeholders as they were not provided in the given API */}
-                  <p>Credit Card Type: [Your Credit Card Type]</p>
-                  <p>Bank Name: [Your Bank Name]</p>
-                  <p>Bank Account Number: [Your Bank Account Number]</p>
-                  <p>Payment: [Your Payment]</p>
-                  <p>Address 1: {data.shipment && data.shipment[0] ? data.shipment[0].address_1 : 'Loading...'}</p>
-                  <p>Address 2: {data.shipment && data.shipment[0] ? data.shipment[0].address_2 : 'Loading...'}</p>
-                  <p>State: {data.shipment && data.shipment[0] ? data.shipment[0].state : 'Loading...'}</p>
-                  <p>City: {data.shipment && data.shipment[0] ? data.shipment[0].city : 'Loading...'}</p>
-                  <p>Zip Code: {data.shipment && data.shipment[0] ? data.shipment[0].zip_code : 'Loading...'}</p>
-                </div>
+                    {/* Displaying the shipment data if it exists */}
+                    <p>Credit Card Type: [Your Credit Card Type]</p>
+                    <p>Bank Name: [Your Bank Name]</p>
+                    <p>Bank Account Number: [Your Bank Account Number]</p>
+                    <p>Payment: [Your Payment]</p>
+                    <p>Address 1: {data.shipment && data.shipment.length > 0 ? data.shipment[0].address_1 : 'Loading...'}</p>
+                    <p>Address 2: {data.shipment && data.shipment.length > 0 ? data.shipment[0].address_2 : 'Loading...'}</p>
+                    <p>State: {data.shipment && data.shipment.length > 0 ? data.shipment[0].state : 'Loading...'}</p>
+                    <p>City: {data.shipment && data.shipment.length > 0 ? data.shipment[0].city : 'Loading...'}</p>
+                    <p>Zip Code: {data.shipment && data.shipment.length > 0 ? data.shipment[0].zip_code : 'Loading...'}</p>
+                  </div>
                 ) : (
-                  <Form>
+                  <Form onSubmit={(e) => {
+                      e.preventDefault();
+                      const shipmentData = {
+                        address1, address2, state, city, zipCode
+                      };
+                      submitShipmentData(shipmentData);
+                    }}>
                     <Row>
                       <Col className="pr-md-1" md="5">
                         <FormGroup>
                           <Label>Credit Card Type</Label>
-                          <Input placeholder="Credit Card Type" type="text" />
+                          {/* <Input
+                            value={creditCardType}
+                            onChange={e => setCreditCardType(e.target.value)}
+                            placeholder="Credit Card Type"
+                            type="text"
+                          /> */}
                         </FormGroup>
                       </Col>
                       <Col className="px-md-1" md="3">
                         <FormGroup>
                           <Label>Bank Name</Label>
-                          <Input placeholder="Bank Name" type="text" />
+                          {/* <Input
+                            value={bankName}
+                            onChange={e => setBankName(e.target.value)}
+                            placeholder="Bank Name"
+                            type="text"
+                          /> */}
                         </FormGroup>
                       </Col>
                       <Col className="pl-md-1" md="4">
                         <FormGroup>
                           <Label>Bank Account Number</Label>
-                          <Input placeholder="Bank Account Number" type="text" />
+                          {/* <Input
+                            value={bankAccountNumber}
+                            onChange={e => setBankAccountNumber(e.target.value)}
+                            placeholder="Bank Account Number"
+                            type="text"
+                          /> */}
                         </FormGroup>
                       </Col>
                     </Row>
@@ -182,13 +236,23 @@ function UserProfile() {
                       <Col className="pr-md-1" md="5">
                         <FormGroup>
                           <Label>Payment</Label>
-                          <Input placeholder="Payment" type="text" />
+                          {/* <Input
+                            value={payment}
+                            onChange={e => setPayment(e.target.value)}
+                            placeholder="Payment"
+                            type="text"
+                          /> */}
                         </FormGroup>
                       </Col>
                       <Col className="px-md-1" md="7">
                         <FormGroup>
                           <Label>Address 1</Label>
-                          <Input placeholder="Address 1" type="text" />
+                          <Input
+                            value={address1}
+                            onChange={e => setAddress1(e.target.value)}
+                            placeholder="Address 1"
+                            type="text"
+                          />
                         </FormGroup>
                       </Col>
                     </Row>
@@ -196,19 +260,34 @@ function UserProfile() {
                       <Col className="pr-md-1" md="5">
                         <FormGroup>
                           <Label>Address 2</Label>
-                          <Input placeholder="Address 2 (optional)" type="text" />
+                          <Input
+                            value={address2}
+                            onChange={e => setAddress2(e.target.value)}
+                            placeholder="Address 2 (optional)"
+                            type="text"
+                          />
                         </FormGroup>
                       </Col>
                       <Col className="px-md-1" md="3">
                         <FormGroup>
                           <Label>State</Label>
-                          <Input placeholder="State" type="text" />
+                          <Input
+                            value={state}
+                            onChange={e => setState(e.target.value)}
+                            placeholder="State"
+                            type="text"
+                          />
                         </FormGroup>
                       </Col>
                       <Col className="pl-md-1" md="4">
                         <FormGroup>
                           <Label>City</Label>
-                          <Input placeholder="City" type="text" />
+                          <Input
+                            value={city}
+                            onChange={e => setCity(e.target.value)}
+                            placeholder="City"
+                            type="text"
+                          />
                         </FormGroup>
                       </Col>
                     </Row>
@@ -216,7 +295,12 @@ function UserProfile() {
                       <Col className="pr-md-1" md="5">
                         <FormGroup>
                           <Label>Zip Code</Label>
-                          <Input placeholder="Zip Code" type="text" />
+                          <Input
+                            value={zipCode}
+                            onChange={e => setZipCode(e.target.value)}
+                            placeholder="Zip Code"
+                            type="text"
+                          />
                         </FormGroup>
                       </Col>
                     </Row>
@@ -227,14 +311,14 @@ function UserProfile() {
                 <Button onClick={() => setShowPaymentEdit(!showPaymentEdit)}>
                   {showPaymentEdit ? "Cancel" : "Edit"}
                 </Button>
-                {showPaymentEdit && <Button onClick={() => setShowPaymentEdit(false)}>Confirm</Button>}
+                {showPaymentEdit && <Button type="submit" onClick={() => setShowPaymentEdit(false)}>Confirm</Button>}
               </CardFooter>
-            </Card>
-          </Col>
-        </Row>
-      </div>
-    </>
-  );
+              </Card>
+              </Col>
+              </Row>
+              </div>
+              </>
+              );
 }
 
 export default UserProfile;
