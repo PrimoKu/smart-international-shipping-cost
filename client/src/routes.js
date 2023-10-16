@@ -1,7 +1,9 @@
 import Dashboard from 'views/Dashboard.js';
 import Checkout from "views/Checkout.js";
 import Icons from 'views/Icons.js';
+import Order from 'views/Order.js'
 import Map from 'views/Map.js';
+import Main from 'views/Main.js'
 import Notifications from 'views/Notifications.js';
 import TableList from 'views/TableList.js';
 import Typography from 'views/Typography.js';
@@ -57,6 +59,20 @@ var routes = [
     icon: "tim-icons icon-cart",
     component: <Checkout />,
     layout: "/admin",
+  },
+  {
+    path: "/main",
+    name: "Main",
+    icon: "tim-icons icon-cart",
+    component: <Main />,
+    layout: "/admin",
+  },
+  {
+    path: '/order',
+    name: 'Order',
+    icon: 'tim-icons icon-bell-55',
+    component: <Order />,
+    layout: '/admin',
   },
   {
     path: "/tables",

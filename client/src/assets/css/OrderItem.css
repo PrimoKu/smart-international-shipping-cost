@@ -1,0 +1,159 @@
+@font-face {
+  font-family: 'Nucleo';
+  src: url('../fonts/nucleo.eot');
+  src: url('../fonts/nucleo.eot') format('embedded-opentype'), url('../fonts/nucleo.woff2') format('woff2'), url('../fonts/nucleo.woff') format('woff'), url('../fonts/nucleo.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.home-page {
+  display:flex; 
+  background-color: white;
+}
+
+.empty-container {
+  display: block;
+  font-size: larger;
+  color: black;
+  width: auto;
+  text-align: center;
+}
+
+.container-left {
+  display: inline-block;
+  width: 35%;
+  background-color: white;
+  height: fit-content;
+  overflow: hidden;
+  padding: 10px;
+  border-radius: 10px;
+  align-items:center;
+  margin-left: 10%;
+}
+
+.container-right {
+  display:inline-block;
+  width: 35%;
+  align-items: center;
+  margin-left: 10%;
+  background-color: white;
+  height: fit-content;
+  overflow: hidden;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.order-img {
+  display: inline-block;
+  background-color: black;
+}
+
+.order-text {
+  display: inline-block;
+}
+.mini-header {
+  color: black;
+  padding-top: 5px;
+  padding-left: 5px;
+  margin-bottom: 2px;
+  text-align: left;
+}
+
+.dropdown-icon {
+  font-size: large;
+}
+
+.head {
+  color: black;
+  margin-top: 30px;
+  margin-left: 20px;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.left-panel {
+  align-items: center;
+  display: flexbox;
+  width: 30%;
+  height: 100vh;
+  padding:0;
+  margin:0;
+}
+
+
+.right-panel {
+  width: 100%;
+  padding:0;
+  margin:0;
+  background-color: lightgray;
+  height: 100vh;
+  align-items:center;
+}
+
+.menu-button {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100%;
+  background-color: white;
+  color: black;
+  border:none;
+}
+
+.new-order-button {
+  background-color: mediumorchid;
+  color: white;
+  border:none;
+  padding: 10px;
+  border-radius: 10px;
+  padding-left:20px;
+  padding-right:20px;
+}
+
+.new-order-button:hover {
+  background-color: darkorchid;
+  border-radius:10px;
+}
+
+.menu-button:hover {
+  background-color: lightgray;
+  border-radius:10px;
+}
+
+.order-box {
+  text-align: left;
+  width: 100%;
+  border: black 1px;
+}
+
+.order-time {
+  width: 100%;
+  display:block;
+  font-size: 20px;
+  background-color: black;
+}
+
+.order-name {
+  width:100%;
+  display:block;
+  font-size: 10px;
+  color: white;
+  border: black 1px;
+}
+
+.item:hover {
+  background-color: lightgray;
+  border-radius:10px;
+}
+
+.item {
+  background-color: white;
+  color: black;
+  overflow:hidden;
+  border: hidden;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+}
+
+

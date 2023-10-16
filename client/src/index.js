@@ -8,6 +8,7 @@ import AdminLayout from "./layouts/Admin/Admin.js";
 import Login from "./views/Login.js";
 import Register from "./views/Register.js";
 import Checkout from './views/Checkout.js';
+import Main from "./views/Main.js";
 
 import { AuthProvider } from "contexts/AuthContext.js"; 
 
@@ -31,6 +32,7 @@ root.render(
             <Route path="/admin/*" element={<AdminLayout />} />
             <Route path='/' element={<Home />} />
             <Route path='/createorder' element={<CreateOrder />} />
+            <Route path='/main' element={<Main />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path='*' element={<Home />} /> {/* Default route */}
           </Routes>
