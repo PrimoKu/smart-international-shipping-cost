@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import ConfirmationPopup from '../components/ConfirmationPopup';
 import {
   Button,
@@ -58,7 +59,8 @@ function Checkout() {
       "price": 12.75,
       "approved": false,
     }
-  ]
+  ];
+  const isApproved = orders.every(obj => obj.approved === true);
   return (
     <>
       <div className="content">
@@ -98,7 +100,10 @@ function Checkout() {
               </CardBody>
             </Card>
           </Col>
-          <Button onClick={togglePopup}>Submit Order</Button>
+          <Link to='/home'>
+            <Button>Return to Home</Button>
+          </Link>
+          <Button onClick={togglePopup} disabled={!isApproved}>Submit Order</Button>
           <ConfirmationPopup show={showPopup} toggle={togglePopup} />
           <ButtonGroup>
     <UncontrolledDropdown>
