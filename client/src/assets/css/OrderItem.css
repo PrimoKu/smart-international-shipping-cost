@@ -31,6 +31,19 @@
   margin-left: 10%;
 }
 
+.notifications {
+  display: inline-block;
+  width: 80%;
+  margin-top: 20px;
+  background-color: white;
+  height: fit-content;
+  overflow: hidden;
+  padding: 10px;
+  border-radius: 10px;
+  align-items:center;
+  margin-left: 10%;
+}
+
 .container-right {
   display:inline-block;
   width: 35%;
@@ -66,8 +79,8 @@
 .head {
   color: black;
   margin-top: 30px;
-  margin-left: 20px;
-  margin-bottom: 30px;
+  margin-left: 30px;
+  margin-bottom: 0px;
   text-align: left;
 }
 
@@ -85,7 +98,7 @@
   width: 100%;
   padding:0;
   margin:0;
-  background-color: lightgray;
+  background-color: rgb(238, 238, 245);
   height: 100vh;
   align-items:center;
 }
@@ -94,10 +107,39 @@
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 100%;
   background-color: white;
   color: black;
+  font-size: large;
+  text-align: left;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
   border:none;
+}
+
+.menu-padding {
+  margin-top: 50%;
+}
+
+.sub-header {
+  font-size: medium;
+  color: darkgrey;
+  margin-left: 20px;
+}
+
+.annotation {
+  font-size: small;
+  padding-left: 30px;
+  color: darkgrey;
+  margin-bottom: 30px;
+}
+
+.menu-button-image {
+  width:25px;
+  margin-right:10px;
+  height:25px;
+  float:left;
+  margin-left:10px;
 }
 
 .new-order-button {
@@ -106,8 +148,8 @@
   border:none;
   padding: 10px;
   border-radius: 10px;
-  padding-left:20px;
-  padding-right:20px;
+  padding-left:40px;
+  padding-right:40px;
 }
 
 .new-order-button:hover {
