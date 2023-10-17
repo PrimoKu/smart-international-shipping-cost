@@ -114,6 +114,38 @@ const getWithManager = async (id) => {
     return groupOrder;
 }
 
+const getOrdersWhereUserIsNotManager = async (user_id) => {
+    const userId = new ObjectId(user_id);
+
+    const results = await GroupOrder.aggregate([
+        {
+            $lookup: {
+                from: 'orders',
+                localField: 'order_ids',
+                foreignField: '_id',
+                as: 'associatedOrders'
+            }
+        },
+        {
+            $match: {
+                manager_id: { $ne: userId },
+                'associatedOrders.user_id': userId
+            }
+        },
+        {
+            $project: {
+                name: 1,
+                country: 1,
+                deadline: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                order_ids: 1,
+            }
+        }
+    ]);
+
+    return results;
+}
 
 module.exports = {
     getAll,
@@ -122,4 +154,5 @@ module.exports = {
     update,
     getWithDetails,
     getWithManager,
+    getOrdersWhereUserIsNotManager
 }

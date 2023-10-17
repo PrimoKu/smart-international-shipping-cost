@@ -9,8 +9,9 @@ class GroupOrderController {
     //@route GET /api/groupOrders
     //@access private
     getGroupOrders = asyncHandler( async (req, res) => {
-        const groupOrders = await groupOrderRepo.getAll(req.user.id); 
-        res.status(200).json(groupOrders);
+        const groupOrders_managed = await groupOrderRepo.getAll(req.user.id); 
+        const groupOrders_joined = await groupOrderRepo.getOrdersWhereUserIsNotManager(req.user.id);
+        res.status(200).json({ managed: groupOrders_managed, joined: groupOrders_joined });
     });
 
     //@des Create new group order
@@ -38,10 +39,11 @@ class GroupOrderController {
     getGroupOrder = asyncHandler( async (req, res) => {
         try {
             const groupOrder = await groupOrderRepo.getWithDetails(req.params.id);
+            console.log(groupOrder);
             if(!groupOrder) {
                 return res.status(404).json({ message: "Group Order not found!" });
             }
-            if (!groupOrder.users.some(user => user._id.toString() === req.user.id) && groupOrder.manager[0]._id.toString() !== req.user.id) {
+            if (!groupOrder.users.some(user => user._id.toString() === req.user.id) && groupOrder.manager._id.toString() !== req.user.id) {
                 return res.status(403).json({ message: "User don't have permission to update other user's order" });
             }
             res.status(200).json({
