@@ -21,8 +21,7 @@ function OrderList({ data }) {
         <div className="container-right">
           <h3 className="mini-header">GO's you manage</h3>
           {data.map(order => (
-            <OrderListItem key={order._id} ident={order._id} name={order.name} price={order.price} 
-                          updatedAt={order.updatedAt} createdAt={order.createdAt} status={order.status} weight={order.weight} />
+            <OrderListItem key={order._id} ident={order._id} name={order.name} updatedAt={order.updatedAt} />
           ))}
         </div>);
       } else {
@@ -30,8 +29,7 @@ function OrderList({ data }) {
           <div className="container-left">
             <h3 className="mini-header">GO's you joined</h3>
             {data.map(order => (
-              <OrderListItem key={order._id} ident={order._id} name={order.name} price={order.price} 
-                            updatedAt={order.updatedAt} createdAt={order.createdAt} status={order.status} weight={order.weight} />
+              <OrderListItem key={order._id} ident={order._id} name={order.name} updatedAt={order.updatedAt} />
             ))}
           </div>);
       }

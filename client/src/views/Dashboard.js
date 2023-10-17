@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import { Line, Bar } from 'react-chartjs-2';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import OrderList from '../components/OrderList';
 import axios from 'axios';
 import OrderListItem from '../components/OrderListItem';
 import '../assets/css/OrderItem.css';
@@ -34,7 +33,7 @@ function Dashboard(props) {
   }, []);
 
   function getManagerOrders(data) {
-    var managed = data.filter(order => order.manager_id === user._id);
+    var managed = data.filter(order => order.manager_id === user?._id);
     //if (managed.length >= 3) {
     //  managed = managed.slice(0, 3);
     //}
@@ -42,7 +41,7 @@ function Dashboard(props) {
   }
 
   function getJoinerOrders(data) {
-    var joined = data.filter(order => order.manager_id !== user._id);
+    var joined = data.filter(order => order.manager_id !== user?._id);
     //if (joined.length >= 3) {
     //  joined = joined.slice(0, 3);
     //}
@@ -52,7 +51,7 @@ function Dashboard(props) {
   function ordersEmpty(data, isManager) {
     if (getManagerOrders(data).length == 0 && isManager) {
       return (
-      <Card className='card-chart' style={{minHeight: '400px'}}>
+      <Card className='card-chart' style={{minHeight: '300px'}}>
         <CardHeader>
           <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Manage</h5>
         </CardHeader>
@@ -62,7 +61,7 @@ function Dashboard(props) {
       </Card>);
     } else if (getJoinerOrders(data).length == 0 && !isManager) {
       return (
-        <Card className='card-chart' style={{minHeight: '400px'}}>
+        <Card className='card-chart' style={{minHeight: '300px', maxHeight:'300px', overflowY: 'scroll', overflow: 'auto'}}>
           <CardHeader>
             <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Joined</h5>
           </CardHeader>
@@ -73,27 +72,25 @@ function Dashboard(props) {
     } else {
       if (isManager) {
         return (
-        <Card className='card-chart' style={{minHeight: '400px'}}>
+        <Card className='card-chart' style={{minHeight: '300px', maxHeight:'300px', overflowY: 'scroll', overflow: 'auto'}}>
           <CardHeader>
             <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Manage</h5>
           </CardHeader>
           <CardBody>
             {getManagerOrders(data).map(order => (
-              <OrderListItem key={order._id} ident={order._id} name={order.name} price={order.price} 
-                            updatedAt={order.updatedAt} createdAt={order.createdAt} status={order.status} weight={order.weight} />
+               <OrderListItem key={order._id} ident={order._id} name={order.name} updatedAt={order.updatedAt} />
             ))}
           </CardBody>
         </Card>);
       } else {
         return (
-        <Card className='card-chart' style={{minHeight: '400px'}}>
+        <Card className='card-chart' style={{minHeight: '300px'}}>
           <CardHeader>
             <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Joined</h5>
           </CardHeader>
           <CardBody>
             {getJoinerOrders(data).map(order => (
-              <OrderListItem key={order._id} ident={order._id} name={order.name} price={order.price} 
-                            updatedAt={order.updatedAt} createdAt={order.createdAt} status={order.status} weight={order.weight} />
+               <OrderListItem key={order._id} ident={order._id} name={order.name} updatedAt={order.updatedAt} />
             ))}
           </CardBody>
           <CardFooter>
