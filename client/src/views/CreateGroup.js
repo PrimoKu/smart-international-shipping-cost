@@ -54,7 +54,7 @@ function CreateGroup() {
 
 
   const handleModalClosed = () => {
-    window.location.assign('/');
+    window.location.assign('/admin/dashboard');
   }
   return (
     <div className='wrapper'>

@@ -19,12 +19,16 @@ import {
 
 function Dashboard(props) {
   const [data, setData] = useState([]);
+  const [managed, setManaged] = useState([]);
+  const [joined, setJoined] = useState([]);
   const {user} = useAuth();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/groupOrders/', { withCredentials: true });
-        setData(response.data);
+        console.log(response.data);
+        setManaged(response.data.managed);
+        setJoined(response.data.joined);
       } catch (error) {
         console.error("An error occurred while fetching data", error);
       }
@@ -49,7 +53,7 @@ function Dashboard(props) {
   }
 
   function ordersEmpty(data, isManager) {
-    if (getManagerOrders(data).length == 0 && isManager) {
+    if (data.length == 0 && isManager) {
       return (
       <Card className='card-chart' style={{minHeight: '300px'}}>
         <CardHeader>
@@ -59,7 +63,7 @@ function Dashboard(props) {
           <h5 className='card-category' style={{fontSize: "large", color: "darkgrey", fontFamily:"'Lucida Console', monospace", marginLeft: "15px"}}>No orders here...</h5>
         </CardBody>
       </Card>);
-    } else if (getJoinerOrders(data).length == 0 && !isManager) {
+    } else if (data.length == 0 && !isManager) {
       return (
         <Card className='card-chart' style={{minHeight: '300px', maxHeight:'300px', overflowY: 'scroll', overflow: 'auto'}}>
           <CardHeader>
@@ -77,7 +81,7 @@ function Dashboard(props) {
             <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Manage</h5>
           </CardHeader>
           <CardBody>
-            {getManagerOrders(data).map(order => (
+            {data.map(order => (
                <OrderListItem key={order._id} ident={order._id} name={order.name} updatedAt={order.updatedAt} />
             ))}
           </CardBody>
@@ -89,7 +93,7 @@ function Dashboard(props) {
             <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Joined</h5>
           </CardHeader>
           <CardBody>
-            {getJoinerOrders(data).map(order => (
+            {data.map(order => (
                <OrderListItem key={order._id} ident={order._id} name={order.name} updatedAt={order.updatedAt} />
             ))}
           </CardBody>
@@ -108,9 +112,9 @@ function Dashboard(props) {
       <div className='content'>
         <Row>
           <Col>
-            <Link to='/createOrder'>
+            <Link to='/creategroup'>
               <Button color='info' size='lg' className='mr-3 mb-3' style={{width: '30%'}}>
-                Add New Order
+                Add New Group Order
               </Button>
             </Link>
           </Col>
@@ -119,10 +123,10 @@ function Dashboard(props) {
           <Col xs='12'>
             <Row>
               <Col>
-                {ordersEmpty(data, true)}
+                {ordersEmpty(managed, true)}
               </Col>
               <Col>
-                {ordersEmpty(data, false)}
+                {ordersEmpty(joined, false)}
               </Col>
             </Row>
           </Col>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { PrimeReactProvider, FilterMatchMode, FilterOperator } from 'primereact/api';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -19,6 +19,7 @@ import {
 } from 'reactstrap';
 
 function GroupOrder(props) {
+    const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
     const [groupOrder, setGroupOrder] = useState("");
@@ -142,6 +143,13 @@ function GroupOrder(props) {
         });
     }
 
+    const handleNavigation = () => {
+        navigate('/createOrder', { state: { groupOrder_id: groupOrder._id } });
+    };
+
+    if (!groupOrder) {
+        return <div>Loading...</div>;
+    }
     return (
         <PrimeReactProvider>
         <div className='content'>
@@ -157,19 +165,15 @@ function GroupOrder(props) {
             </Row>
             <Row sm='2' md='3' lg='4'>
                 <Col className='text-left' >
-                    <Link to='/createOrder'>
-                        <Button color='info' size='lg' className='mr-3 mb-3'>
-                            Add New Order
-                        </Button>
-                    </Link>
+                    <Button color='info' size='lg' className='mr-3 mb-3' onClick={handleNavigation}>
+                        Add New Order
+                    </Button>
                 </Col>
                 {user?._id && manager?._id && user._id === manager._id && (
                 <Col className='text-left' >
-                    <Link to='/createOrder'>
-                        <Button color='info' size='lg' className='mr-3 mb-3'>
-                            Invite Joiners
-                        </Button>
-                    </Link>
+                    <Button color='info' size='lg' className='mr-3 mb-3' >
+                        Invite Joiners
+                    </Button>
                 </Col>
                 )}
             </Row>

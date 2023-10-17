@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import {
   Card,
@@ -14,10 +14,13 @@ import {
 } from 'reactstrap';
 
 function CreateOrder() {
+  const location = useLocation();
+  const groupOrderId = location.state?.groupOrder_id;
   const [order, setOrder] = useState({
     name: '',
     price: '',
     weight: '',
+    groupOrder_id: '',
     date: '',
   });
   const [modal, setModal] = useState(false);
@@ -42,6 +45,7 @@ function CreateOrder() {
     formData.append('name', order.name);
     formData.append('price', order.price);
     formData.append('weight', order.weight);
+    formData.append('groupOrder_id', groupOrderId);
 
     axios.post('http://localhost:8080/api/orders', formData, { withCredentials: true })
     .then(response => {
@@ -56,7 +60,7 @@ function CreateOrder() {
 
     
   const handleModalClosed = () => {
-    window.location.assign('/');
+    window.location.assign(`/admin/groupOrder/${groupOrderId}`);
   }
   return (
     <div className='wrapper'>
@@ -124,7 +128,7 @@ function CreateOrder() {
             </ModalFooter>
           </Modal>
         </div>
-        <Link to='/home'>
+        <Link to='/admin/dashboard'>
         <Button>Return to Home</Button>
         </Link>
       </div>

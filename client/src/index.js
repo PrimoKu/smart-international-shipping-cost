@@ -8,7 +8,7 @@ import AdminLayout from "./layouts/Admin/Admin.js";
 import Login from "./views/Login.js";
 import Register from "./views/Register.js";
 import Checkout from './views/Checkout.js';
-import Main from "./views/Main.js";
+import CreateGroup from 'views/CreateGroup.js';
 
 import { AuthProvider } from "contexts/AuthContext.js"; 
 
@@ -19,6 +19,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import ThemeContextWrapper from './components/ThemeWrapper/ThemeWrapper';
 import BackgroundColorWrapper from './components/BackgroundColorWrapper/BackgroundColorWrapper';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -32,7 +33,7 @@ root.render(
             <Route path="/admin/*" element={<AdminLayout />} />
             <Route path='/' element={<Home />} />
             <Route path='/createorder' element={<CreateOrder />} />
-            <Route path='/main' element={<Main />} />
+            <Route path='/creategroup' element={<CreateGroup />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path='*' element={<Home />} /> {/* Default route */}
           </Routes>
