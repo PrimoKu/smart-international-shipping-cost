@@ -41,29 +41,6 @@ function Home() {
               </Link>
             </CardBody>
           </Card>
-          <Card className='text-center'>
-            <CardBody>
-              <CardTitle tag='h3'>Create a shipping order</CardTitle>
-              <Link to='/createorder'>
-                <Button color='info' size='lg' className='mr-3'>
-                  Create
-                </Button>
-              </Link>
-            </CardBody>
-          </Card>
-          <div className="App">
-            <h1>All Order Information</h1>
-             <Link to='/checkout'>
-                <Button color='info' size='lg' className='mr-3'>
-                  Checkout
-                </Button>
-              </Link>
-            <ul>
-              {data.map(item => (
-                <li key={item._id}> Name: {item.name}, Weight: {item.weight}, Price: {item.price} </li>
-              ))}
-            </ul>
-          </div>
         </div>
       </div>
     </div>
