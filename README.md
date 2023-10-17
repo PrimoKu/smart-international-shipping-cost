@@ -174,9 +174,10 @@ Iteration 1:
 4) "Create order" creates a modal, which allows you to upload orders to the interface and the database.
 
 Iteration 2:
-1) The main interface is now accessible and connected to the order management interface
-2) User registration / information has been updated, and checkout has been improved
-3) Additional API functionality has been added, see the documentation or just explore :^)
+1) The starting screen has been streamlined for login/registration, though this is likely to be removed or changed.
+2) The dashboard interface is now accessible and connected to the order management interface
+3) User registration / login / information input has been updated, and checkout has been improved
+4) Additional API functionality has been added, see the documentation or just explore :^)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
