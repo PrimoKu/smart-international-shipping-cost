@@ -147,14 +147,16 @@ npm install
 Configuration variables, such as database connection strings, or secret keys, are stored in `.env` file, which you can locate it in `server` folder.
 - Start by copying the provided `.env.example` file to create your own `.env` file.
 - Populate the `.env` file based on the guildlines below:
-    - `DB_CONNECTION_STRING`: \
-    This is the connection string for MongoDB. The connection string for MongoDB is provided in the `.env.example` file. You can use it directly to connect to the provided database.
-    - `ACCESS_TOKEN_SECRET`: \
-    This is a secret key for token-based authentication. To generate a secret, run the command provided in `.env.example`:
-        ```bash
-        node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-        ```
-        Copy the output and paste it as the value for `ACCESS_TOKEN_SECRET`.
+  - `LocalHostPort`:\
+  Specify the port other than 3000 you'd like the server to run on. E.g., 8080.
+  - `DB_CONNECTION_STRING`: \
+  This is the connection string for MongoDB. The connection string for MongoDB is provided in the `.env.example` file. You can use it directly to connect to the provided database.
+  - `ACCESS_TOKEN_SECRET`: \
+  This is a secret key for token-based authentication. To generate a secret, run the command provided in `.env.example`:
+      ```bash
+      node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+      ```
+      Copy the output and paste it as the value for `ACCESS_TOKEN_SECRET`.
 
 #### 3. Starting App
 To launch the app correctly, you need to start both the `client` and `server` individually. \
