@@ -39,7 +39,6 @@ class GroupOrderController {
     getGroupOrder = asyncHandler( async (req, res) => {
         try {
             const groupOrder = await groupOrderRepo.getWithDetails(req.params.id);
-            console.log(groupOrder);
             if(!groupOrder) {
                 return res.status(404).json({ message: "Group Order not found!" });
             }

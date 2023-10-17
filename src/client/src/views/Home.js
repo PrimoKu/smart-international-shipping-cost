@@ -5,20 +5,6 @@ import axios from 'axios';
 import logo from 'assets/img/react-logo.png';
 
 function Home() {
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/api/orders/', { withCredentials: true });
-        console.log(response);
-        setData(response.data);
-      } catch (error) {
-        console.error("An error occurred while fetching data", error);
-      }
-    };
-    fetchData();
-  }, []);
-
   return (
     <div className='wrapper'>
       <div className='main-panel'>
