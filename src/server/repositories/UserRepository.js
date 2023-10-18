@@ -20,9 +20,15 @@ const getWithDetails = async(id) => {
         {
             $lookup: {
                 from: 'shipments', 
-                localField: 'shipment_id',
-                foreignField: '_id',
+                localField: '_id',
+                foreignField: 'user_id',
                 as: 'shipment' 
+            }
+        },
+        {
+            $unwind: {
+                path: "$shipment",
+                preserveNullAndEmptyArrays: true
             }
         }
     ]);

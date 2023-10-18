@@ -14,6 +14,7 @@ const AuthProvider = ({ children }) => {
             try {
                 const res = await axios.get('http://localhost:8080/api/users/current', { withCredentials: true });
                 if (res.data) {
+                    console.log(res.data);
                     setUser(res.data);
                     setIsAuthenticated(res.data !== null);
                 } else {
