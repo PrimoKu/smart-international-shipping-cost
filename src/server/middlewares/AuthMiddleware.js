@@ -59,8 +59,7 @@ const requireAuth = (req, res, next) => {
             }
         });
     } else {
-        // res.redirect('/login');
-        res.status(401).json({ error: 'Unauthorized' });
+        // res.status(401).json({ error: 'Unauthorized' });
     }
 }
 

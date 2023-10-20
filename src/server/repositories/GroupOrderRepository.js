@@ -46,7 +46,7 @@ const getWithDetails = async (id) => {
                 createdAt: 1,
                 updatedAt: 1,
                 __v: 1,
-                order_ids: 1,
+                user_ids: 1,
                 'manager._id': 1,
                 'manager.name': 1,
                 'manager.email': 1
@@ -55,8 +55,8 @@ const getWithDetails = async (id) => {
         {
             $lookup: {
                 from: 'orders', 
-                localField: 'order_ids',
-                foreignField: '_id',
+                localField: '_id',
+                foreignField: 'groupOrder_id',
                 as: 'orders' 
             }
         },
@@ -68,10 +68,10 @@ const getWithDetails = async (id) => {
         },
         {
             $lookup: {
-                from: 'users', 
-                localField: 'orders.user_id',
+                from: 'users',
+                localField: 'user_ids',
                 foreignField: '_id',
-                as: 'orders.user' 
+                as: 'users'
             }
         },
         {
@@ -85,10 +85,11 @@ const getWithDetails = async (id) => {
                 updatedAt: { $first: "$updatedAt" },
                 __v: { $first: "$__v" },
                 orders: { $push: "$orders" },
-                users: { $addToSet: { $arrayElemAt: ["$orders.user", 0] } }
+                users: { $first: "$users" }
             }
         }
     ]);
+    
     const groupOrder = results && results.length ? results[0] : null;
 
     return groupOrder;
@@ -121,8 +122,8 @@ const getOrdersWhereUserIsNotManager = async (user_id) => {
         {
             $lookup: {
                 from: 'orders',
-                localField: 'order_ids',
-                foreignField: '_id',
+                localField: '_id',
+                foreignField: 'groupOrder_id',
                 as: 'associatedOrders'
             }
         },
@@ -139,7 +140,6 @@ const getOrdersWhereUserIsNotManager = async (user_id) => {
                 deadline: 1,
                 createdAt: 1,
                 updatedAt: 1,
-                order_ids: 1,
             }
         }
     ]);

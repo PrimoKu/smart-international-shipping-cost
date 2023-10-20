@@ -5,8 +5,8 @@ const getAll = async (user_id) => {
     return notifications;
 }
 
-const create = async (user_id, message, link) => {
-    const notification = await Notification.create({ user_id, message, link });
+const create = async (user_id, message) => {
+    const notification = await Notification.create({ user_id, message });
     return notification;
 }
 

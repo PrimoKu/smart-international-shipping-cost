@@ -18,10 +18,10 @@ const groupOrderSchema = mongoose.Schema({
             type: Date,
             required: false,
         },
-        order_ids: [
+        user_ids: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "Order"
+                ref: "User",
             }
         ]
     }, 

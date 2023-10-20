@@ -10,10 +10,6 @@ const notificationSchema = mongoose.Schema({
             type: String,
             required: [true, "Please add notification message"],
         },
-        link: {
-            type: String,
-            required: [true, "Please add notification link"],
-        },
         isRead: { 
             type: Boolean, 
             default: false 
