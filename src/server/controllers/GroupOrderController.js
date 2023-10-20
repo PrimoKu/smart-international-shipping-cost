@@ -1,7 +1,10 @@
 const asyncHandler = require("express-async-handler");
 const GroupOrder = require("../models/GroupOrder");
 const groupOrderRepo = require("../repositories/GroupOrderRepository");
+const userRepo = require("../repositories/UserRepository");
+const notificationRepo = require("../repositories/NotificationRepository");
 const { OrderStatus, OrderStatusList } = require("../enums/OrderStatusEnums");
+const { sendNotificationToUser } = require("../socketManager");
 
 class GroupOrderController {
 
@@ -72,6 +75,34 @@ class GroupOrderController {
             res.status(200).json(updatedGroupOrder);
     
         } catch (error) {
+            res.status(500);
+            throw new Error("Server Error!");
+        }
+    });
+
+    //@des Invite user to group order
+    //@route POST /api/groupOrders/invite/:id
+    //@access private
+    inviteToGroupOrder = asyncHandler( async (req, res) => { 
+        const sender = req.user;
+        const groupOrder = await groupOrderRepo.get(req.params.id);
+        const { userEmail } = req.body;
+        let notification;
+        try {
+            notification = await notificationRepo.create(user.id, message, link);
+            if(notification) {
+                res.status(201).json({notification});
+            } else {
+                return res.status(442).json({ message: "Create notification failed!" });
+            }
+
+            const receiver = await userRepo.getByEmail(userEmail);
+            if(!receiver) { return res.status(404).json({ message: "User not found!" }); }
+            const message = `${sender.name} invited you to join the group ${groupOrder.name}:\n http://localhost:3000/admin/groupOrder/${groupOrder.id}`;
+            sendNotificationToUser(receiver.id, message);
+            
+        } catch (error) {
+            console.log(error);
             res.status(500);
             throw new Error("Server Error!");
         }

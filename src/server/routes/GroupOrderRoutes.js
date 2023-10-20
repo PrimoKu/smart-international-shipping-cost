@@ -8,4 +8,5 @@ const { requireAuth } = require('../middlewares/AuthMiddleware');
 router.route('/').get(requireAuth, groupOrderController.getGroupOrders).post(requireAuth, GroupOrderCreateValidator, groupOrderController.createGroupOrder);
 router.route('/:id').get(requireAuth, groupOrderController.getGroupOrder).put(requireAuth, groupOrderController.updateGroupOrder);
 
+router.route('/invite/:id').post(requireAuth, groupOrderController.inviteToGroupOrder);
 module.exports = router;

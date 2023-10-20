@@ -37,8 +37,14 @@ const getWithDetails = async(id) => {
     return user;
 }
 
+const getByEmail = async (email) => {
+    const user = await User.findOne({email: email});
+    return user;
+}
+
 module.exports = {
     get,
     update,
     getWithDetails,
+    getByEmail,
 }
