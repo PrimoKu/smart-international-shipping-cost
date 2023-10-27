@@ -20,7 +20,6 @@ import {
 function UserProfile() {
   const [showUserEdit, setShowUserEdit] = useState(false);
   const [showPaymentEdit, setShowPaymentEdit] = useState(false);
-  const [data, setData] = useState([]);
   const { user } = useAuth();
 
   // console.log(user)
@@ -37,32 +36,29 @@ function UserProfile() {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/users/current', { withCredentials: true });
-        console.log(response);
-        setData(response.data.user);
-        
-        if (response.data && response.data.user) {
-          setData(response.data.user);
-          
+        console.log(response.data);
+            
+        if (response.data && response.data.user) { 
           if (response.data.user.shipment && response.data.user.shipment.length > 0) {
-              const shipmentData = response.data.user.shipment[0];
-              setFirstName(shipmentData.first_name);
-              setLastName(shipmentData.last_name);
-              setAddress1(shipmentData.address_1);
-              setAddress2(shipmentData.address_2 || "");
-              setState(shipmentData.state);
-              setCity(shipmentData.city);
-              setZipCode(shipmentData.zip_code);
+            const shipmentData = response.data.user.shipment[0];
+            setFirstName(shipmentData.first_name);
+            setLastName(shipmentData.last_name);
+            setAddress1(shipmentData.address_1);
+            setAddress2(shipmentData.address_2 || "");
+            setState(shipmentData.state);
+            setCity(shipmentData.city);
+            setZipCode(shipmentData.zip_code);
           } else {
-              // Reset the shipment related state variables if needed
-              setFirstName("");
-              setLastName("");
-              setAddress1("");
-              setAddress2("");
-              setState("");
-              setCity("");
-              setZipCode("");
+            // Reset the shipment related state variables if needed
+            setFirstName("");
+            setLastName("");
+            setAddress1("");
+            setAddress2("");
+            setState("");
+            setCity("");
+            setZipCode("");
           }
-      }
+        }
       } catch (error) {
         console.error("An error occurred while fetching data", error);
       }
@@ -121,13 +117,13 @@ function UserProfile() {
                         <Col className="pr-md-1" md="6">
                             <FormGroup>
                                 <Label>User ID</Label>
-                                <Input placeholder="User ID" type="text" />
+                                <Input value={user?._id || ""} placeholder="User ID" type="text" disabled />
                             </FormGroup>
                         </Col>
                         <Col className="pl-md-1" md="6">
                             <FormGroup>
                                 <Label>User Name</Label>
-                                <Input placeholder="User Name" type="text" />
+                                <Input value={user?.name || ""} placeholder="User Name" type="text" />
                             </FormGroup>
                         </Col>
                     </Row>
@@ -137,7 +133,7 @@ function UserProfile() {
                         <Col className="pr-md-1" md="6">
                             <FormGroup>
                                 <Label>Email</Label>
-                                <Input placeholder="Email" type="email" />
+                                <Input value={user?.email || ""} placeholder="Email" type="email" />
                             </FormGroup>
                         </Col>
                         <Col className="pl-md-1" md="6">
