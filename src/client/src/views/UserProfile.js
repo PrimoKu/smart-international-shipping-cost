@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import { useAuth } from "contexts/AuthContext.js"; 
 
 import {
   Button,
@@ -20,6 +21,9 @@ function UserProfile() {
   const [showUserEdit, setShowUserEdit] = useState(false);
   const [showPaymentEdit, setShowPaymentEdit] = useState(false);
   const [data, setData] = useState([]);
+  const { user } = useAuth();
+
+  // console.log(user)
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -32,9 +36,33 @@ function UserProfile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/users/current', { withCredentials: true });
+        const response = await axios.get('http://localhost:8080/api/users/current', { withCredentials: true });
         console.log(response);
         setData(response.data.user);
+        
+        if (response.data && response.data.user) {
+          setData(response.data.user);
+          
+          if (response.data.user.shipment && response.data.user.shipment.length > 0) {
+              const shipmentData = response.data.user.shipment[0];
+              setFirstName(shipmentData.first_name);
+              setLastName(shipmentData.last_name);
+              setAddress1(shipmentData.address_1);
+              setAddress2(shipmentData.address_2 || "");
+              setState(shipmentData.state);
+              setCity(shipmentData.city);
+              setZipCode(shipmentData.zip_code);
+          } else {
+              // Reset the shipment related state variables if needed
+              setFirstName("");
+              setLastName("");
+              setAddress1("");
+              setAddress2("");
+              setState("");
+              setCity("");
+              setZipCode("");
+          }
+      }
       } catch (error) {
         console.error("An error occurred while fetching data", error);
       }
@@ -44,7 +72,7 @@ function UserProfile() {
 
   const submitShipmentData = async () => {
     try {
-        const response = await axios.post('http://localhost:8080/shipments', {
+        const response = await axios.post('http://localhost:8080/api/shipments', {
             firstName,
             lastName,
             address1,
@@ -53,12 +81,14 @@ function UserProfile() {
             city,
             zipCode
         }, { withCredentials: true });
-
         console.log(response.data);
+
+        // // Optionally: Refetch user data after updating to reflect changes
+        // fetchData();
     } catch (error) {
         console.error("Error posting shipment data", error);
     }
-};
+  };
 
   return (
     <>
@@ -73,13 +103,13 @@ function UserProfile() {
               <CardBody>
                 {!showUserEdit ? (
                   <div>
-                    <p>User ID: {data._id || 'Loading...'}</p>
-                    <p>User Name: {data.name || 'Loading...'}</p>
-                    <p>Email: {data.email || 'Loading...'}</p>
+                    <p>User ID: {user?. _id ?? "defaultId"}</p>
+                    <p>User Name: {user.name || 'Loading...'}</p>
+                    <p>Email: {user.email || 'Loading...'}</p>
                     {/* The below fields are just placeholders as they were not provided in the given API */}
                     {/* <p>Password: [Your Password]</p> */}
-                    <p>Legal First Name: {data.firstName || 'Loading...'}</p>
-                    <p>Legal Last Name: {data.lastName || 'Loading...'}</p>
+                    <p>Legal First Name: {user.shipment.firstName || 'Loading...'}</p>
+                    <p>Legal Last Name: {user.shipment.lastName || 'Loading...'}</p>
                     <p>Legal ID: [Your Legal ID]</p>
                     <p>Gender: [Your Gender]</p>
                     <p>Birth Date: [Your Birth Date]</p>
@@ -183,11 +213,11 @@ function UserProfile() {
                     <p>Bank Name: [Your Bank Name]</p>
                     <p>Bank Account Number: [Your Bank Account Number]</p>
                     <p>Payment: [Your Payment]</p>
-                    <p>Address 1: {data.shipment && data.shipment.length > 0 ? data.shipment[0].address_1 : 'Loading...'}</p>
-                    <p>Address 2: {data.shipment && data.shipment.length > 0 ? data.shipment[0].address_2 : 'Loading...'}</p>
-                    <p>State: {data.shipment && data.shipment.length > 0 ? data.shipment[0].state : 'Loading...'}</p>
-                    <p>City: {data.shipment && data.shipment.length > 0 ? data.shipment[0].city : 'Loading...'}</p>
-                    <p>Zip Code: {data.shipment && data.shipment.length > 0 ? data.shipment[0].zip_code : 'Loading...'}</p>
+                    <p>Address 1: {user.shipment && user.shipment.length > 0 ? user.shipment[0].address_1 : 'Loading...'}</p>
+                    <p>Address 2: {user.shipment && user.shipment.length > 0 ? user.shipment[0].address_2 : 'Loading...'}</p>
+                    <p>State: {user.shipment && user.shipment.length > 0 ? user.shipment[0].state : 'Loading...'}</p>
+                    <p>City: {user.shipment && user.shipment.length > 0 ? user.shipment[0].city : 'Loading...'}</p>
+                    <p>Zip Code: {user.shipment && user.shipment.length > 0 ? user.shipment[0].zip_code : 'Loading...'}</p>
                   </div>
                 ) : (
                   <Form onSubmit={(e) => {
@@ -311,7 +341,10 @@ function UserProfile() {
                 <Button onClick={() => setShowPaymentEdit(!showPaymentEdit)}>
                   {showPaymentEdit ? "Cancel" : "Edit"}
                 </Button>
-                {showPaymentEdit && <Button type="submit" onClick={() => setShowPaymentEdit(false)}>Confirm</Button>}
+                {showPaymentEdit && <Button onClick={() => {
+                    submitShipmentData(); 
+                    setShowPaymentEdit(false);
+                }}>Confirm</Button>}
               </CardFooter>
               </Card>
               </Col>
