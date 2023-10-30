@@ -13,9 +13,10 @@ import {
   Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
 
-function CreateOrderModal({ isOpen, toggle }) {
+function CreateOrderModal({ isOpen, toggle, groupOrderId }) {
   const location = useLocation();
-  const groupOrderId = location.state?.groupOrder_id;
+  // const groupOrderId = location.state?.groupOrder_id;
+  // console.log(groupOrderId)
   const [order, setOrder] = useState({
     name: '',
     price: '',
@@ -129,9 +130,9 @@ function CreateOrderModal({ isOpen, toggle }) {
             </ModalFooter>
           </Modal>
 
-          {/* <Link to='/admin/dashboard'>
+          <Link to='/admin/dashboard'>
         <Button>Return to Home</Button>
-        </Link> */}
+        </Link>
     </Modal>
   );
 }

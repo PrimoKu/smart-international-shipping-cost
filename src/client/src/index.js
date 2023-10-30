@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
-import CreateOrder from './views/CreateOrder.js';
+import CreateOrder from './views/CreateOrder';
 import Home from './views/Home.js';
 import AdminLayout from "./layouts/Admin/Admin.js";
 import Login from "./views/Login.js";
@@ -32,7 +32,7 @@ root.render(
             <Route path="/register" element={<Register />} />
             <Route path="/admin/*" element={<AdminLayout />} />
             <Route path='/' element={<Home />} />
-            {/* <Route path='/createorder' element={<CreateOrder />} /> */}
+            <Route path='/createorder' element={<CreateOrder />} />
             <Route path='/creategroup' element={<CreateGroup />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path='*' element={<Home />} /> {/* Default route */}

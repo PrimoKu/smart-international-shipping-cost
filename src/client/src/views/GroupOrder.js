@@ -7,6 +7,7 @@ import axios from 'axios';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import { useAuth } from "contexts/AuthContext.js"; 
+import CreateOrderModal from './CreateOrderModal';
 
 import {
   Button,
@@ -19,7 +20,7 @@ import {
 } from 'reactstrap';
 
 function GroupOrder(props) {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
     const [groupOrder, setGroupOrder] = useState("");
@@ -39,6 +40,10 @@ function GroupOrder(props) {
         user: { value: null, matchMode: FilterMatchMode.IN }
     });
     const [loading, setLoading] = useState(true);
+
+    const [isCreateOrderModalOpen, setCreateOrderModalOpen] = useState(false);
+    const [selectedGroupOrderId, setSelectedGroupOrderId] = useState();
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -143,9 +148,10 @@ function GroupOrder(props) {
         });
     }
 
-    const handleNavigation = () => {
-        navigate('/createOrder', { state: { groupOrder_id: groupOrder._id } });
-    };
+        const handleNavigation = () => {
+            setSelectedGroupOrderId(groupOrder._id);
+            setCreateOrderModalOpen(true);
+        };
 
     if (!groupOrder) {
         return <div>Loading...</div>;
@@ -252,6 +258,8 @@ function GroupOrder(props) {
                     </Card>
                 </Col>
             </Row>
+
+            <CreateOrderModal isOpen={isCreateOrderModalOpen} toggle={() => setCreateOrderModalOpen(false)} groupOrderId={selectedGroupOrderId} />
         </div>
         </PrimeReactProvider>
     );

@@ -119,10 +119,11 @@ function Dashboard(props) {
       <div className='content'>
         <Row>
           <Col>
-            <Button color='info' size='lg' className='mr-3 mb-3' style={{width: '30%'}} onClick={toggleCreateOrderModal}>
-              Add New Group Order
-            </Button>
-            <CreateOrderModal isOpen={isCreateOrderModalOpen} toggle={toggleCreateOrderModal} />
+          <Link to='/creategroup'>
+              <Button color='info' size='lg' className='mr-3 mb-3' style={{width: '30%'}}>
+                Add New Group Order
+              </Button>
+            </Link>
           </Col>
         </Row>
         <Row>
