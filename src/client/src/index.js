@@ -32,7 +32,7 @@ root.render(
             <Route path="/register" element={<Register />} />
             <Route path="/admin/*" element={<AdminLayout />} />
             <Route path='/' element={<Home />} />
-            <Route path='/createorder' element={<CreateOrder />} />
+            {/* <Route path='/createorder' element={<CreateOrder />} /> */}
             <Route path='/creategroup' element={<CreateGroup />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path='*' element={<Home />} /> {/* Default route */}

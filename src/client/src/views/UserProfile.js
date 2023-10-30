@@ -20,10 +20,7 @@ import {
 function UserProfile() {
   const [showUserEdit, setShowUserEdit] = useState(false);
   const [showPaymentEdit, setShowPaymentEdit] = useState(false);
-  const { user } = useAuth();
-
-  // console.log(user)
-
+  
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [address1, setAddress1] = useState("");
@@ -31,40 +28,43 @@ function UserProfile() {
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [zipCode, setZipCode] = useState("");
+  const { user } = useAuth();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/api/users/current', { withCredentials: true });
-        console.log(response.data);
+
+  console.log(user)
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get('http://localhost:8080/api/users/current', { withCredentials: true });
+  //       console.log(response.data);
             
-        if (response.data && response.data.user) { 
-          if (response.data.user.shipment && response.data.user.shipment.length > 0) {
-            const shipmentData = response.data.user.shipment[0];
-            setFirstName(shipmentData.first_name);
-            setLastName(shipmentData.last_name);
-            setAddress1(shipmentData.address_1);
-            setAddress2(shipmentData.address_2 || "");
-            setState(shipmentData.state);
-            setCity(shipmentData.city);
-            setZipCode(shipmentData.zip_code);
-          } else {
-            // Reset the shipment related state variables if needed
-            setFirstName("");
-            setLastName("");
-            setAddress1("");
-            setAddress2("");
-            setState("");
-            setCity("");
-            setZipCode("");
-          }
-        }
-      } catch (error) {
-        console.error("An error occurred while fetching data", error);
-      }
-    };
-    fetchData();
-  }, []);
+  //       if (response.data && response.data.user) { 
+  //         if (response.data.user.shipment && response.data.user.shipment.length > 0) {
+  //           const shipmentData = response.data.user.shipment[0];
+  //           setFirstName(shipmentData.first_name);
+  //           setLastName(shipmentData.last_name);
+  //           setAddress1(shipmentData.address_1);
+  //           setAddress2(shipmentData.address_2 || "");
+  //           setState(shipmentData.state);
+  //           setCity(shipmentData.city);
+  //           setZipCode(shipmentData.zip_code);
+  //         } else {
+  //           // Reset the shipment related state variables if needed
+  //           setFirstName("");
+  //           setLastName("");
+  //           setAddress1("");
+  //           setAddress2("");
+  //           setState("");
+  //           setCity("");
+  //           setZipCode("");
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("An error occurred while fetching data", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
   const submitShipmentData = async () => {
     try {
@@ -99,13 +99,13 @@ function UserProfile() {
               <CardBody>
                 {!showUserEdit ? (
                   <div>
-                    <p>User ID: {user?. _id ?? "defaultId"}</p>
-                    <p>User Name: {user.name || 'Loading...'}</p>
-                    <p>Email: {user.email || 'Loading...'}</p>
+                    <p>User ID: {user?._id ?? "defaultId"}</p>
+                    <p>User Name: {user?.name || 'Loading...'}</p>
+                    <p>Email: {user?.email || 'Loading...'}</p>
                     {/* The below fields are just placeholders as they were not provided in the given API */}
                     {/* <p>Password: [Your Password]</p> */}
-                    <p>Legal First Name: {user.shipment.firstName || 'Loading...'}</p>
-                    <p>Legal Last Name: {user.shipment.lastName || 'Loading...'}</p>
+                    <p>Legal First Name: {user?.shipment.firstName || 'Loading...'}</p>
+                    <p>Legal Last Name: {user?.shipment.lastName || 'Loading...'}</p>
                     <p>Legal ID: [Your Legal ID]</p>
                     <p>Gender: [Your Gender]</p>
                     <p>Birth Date: [Your Birth Date]</p>
@@ -209,11 +209,11 @@ function UserProfile() {
                     <p>Bank Name: [Your Bank Name]</p>
                     <p>Bank Account Number: [Your Bank Account Number]</p>
                     <p>Payment: [Your Payment]</p>
-                    <p>Address 1: {user.shipment && user.shipment.length > 0 ? user.shipment[0].address_1 : 'Loading...'}</p>
-                    <p>Address 2: {user.shipment && user.shipment.length > 0 ? user.shipment[0].address_2 : 'Loading...'}</p>
-                    <p>State: {user.shipment && user.shipment.length > 0 ? user.shipment[0].state : 'Loading...'}</p>
-                    <p>City: {user.shipment && user.shipment.length > 0 ? user.shipment[0].city : 'Loading...'}</p>
-                    <p>Zip Code: {user.shipment && user.shipment.length > 0 ? user.shipment[0].zip_code : 'Loading...'}</p>
+                    <p>Address 1: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].address_1 : 'Loading...'}</p>
+                    <p>Address 2: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].address_2 : 'Loading...'}</p>
+                    <p>State: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].state : 'Loading...'}</p>
+                    <p>City: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].city : 'Loading...'}</p>
+                    <p>Zip Code: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].zip_code : 'Loading...'}</p>
                   </div>
                 ) : (
                   <Form onSubmit={(e) => {

@@ -6,6 +6,7 @@ import axios from 'axios';
 import OrderListItem from '../components/OrderListItem';
 import '../assets/css/OrderItem.css';
 import { useAuth } from "contexts/AuthContext.js";
+import CreateOrderModal from './CreateOrderModal'; 
 
 import {
   Button,
@@ -22,6 +23,12 @@ function Dashboard(props) {
   const [managed, setManaged] = useState([]);
   const [joined, setJoined] = useState([]);
   const {user} = useAuth();
+  const [isCreateOrderModalOpen, setCreateOrderModalOpen] = useState(false);
+
+  const toggleCreateOrderModal = () => {
+    setCreateOrderModalOpen(!isCreateOrderModalOpen);
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -112,11 +119,10 @@ function Dashboard(props) {
       <div className='content'>
         <Row>
           <Col>
-            <Link to='/creategroup'>
-              <Button color='info' size='lg' className='mr-3 mb-3' style={{width: '30%'}}>
-                Add New Group Order
-              </Button>
-            </Link>
+            <Button color='info' size='lg' className='mr-3 mb-3' style={{width: '30%'}} onClick={toggleCreateOrderModal}>
+              Add New Group Order
+            </Button>
+            <CreateOrderModal isOpen={isCreateOrderModalOpen} toggle={toggleCreateOrderModal} />
           </Col>
         </Row>
         <Row>
