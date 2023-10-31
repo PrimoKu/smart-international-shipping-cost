@@ -17,10 +17,10 @@ class NotificationController {
     //@route POST /api/notifications
     //@access private
     createNotification = asyncHandler( async (req, res) => {
-        const { user_id, message, link } = req.body;
+        const { user_id, message } = req.body;
         let notification;
         try {
-            notification = await notificationRepo.create(user_id, message, link);
+            notification = await notificationRepo.create(user_id, message);
             if(notification) {
                 return res.status(201).json({Order: order, GroupOrder: groupOrder});
             } else {
