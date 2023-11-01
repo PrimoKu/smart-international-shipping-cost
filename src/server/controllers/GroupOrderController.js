@@ -100,7 +100,6 @@ class GroupOrderController {
                 return res.status(442).json({ message: "Create notification failed!" });
             }
             sendNotificationToUser(receiver.id, message);
-            res.status(201).json({message: "OK"});
         } catch (error) {
             console.log(error);
             res.status(500);
@@ -112,22 +111,21 @@ class GroupOrderController {
     //@route PUT /api/groupOrders/add/:id
     //@access private
     addToGroupOrder = asyncHandler( async (req, res) => { 
-        console.log(user_id);
         const user_id = req.user.id;
         const groupOrder = await groupOrderRepo.get(req.params.id);
+        if (!groupOrder) {
+            return res.status(404).json({ message: "Group Order not found!" });
+        }
         try {
-            if(!groupOrder) {
-                return res.status(404).json({ message: "Group Order not found!" });
-            } 
-            if (groupOrder.manager_id.toString() !== req.user.id) {
-                return res.status(403).json({ message: "User don't have permission to update other user's order" });
-            }
-            const updatedGroupOrder = await groupOrderRepo.update(req.params.id, { $push: { user_ids: user_id }}, { new: true });
+            const updatedGroupOrder = await groupOrderRepo.update(
+                req.params.id, 
+                { $push: { user_ids: user_id }},
+                { new: true }
+            );
             res.status(200).json(updatedGroupOrder);
-    
         } catch (error) {
-            res.status(500);
-            throw new Error("Server Error!");
+            console.error(error); // Log the error for debugging purposes
+            res.status(500).json({ message: "Server Error!" });
         }
     });
 

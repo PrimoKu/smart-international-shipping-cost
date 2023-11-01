@@ -29,13 +29,13 @@ const AuthProvider = ({ children }) => {
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div className="text-dark" style={{ fontSize: '20px' }}>
                     {parsedMessage.text}
-                    {parsedMessage.link && (
+                    {/* {parsedMessage.link && (
                         <a href={parsedMessage.link} target="_blank" rel="noopener noreferrer"> Click here</a>
-                    )}
+                    )} */}
                 </div>
                 {parsedMessage.link && (
                     <div style={{ marginTop: '15px', display: 'flex', gap: '10px' }}>
-                        <Button label="Accept" className="p-button-success" onClick={acceptInvite}/>
+                        <Button label="Accept" className="p-button-success" onClick={() => acceptInvite(parsedMessage.link)}/>
                         <Button label="Decline" className="p-button-danger" onClick={() => toastRef.current.clear()} />
                     </div>
                 )}
@@ -46,11 +46,13 @@ const AuthProvider = ({ children }) => {
         });
     };
 
-    const acceptInvite = async () => {
+    const acceptInvite = async (link) => {
+        const segments = link.split('/');
+        const groupOrderId = segments.pop();
         console.log(groupOrderId);
-        axios.put(`http://localhost:8080/api/groupOrders/add/${groupOrderId}`, { withCredentials: true })
+        axios.put(`http://localhost:8080/api/groupOrders/add/${groupOrderId}`, {}, { withCredentials: true })
         .then(response => {
-            window.location.href = parsedMessage.link;
+            window.location.href = `http://localhost:3000/admin/groupOrder/${groupOrderId}`;
         })
         .catch((error) => {
             if (error.response && error.response.data) {

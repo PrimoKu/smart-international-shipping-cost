@@ -129,8 +129,8 @@ const getOrdersWhereUserIsNotManager = async (user_id) => {
         },
         {
             $match: {
-                manager_id: { $ne: userId },
-                'associatedOrders.user_id': userId
+                manager_id: { $ne: userId }, // Exclude orders where the user is the manager
+                user_ids: userId // Include orders where the user is part of the group
             }
         },
         {
