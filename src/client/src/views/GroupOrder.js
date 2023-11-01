@@ -1,27 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { PrimeReactProvider, FilterMatchMode, FilterOperator } from 'primereact/api';
+import { FilterMatchMode } from 'primereact/api';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import axios from 'axios';
-import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import { useAuth } from "contexts/AuthContext.js"; 
-
+import "primereact/resources/themes/lara-light-indigo/theme.css";
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Row,
-  Col,
+    Button,
+    Card,
+    CardHeader,
+    CardBody,
+    CardTitle,
+    Row,
+    Col,
+    FormGroup,
+    Form,
+    Input,
+    Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
 
 function GroupOrder(props) {
     const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
+    // Table of Orders in GroupOrder
     const [groupOrder, setGroupOrder] = useState("");
     const [pendingOrders, setPendingOrders] = useState([]);
     const [approvedOrders, setApprovedOrders] = useState([]);
@@ -29,7 +33,6 @@ function GroupOrder(props) {
     const [orderStatusList, setOrderStatusList] = useState([]);
     const [manager, setManager] = useState("");
     const [users, setUsers] = useState([]);
-
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         name: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -39,6 +42,13 @@ function GroupOrder(props) {
         user: { value: null, matchMode: FilterMatchMode.IN }
     });
     const [loading, setLoading] = useState(true);
+
+    // Invite User Modal
+    const [modal, setModal] = useState(false);
+    const [modalCancelable, setModalCancelable] = useState(true);
+    const [email, setEmail] = useState("");
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -112,9 +122,10 @@ function GroupOrder(props) {
     };
 
     const userBodyTemplate = (rowData) => {
+        const user = users.find(obj => obj._id === rowData.user_id);
         return (
             <div className="flex align-items-center gap-2">
-                <span>{rowData.user[0].name}</span>
+                <span>{user.name}</span>
             </div>
         );
     };
@@ -186,11 +197,29 @@ function GroupOrder(props) {
         navigate('/createOrder', { state: { groupOrder_id: groupOrder._id } });
     };
 
-    if (!groupOrder) {
-        return <div>Loading...</div>;
+    const toggleInviteModal = () => {
+        setModal(!modal);
+        setModalCancelable(true);
     }
+
+    const handleInvite = async (e) => {
+        e.preventDefault();
+        
+        let formData = new FormData();
+        formData.append('userEmail', email);
+
+        axios.post(`http://localhost:8080/api/groupOrders/invite/${groupOrder._id}`, formData, { withCredentials: true })
+        .then(res => {
+            window.location.reload();
+        })
+        .catch((error) => {
+            if (error.response && error.response.data) {
+            }
+        });
+    };
+
     return (
-        <PrimeReactProvider>
+        // <PrimeReactProvider>
         <div className='content'>
             <Row sm='2' md='3' lg='4'>
                 <Col className='text-left' >
@@ -277,8 +306,33 @@ function GroupOrder(props) {
                     </Card>
                 </Col>
             </Row>
+            <Modal isOpen={modal} toggle={toggleInviteModal}>
+                <ModalHeader toggle={toggleInviteModal}>
+                    <div className="text-dark mb-0" style={{fontSize: '30px'}}>Invite Joiners</div>
+                </ModalHeader>
+                <Form id="form_invite" onSubmit={handleInvite}>
+                    <ModalBody style={{height: '75px'}}>
+                        <div className="text-dark">
+                                <FormGroup>
+                                    <Input
+                                        type="email"
+                                        name="email"
+                                        placeholder="Email"
+                                        required
+                                        style={{ height: '50px', fontSize: '18px' }}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
+                                </FormGroup>
+                        </div>
+                    </ModalBody>
+                    <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+                        <Button type="submit" className="btn-success mx-1">Invite</Button>
+                        <Button className="btn-secondary mx-1" onClick={toggleInviteModal} style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
+                    </ModalFooter>
+                </Form>
+            </Modal>
         </div>
-        </PrimeReactProvider>
+        // </PrimeReactProvider>
     );
 }
 

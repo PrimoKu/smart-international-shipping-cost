@@ -1,7 +1,12 @@
 const GroupOrder = require("../models/GroupOrder");
 const { ObjectId } = require('mongoose').Types;
 
-const getAll = async (user_id) => {
+const getAll = async () => {
+    const groupOrders = await GroupOrder.find().sort({ 'updatedAt': -1 }).exec();
+    return groupOrders;
+}
+
+const getAllWithUser = async (user_id) => {
     const groupOrders = await GroupOrder.find({manager_id: user_id}).sort({ 'updatedAt': -1 }).exec();
     return groupOrders;
 }
@@ -43,10 +48,11 @@ const getWithDetails = async (id) => {
                 name: 1,
                 country: 1,
                 deadline: 1,
+                status: 1,
                 createdAt: 1,
                 updatedAt: 1,
                 __v: 1,
-                order_ids: 1,
+                user_ids: 1,
                 'manager._id': 1,
                 'manager.name': 1,
                 'manager.email': 1
@@ -55,8 +61,8 @@ const getWithDetails = async (id) => {
         {
             $lookup: {
                 from: 'orders', 
-                localField: 'order_ids',
-                foreignField: '_id',
+                localField: '_id',
+                foreignField: 'groupOrder_id',
                 as: 'orders' 
             }
         },
@@ -68,10 +74,10 @@ const getWithDetails = async (id) => {
         },
         {
             $lookup: {
-                from: 'users', 
-                localField: 'orders.user_id',
+                from: 'users',
+                localField: 'user_ids',
                 foreignField: '_id',
-                as: 'orders.user' 
+                as: 'users'
             }
         },
         {
@@ -85,10 +91,11 @@ const getWithDetails = async (id) => {
                 updatedAt: { $first: "$updatedAt" },
                 __v: { $first: "$__v" },
                 orders: { $push: "$orders" },
-                users: { $addToSet: { $arrayElemAt: ["$orders.user", 0] } }
+                users: { $first: "$users" }
             }
         }
     ]);
+    
     const groupOrder = results && results.length ? results[0] : null;
 
     return groupOrder;
@@ -121,15 +128,15 @@ const getOrdersWhereUserIsNotManager = async (user_id) => {
         {
             $lookup: {
                 from: 'orders',
-                localField: 'order_ids',
-                foreignField: '_id',
+                localField: '_id',
+                foreignField: 'groupOrder_id',
                 as: 'associatedOrders'
             }
         },
         {
             $match: {
-                manager_id: { $ne: userId },
-                'associatedOrders.user_id': userId
+                manager_id: { $ne: userId }, // Exclude orders where the user is the manager
+                user_ids: userId // Include orders where the user is part of the group
             }
         },
         {
@@ -137,9 +144,9 @@ const getOrdersWhereUserIsNotManager = async (user_id) => {
                 name: 1,
                 country: 1,
                 deadline: 1,
+                status: 1,
                 createdAt: 1,
                 updatedAt: 1,
-                order_ids: 1,
             }
         }
     ]);
@@ -149,6 +156,7 @@ const getOrdersWhereUserIsNotManager = async (user_id) => {
 
 module.exports = {
     getAll,
+    getAllWithUser,
     create,
     get,
     update,
