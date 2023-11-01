@@ -18,6 +18,7 @@ import {
 function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
+    const [role, setRole] = useState(""); 
     const [password, setPassword] = useState("");
     const [passwordCheck, setPasswordCheck] = useState("");
     const [passwordMatchError, setPasswordMatchError] = useState("");
@@ -69,6 +70,7 @@ function Register() {
         formData.append('name', name);
         formData.append('email', email);
         formData.append('password', password);
+        formData.append('role', role);
 
         axios.post('http://localhost:8080/api/users/register', formData, { withCredentials: true })
         .then(response => {
@@ -148,6 +150,20 @@ function Register() {
                                                     onChange={handleConfirmPasswordChange}
                                                 />
                                                 <div className={password === passwordCheck ? "text-success" : "text-warning"} id="password_match_error">{passwordMatchError}</div>
+                                            </FormGroup>
+                                            <FormGroup>
+                                                <Input
+                                                    type="select"
+                                                    className="form-control-user"
+                                                    style={{ height: '50px', fontSize: '18px' }}
+                                                    value={role}
+                                                    onChange={(e) => setRole(e.target.value)}
+                                                    required
+                                                >
+                                                    <option value="" disabled>Select a role</option>
+                                                    <option value="0">User</option>
+                                                    <option value="1">Shipper</option>
+                                                </Input>
                                             </FormGroup>
                                             <div className="text-danger" id="validation_error">{validationError}</div>
                                             <Button type="submit" className="btn-info" block>

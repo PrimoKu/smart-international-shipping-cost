@@ -7,6 +7,9 @@ import OrderListItem from '../components/OrderListItem';
 import ConfirmationListItem from '../components/ConfirmationListItem';
 import '../assets/css/OrderItem.css';
 import { useAuth } from "contexts/AuthContext.js";
+import CreateOrderModal from './CreateOrderModal'; 
+import { Paginator } from 'primereact/paginator';
+
 
 import {
   Button,
@@ -25,6 +28,18 @@ function Dashboard(props) {
   const [joined, setJoined] = useState([]);
   const {user} = useAuth();
 
+  const [isCreateOrderModalOpen, setCreateOrderModalOpen] = useState(false);
+
+  const toggleCreateOrderModal = () => {
+    setCreateOrderModalOpen(!isCreateOrderModalOpen);
+  }
+
+  const [firstManage, setFirstManage] = useState(0);
+
+  const onPageChange = (event) => {
+      setFirstManage(event.first);
+  };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,7 +67,7 @@ function Dashboard(props) {
   function ordersEmpty(data, isManager) {
     if (data.length == 0 && isManager) {
       return (
-      <Card className='card-chart' style={{minHeight: '300px'}}>
+      <Card className='card-chart' style={{minHeight: '300px', maxHeight: '500px'}}>
         <CardHeader>
           <h5 className='title' style={{fontSize: "x-large", color: "white"}}>GO's You Manage</h5>
         </CardHeader>
