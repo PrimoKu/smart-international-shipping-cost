@@ -34,11 +34,12 @@ var routes = [
     layout: '/admin',
   },
   {
-    path: "/checkout",
+    path: "/checkout/:id",
     name: "Checkout",
     icon: "tim-icons icon-cart",
     component: <Checkout />,
     layout: "/admin",
+    hidden: true,
   },
   // {
   //   path: '/order',

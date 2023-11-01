@@ -23,7 +23,11 @@ const groupOrderSchema = mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Order"
             }
-        ]
+        ],
+        status: {
+            type: Number,
+            default: 0,
+        }
     }, 
     {
         timestamps: true,

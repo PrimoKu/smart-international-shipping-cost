@@ -6,6 +6,7 @@ import axios from 'axios';
 import OrderListItem from '../components/OrderListItem';
 import '../assets/css/OrderItem.css';
 import { useAuth } from "contexts/AuthContext.js";
+import { Paginator } from 'primereact/paginator';
 
 import {
   Button,
@@ -22,6 +23,11 @@ function Dashboard(props) {
   const [managed, setManaged] = useState([]);
   const [joined, setJoined] = useState([]);
   const {user} = useAuth();
+  const [firstManage, setFirstManage] = useState(0);
+
+  const onPageChange = (event) => {
+      setFirstManage(event.first);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,7 +61,7 @@ function Dashboard(props) {
   function ordersEmpty(data, isManager) {
     if (data.length == 0 && isManager) {
       return (
-      <Card className='card-chart' style={{minHeight: '300px'}}>
+      <Card className='card-chart' style={{minHeight: '300px', maxHeight: '500px'}}>
         <CardHeader>
           <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Manage</h5>
         </CardHeader>
@@ -65,7 +71,7 @@ function Dashboard(props) {
       </Card>);
     } else if (data.length == 0 && !isManager) {
       return (
-        <Card className='card-chart' style={{minHeight: '300px', maxHeight:'300px', overflowY: 'scroll', overflow: 'auto'}}>
+        <Card className='card-chart' style={{minHeight: '300px', maxHeight:'500px', overflowY: 'scroll', overflow: 'auto'}}>
           <CardHeader>
             <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Joined</h5>
           </CardHeader>
@@ -76,19 +82,22 @@ function Dashboard(props) {
     } else {
       if (isManager) {
         return (
-        <Card className='card-chart' style={{minHeight: '300px', maxHeight:'300px', overflowY: 'scroll', overflow: 'auto'}}>
+        <Card className='card-chart' style={{minHeight: '300px', maxHeight:'500px', overflowY: 'scroll', overflow: 'auto'}}>
           <CardHeader>
             <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Manage</h5>
           </CardHeader>
           <CardBody>
-            {data.map(order => (
+            {data.slice(firstManage, firstManage + 3).map(order => (
                <OrderListItem key={order._id} ident={order._id} name={order.name} updatedAt={order.updatedAt} />
             ))}
+        <div className="card">
+            <Paginator first={firstManage} rows={3} totalRecords={managed.length} onPageChange={onPageChange} template={{ layout: 'PrevPageLink CurrentPageReport NextPageLink' }} />
+        </div>
           </CardBody>
         </Card>);
       } else {
         return (
-        <Card className='card-chart' style={{minHeight: '300px'}}>
+        <Card className='card-chart' style={{minHeight: '300px', maxHeight: '500px'}}>
           <CardHeader>
             <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Joined</h5>
           </CardHeader>

@@ -10,6 +10,10 @@ import { useAuth } from "contexts/AuthContext.js";
 
 import {
   Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
   Card,
   CardHeader,
   CardBody,
@@ -144,8 +148,11 @@ function GroupOrder(props) {
     }
 
     const handleNavigation = () => {
-        navigate('/createOrder', { state: { groupOrder_id: groupOrder._id } });
+        navigate('/admin/createOrder', { state: { groupOrder_id: groupOrder._id } });
     };
+
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const toggle = () => setDropdownOpen((prevState) => !prevState);
 
     if (!groupOrder) {
         return <div>Loading...</div>;
@@ -162,6 +169,10 @@ function GroupOrder(props) {
                     <h5 className='card-category'>Manager</h5>
                     <h1 tag='h1'>{manager.name}</h1>
                 </Col>
+                <Col className='text-left' >
+                    <h5 className='card-category'>Ready</h5>
+                    <h1 tag='h1'>Group Order Status</h1>
+                </Col>
             </Row>
             <Row sm='2' md='3' lg='4'>
                 <Col className='text-left' >
@@ -174,8 +185,24 @@ function GroupOrder(props) {
                     <Button color='info' size='lg' className='mr-3 mb-3' >
                         Invite Joiners
                     </Button>
-                </Col>
+                </Col>   
                 )}
+                <Dropdown isOpen={dropdownOpen} toggle={toggle} direction={'down'}>
+                <DropdownToggle color='info' caret>Update Status</DropdownToggle>
+                <DropdownMenu>
+                    <DropdownItem>Pending</DropdownItem>
+                    <DropdownItem>Closed</DropdownItem>
+                    <DropdownItem disabled>Ordered</DropdownItem>
+                    <DropdownItem disabled>Shipped</DropdownItem>
+                </DropdownMenu>
+                </Dropdown>
+                <Col className='text-left' >
+                <Link to= {`/admin/checkout/${id}`} onClick={console.log(groupOrder)}>
+                    <Button color='info' size='lg' className='mr-3 mb-3' >
+                        Checkout
+                    </Button>
+                </Link>
+                </Col>  
             </Row>
             
             <Row>
