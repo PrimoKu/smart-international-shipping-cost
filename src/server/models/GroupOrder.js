@@ -27,6 +27,11 @@ const groupOrderSchema = mongoose.Schema({
         status: {
             type: Number,
             default: 0,
+        }, 
+        shipper_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: false,
+            ref: "User",
         }
     }, 
     {
