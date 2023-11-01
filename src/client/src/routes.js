@@ -61,13 +61,13 @@ var routes = [
   //   component: <Map />,
   //   layout: '/admin',
   // },
-  // {
-  //   path: '/notifications',
-  //   name: 'Notifications',
-  //   icon: 'tim-icons icon-bell-55',
-  //   component: <Notifications />,
-  //   layout: '/admin',
-  // },
+  {
+    path: '/notifications/:id',
+    name: 'Notifications',
+    icon: 'tim-icons icon-bell-55',
+    component: <Notifications />,
+    layout: '/admin',
+  },
   // {
   //   path: "/tables",
   //   name: "Table List",
