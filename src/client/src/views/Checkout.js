@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import ConfirmationPopup from '../components/ConfirmationPopup';
-import { useAuth } from "contexts/AuthContext.js"; 
+import { useAuth } from "contexts/AuthContext.js";
 import axios from 'axios';
 import {
   Button,
@@ -13,6 +13,7 @@ import {
   Row,
   Col,
   UncontrolledDropdown,
+  Dropdown,
   DropdownMenu,
   DropdownToggle,
   DropdownItem,
@@ -24,7 +25,10 @@ function Checkout() {
   const { id } = useParams();
   const { user } = useAuth();
   const [groupOrder, setGroupOrder] = useState("");
-  const [orders1, setOrders] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [joiners, setJoiners] = useState([]);
+  const [joinerFilter, setJoinerFilter] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +36,8 @@ function Checkout() {
         const response = await axios.get(`http://localhost:8080/api/groupOrders/${id}`, { withCredentials: true });
         setGroupOrder(response.data.GroupOrder);
         setOrders(response.data.GroupOrder.orders.filter(order => order.status === 1)); //approved orders
+        setFilteredOrders(response.data.GroupOrder.orders.filter(order => order.status === 1));
+        setJoiners(response.data.GroupOrder.users);
       } catch (error) {
         console.error("An error occurred while fetching data", error);
       }
@@ -39,54 +45,31 @@ function Checkout() {
     fetchData();
   }, []);
 
-  const [showPopup, setShowPopup] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggle = () => setDropdownOpen((prevState) => !prevState);
 
-  const togglePopup = () => {
-    setShowPopup(!showPopup);
-  };
-  const orders = [
-    {
-      "name": "John Doe",
-      "item": "Widget",
-      "item_weight": 0.5,
-      "price": 10.99,
-      "approved": false,
-    },
-    {
-      "name": "Alice Smith",
-      "item": "Gadget",
-      "item_weight": 0.8,
-      "price": 19.99,
-      "approved": false,
-    },
-    {
-      "name": "Bob Johnson",
-      "item": "Tool",
-      "item_weight": 1.2,
-      "price": 24.95,
-      "approved": true,
-    },
-    {
-      "name": "Eva Williams",
-      "item": "Accessory",
-      "item_weight": 0.3,
-      "price": 5.49,
-      "approved": true,
-    },
-    {
-      "name": "Michael Brown",
-      "item": "Toy",
-      "item_weight": 0.6,
-      "price": 12.75,
-      "approved": false,
-    }
-  ];
-  const isApproved = orders.every(obj => obj.approved === true);
+  const onDropdownClick = (e) => {
+    setFilteredOrders(e.target.value ? orders.filter(order => order.user[0].name == e.target.value) : orders);
+  }
 
   return (
     <>
       <div className="content">
-        <h1>Checkout</h1>
+        <Row sm='2' md='3' lg='4'>
+          <Col className='text-left'>
+            <CardTitle tag="h1">Checkout</CardTitle>
+          </Col>
+          <Col className='text-left' >
+            <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+              <DropdownToggle caret>View Orders By Individual</DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem onClick={onDropdownClick} value={""}>All Joiners</DropdownItem>
+                <DropdownItem divider />
+                {joiners.map(joiner => <DropdownItem onClick={onDropdownClick} value={joiner.name}>{joiner.name}</DropdownItem>)}
+              </DropdownMenu>
+            </Dropdown>
+          </Col>
+        </Row>
         <Row>
           <Col md="12">
             <Card>
@@ -104,47 +87,38 @@ function Checkout() {
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.map(order => (
+                    {filteredOrders.map(order => (
                       <tr>
-                      <td>{order.name}</td>
-                      <td>{order.item}</td>
-                      <td>{order.item_weight}</td>
-                      <td className="text-center">{order.price}</td>
-                    </tr>
+                        <td>{order.user[0].name}</td>
+                        <td>{order.name}</td>
+                        <td>{order.weight}</td>
+                        <td className="text-center">{order.price}</td>
+                      </tr>
                     ))}
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td className="text-center">{orders.reduce((acc, order) => acc + order.price, 0).toFixed(2)}</td>
-                    </tr>
                   </tbody>
                 </Table>
               </CardBody>
             </Card>
           </Col>
+        </Row>
+        <Row sm='2' md='3' lg='4'>
+          <Col className='text-left'>
           <Link to='/admin/dashboard'>
             <Button>Return to Home</Button>
           </Link>
-          <Button onClick={togglePopup} disabled={!isApproved}>Submit Order</Button>
-          <ConfirmationPopup show={showPopup} toggle={togglePopup} />
-          <ButtonGroup>
-    <UncontrolledDropdown>
-      <DropdownToggle caret>
-        User Agreement
-      </DropdownToggle>
-      <DropdownMenu>
-        {orders.map(order => <DropdownItem header 
-        style={{color: order.approved ? 'black' : 'gray'}}>
-          {order.name}
-        </DropdownItem> )}
-
-      </DropdownMenu>
-    </UncontrolledDropdown>
-  </ButtonGroup>
+          </Col>
+          <Col className='text-center'>
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h2">Total: ${filteredOrders.reduce((acc, order) => acc + order.price, 0).toFixed(2)}</CardTitle>
+              </CardHeader>
+            </Card>
+          </Col>
+          <Col className='text-right'>
+          <Button color="info">Submit Order</Button>
+          </Col>
         </Row>
       </div>
-      {console.log(groupOrder)}
     </>
   );
 }

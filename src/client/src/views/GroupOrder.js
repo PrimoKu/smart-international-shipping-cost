@@ -171,7 +171,7 @@ function GroupOrder(props) {
                 </Col>
                 <Col className='text-left' >
                     <h5 className='card-category'>Ready</h5>
-                    <h1 tag='h1'>Group Order Status</h1>
+                    <h1 tag='h1'>Checkout</h1>
                 </Col>
             </Row>
             <Row sm='2' md='3' lg='4'>
@@ -187,15 +187,6 @@ function GroupOrder(props) {
                     </Button>
                 </Col>   
                 )}
-                <Dropdown isOpen={dropdownOpen} toggle={toggle} direction={'down'}>
-                <DropdownToggle color='info' caret>Update Status</DropdownToggle>
-                <DropdownMenu>
-                    <DropdownItem>Pending</DropdownItem>
-                    <DropdownItem>Closed</DropdownItem>
-                    <DropdownItem disabled>Ordered</DropdownItem>
-                    <DropdownItem disabled>Shipped</DropdownItem>
-                </DropdownMenu>
-                </Dropdown>
                 <Col className='text-left' >
                 <Link to= {`/admin/checkout/${id}`} onClick={console.log(groupOrder)}>
                     <Button color='info' size='lg' className='mr-3 mb-3' >
