@@ -9,4 +9,5 @@ router.route('/').get(requireAuth, groupOrderController.getGroupOrders).post(req
 router.route('/:id').get(requireAuth, groupOrderController.getGroupOrder).put(requireAuth, groupOrderController.updateGroupOrder);
 
 router.route('/invite/:id').post(requireAuth, groupOrderController.inviteToGroupOrder);
+router.route('/add/:id').put(requireAuth, groupOrderController.addToGroupOrder);
 module.exports = router;

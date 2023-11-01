@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const notificationRepo = require("../repositories/NotificationRepository");
-
+const { sendNotificationToUser } = require("../socketManager");
+const userRepo = require("../repositories/UserRepository");
 
 class NotificationController {
 
@@ -17,15 +18,20 @@ class NotificationController {
     //@route POST /api/notifications
     //@access private
     createNotification = asyncHandler( async (req, res) => {
-        const { user_id, message, link } = req.body;
+        const user = req.user;
+        const { userEmail, message, link } = req.body;
         let notification;
         try {
-            notification = await notificationRepo.create(user_id, message, link);
+            const user = await userRepo.getByEmail(userEmail);
+            if(!user) { return res.status(404).json({ message: "User not found!" }); }
+            sendNotificationToUser(user.id, message);
+            notification = await notificationRepo.create(user.id, message, link);
             if(notification) {
-                return res.status(201).json({Order: order, GroupOrder: groupOrder});
+                return res.status(201).json({notification});
             } else {
                 return res.status(442).json({ message: "Create notification failed!" });
             }
+            return res.status(201).json({message: "Successed"});
         } catch (error) {
             res.status(500);
             throw new Error("Server Error!");

@@ -89,24 +89,48 @@ class GroupOrderController {
         const { userEmail } = req.body;
         let notification;
         try {
-            notification = await notificationRepo.create(user.id, message, link);
+            const receiver = await userRepo.getByEmail(userEmail);
+            if(!receiver) { return res.status(404).json({ message: "User not found!" }); }
+
+            const message = `${sender.name} invited you to join the group: ${groupOrder.name} \n http://localhost:3000/admin/groupOrder/${groupOrder.id}`;
+            notification = await notificationRepo.create(receiver.id, message);
             if(notification) {
                 res.status(201).json({notification});
             } else {
                 return res.status(442).json({ message: "Create notification failed!" });
             }
-
-            const receiver = await userRepo.getByEmail(userEmail);
-            if(!receiver) { return res.status(404).json({ message: "User not found!" }); }
-            const message = `${sender.name} invited you to join the group ${groupOrder.name}:\n http://localhost:3000/admin/groupOrder/${groupOrder.id}`;
             sendNotificationToUser(receiver.id, message);
-            
+            res.status(201).json({message: "OK"});
         } catch (error) {
             console.log(error);
             res.status(500);
             throw new Error("Server Error!");
         }
     });
+
+    //@des Add user to group order
+    //@route PUT /api/groupOrders/add/:id
+    //@access private
+    addToGroupOrder = asyncHandler( async (req, res) => { 
+        console.log(user_id);
+        const user_id = req.user.id;
+        const groupOrder = await groupOrderRepo.get(req.params.id);
+        try {
+            if(!groupOrder) {
+                return res.status(404).json({ message: "Group Order not found!" });
+            } 
+            if (groupOrder.manager_id.toString() !== req.user.id) {
+                return res.status(403).json({ message: "User don't have permission to update other user's order" });
+            }
+            const updatedGroupOrder = await groupOrderRepo.update(req.params.id, { $push: { user_ids: user_id }}, { new: true });
+            res.status(200).json(updatedGroupOrder);
+    
+        } catch (error) {
+            res.status(500);
+            throw new Error("Server Error!");
+        }
+    });
+
 
 }
 
