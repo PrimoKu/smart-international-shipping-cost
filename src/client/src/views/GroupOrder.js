@@ -64,12 +64,46 @@ function GroupOrder(props) {
                 setApprovedOrders(approvedOrders);
                 setCanceledOrders(canceledOrders);
                 setLoading(false);
+                var orderStatus = 1;
+                console.log(orderStatus);
+                if (orderStatus === 1) {
+                    // if order completed
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.getElementById("inviteJoiner").remove();
+                        document.getElementById("newOrder").remove();
+                    });
+                }
             } catch (error) {
                 console.error("An error occurred while fetching data", error);
             }
         };
         fetchData();
     }, []);
+
+    function setButtons(orderComplete) {
+        if (orderComplete) {
+            return (
+                <h2 tag='h2' style={{width: "100%"}}> This order cannot be edited at this time.</h2>
+            );
+        } else {
+            return (
+                <Row sm='2' md='3' lg='4'>
+                    <Col className='text-left' >
+                        <Button color='info' size='lg' className='mr-3 mb-3' onClick={handleNavigation}>
+                            Add New Order
+                        </Button>
+                    </Col>
+                    {user?._id && manager?._id && user._id === manager._id && (
+                    <Col className='text-left' >
+                        <Button color='info' size='lg' className='mr-3 mb-3' >
+                            Invite Joiners
+                        </Button>
+                    </Col>
+                    )}
+                </Row>
+            );
+        }
+    }
 
     const weightBodyTemplate = (rowData) => {
         return (
@@ -109,7 +143,12 @@ function GroupOrder(props) {
         );
     };
     
-    const managerBodyTemplate = (rowData) => {
+    //todo edit?
+    const managerBodyTemplate = (rowData, orderComplete) => {
+        if (orderComplete) {
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+            </div>
+        }
         return (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <Button style={{ whiteSpace: 'nowrap', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
@@ -192,21 +231,7 @@ function GroupOrder(props) {
                     <h1 tag='h1'>{manager.name}</h1>
                 </Col>
             </Row>
-            <Row sm='2' md='3' lg='4'>
-                <Col className='text-left' >
-                    <Button color='info' size='lg' className='mr-3 mb-3' onClick={handleNavigation}>
-                        Add New Order
-                    </Button>
-                </Col>
-                {user?._id && manager?._id && user._id === manager._id && (
-                <Col className='text-left' >
-                    <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleInviteModal}>
-                        Invite Joiners
-                    </Button>
-                </Col>
-                )}
-            </Row>
-            
+            {setButtons(1)}
             <Row>
                 <Col xs='12'>
                     <Card className='card-chart'>
