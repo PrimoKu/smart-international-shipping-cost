@@ -1,31 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { PrimeReactProvider, FilterMatchMode, FilterOperator } from 'primereact/api';
+import { FilterMatchMode } from 'primereact/api';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import axios from 'axios';
-import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import { useAuth } from "contexts/AuthContext.js"; 
-
+import "primereact/resources/themes/lara-light-indigo/theme.css";
 import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Row,
-  Col,
+    Button,
+    Card,
+    CardHeader,
+    CardBody,
+    CardTitle,
+    Row,
+    Col,
+    FormGroup,
+    Form,
+    Input,
+    Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
 
 function GroupOrder(props) {
     const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
+    // Table of Orders in GroupOrder
     const [groupOrder, setGroupOrder] = useState("");
     const [pendingOrders, setPendingOrders] = useState([]);
     const [approvedOrders, setApprovedOrders] = useState([]);
@@ -33,7 +33,6 @@ function GroupOrder(props) {
     const [orderStatusList, setOrderStatusList] = useState([]);
     const [manager, setManager] = useState("");
     const [users, setUsers] = useState([]);
-
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         name: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -43,6 +42,13 @@ function GroupOrder(props) {
         user: { value: null, matchMode: FilterMatchMode.IN }
     });
     const [loading, setLoading] = useState(true);
+
+    // Invite User Modal
+    const [modal, setModal] = useState(false);
+    const [modalCancelable, setModalCancelable] = useState(true);
+    const [email, setEmail] = useState("");
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -58,12 +64,53 @@ function GroupOrder(props) {
                 setApprovedOrders(approvedOrders);
                 setCanceledOrders(canceledOrders);
                 setLoading(false);
+                var orderStatus = 1;
+                console.log(orderStatus);
+                if (orderStatus === 1) {
+                    // if order completed
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.getElementById("inviteJoiner").remove();
+                        document.getElementById("newOrder").remove();
+                    });
+                }
             } catch (error) {
                 console.error("An error occurred while fetching data", error);
             }
         };
         fetchData();
     }, []);
+
+    function setButtons(orderComplete) {
+        if (orderComplete) {
+            return (
+                <h2 tag='h2' style={{width: "100%"}}> This order cannot be edited at this time.</h2>
+            );
+        } else {
+            return (
+                <Row sm='2' md='3' lg='4'>
+                    <Col className='text-left' >
+                        <Button color='info' size='lg' className='mr-3 mb-3' onClick={handleNavigation}>
+                            Add New Order
+                        </Button>
+                    </Col>
+                    {user?._id && manager?._id && user._id === manager._id && (
+                    <Col className='text-left' >
+                        <Button color='info' size='lg' className='mr-3 mb-3' >
+                            Invite Joiners
+                        </Button>
+                    </Col>
+                    )}
+                    <Col className='text-left' >
+                      <Link to= {`/admin/checkout/${id}`} onClick={console.log(groupOrder)}>
+                          <Button color='info' size='lg' className='mr-3 mb-3' >
+                              Checkout
+                          </Button>
+                      </Link>
+                    </Col>  
+                </Row>
+            );
+        }
+    }
 
     const weightBodyTemplate = (rowData) => {
         return (
@@ -82,9 +129,10 @@ function GroupOrder(props) {
     };
 
     const userBodyTemplate = (rowData) => {
+        const user = users.find(obj => obj._id === rowData.user_id);
         return (
             <div className="flex align-items-center gap-2">
-                <span>{rowData.user[0].name}</span>
+                <span>{user.name}</span>
             </div>
         );
     };
@@ -102,7 +150,12 @@ function GroupOrder(props) {
         );
     };
     
-    const managerBodyTemplate = (rowData) => {
+    //todo edit?
+    const managerBodyTemplate = (rowData, orderComplete) => {
+        if (orderComplete) {
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+            </div>
+        }
         return (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <Button style={{ whiteSpace: 'nowrap', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
@@ -151,14 +204,29 @@ function GroupOrder(props) {
         navigate('/admin/createOrder', { state: { groupOrder_id: groupOrder._id } });
     };
 
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const toggle = () => setDropdownOpen((prevState) => !prevState);
-
-    if (!groupOrder) {
-        return <div>Loading...</div>;
+    const toggleInviteModal = () => {
+        setModal(!modal);
+        setModalCancelable(true);
     }
+
+    const handleInvite = async (e) => {
+        e.preventDefault();
+        
+        let formData = new FormData();
+        formData.append('userEmail', email);
+
+        axios.post(`http://localhost:8080/api/groupOrders/invite/${groupOrder._id}`, formData, { withCredentials: true })
+        .then(res => {
+            window.location.reload();
+        })
+        .catch((error) => {
+            if (error.response && error.response.data) {
+            }
+        });
+    };
+
     return (
-        <PrimeReactProvider>
+        // <PrimeReactProvider>
         <div className='content'>
             <Row sm='2' md='3' lg='4'>
                 <Col className='text-left' >
@@ -174,28 +242,7 @@ function GroupOrder(props) {
                     <h1 tag='h1'>Checkout</h1>
                 </Col>
             </Row>
-            <Row sm='2' md='3' lg='4'>
-                <Col className='text-left' >
-                    <Button color='info' size='lg' className='mr-3 mb-3' onClick={handleNavigation}>
-                        Add New Order
-                    </Button>
-                </Col>
-                {user?._id && manager?._id && user._id === manager._id && (
-                <Col className='text-left' >
-                    <Button color='info' size='lg' className='mr-3 mb-3' >
-                        Invite Joiners
-                    </Button>
-                </Col>   
-                )}
-                <Col className='text-left' >
-                <Link to= {`/admin/checkout/${id}`} onClick={console.log(groupOrder)}>
-                    <Button color='info' size='lg' className='mr-3 mb-3' >
-                        Checkout
-                    </Button>
-                </Link>
-                </Col>  
-            </Row>
-            
+            {setButtons(1)}
             <Row>
                 <Col xs='12'>
                     <Card className='card-chart'>
@@ -270,8 +317,33 @@ function GroupOrder(props) {
                     </Card>
                 </Col>
             </Row>
+            <Modal isOpen={modal} toggle={toggleInviteModal}>
+                <ModalHeader toggle={toggleInviteModal}>
+                    <div className="text-dark mb-0" style={{fontSize: '30px'}}>Invite Joiners</div>
+                </ModalHeader>
+                <Form id="form_invite" onSubmit={handleInvite}>
+                    <ModalBody style={{height: '75px'}}>
+                        <div className="text-dark">
+                                <FormGroup>
+                                    <Input
+                                        type="email"
+                                        name="email"
+                                        placeholder="Email"
+                                        required
+                                        style={{ height: '50px', fontSize: '18px' }}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
+                                </FormGroup>
+                        </div>
+                    </ModalBody>
+                    <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+                        <Button type="submit" className="btn-success mx-1">Invite</Button>
+                        <Button className="btn-secondary mx-1" onClick={toggleInviteModal} style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
+                    </ModalFooter>
+                </Form>
+            </Modal>
         </div>
-        </PrimeReactProvider>
+        // </PrimeReactProvider>
     );
 }
 

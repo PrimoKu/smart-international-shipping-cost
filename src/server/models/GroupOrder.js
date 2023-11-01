@@ -18,15 +18,20 @@ const groupOrderSchema = mongoose.Schema({
             type: Date,
             required: false,
         },
-        order_ids: [
+        user_ids: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "Order"
+                ref: "User",
             }
         ],
         status: {
             type: Number,
             default: 0,
+        }, 
+        shipper_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: false,
+            ref: "User",
         }
     }, 
     {

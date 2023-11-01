@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import OrderListItem from '../components/OrderListItem';
+import ConfirmationListItem from '../components/ConfirmationListItem';
 import '../assets/css/OrderItem.css';
 import { useAuth } from "contexts/AuthContext.js";
 import { Paginator } from 'primereact/paginator';
@@ -17,6 +18,7 @@ import {
   Col,
   CardFooter,
 } from 'reactstrap';
+import { ScrollPanel } from 'primereact/scrollpanel';
 
 function Dashboard(props) {
   const [data, setData] = useState([]);
@@ -32,7 +34,7 @@ function Dashboard(props) {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/groupOrders/', { withCredentials: true });
-        console.log(response.data);
+        setData((response.data.managed).concat((response.data.joined)));
         setManaged(response.data.managed);
         setJoined(response.data.joined);
       } catch (error) {
@@ -42,78 +44,95 @@ function Dashboard(props) {
     fetchData();
   }, []);
 
-  function getManagerOrders(data) {
-    var managed = data.filter(order => order.manager_id === user?._id);
-    //if (managed.length >= 3) {
-    //  managed = managed.slice(0, 3);
-    //}
-    return managed;
-  }
-
-  function getJoinerOrders(data) {
-    var joined = data.filter(order => order.manager_id !== user?._id);
-    //if (joined.length >= 3) {
-    //  joined = joined.slice(0, 3);
-    //}
-    return joined;
-  }
-
   function ordersEmpty(data, isManager) {
     if (data.length == 0 && isManager) {
       return (
       <Card className='card-chart' style={{minHeight: '300px', maxHeight: '500px'}}>
         <CardHeader>
-          <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Manage</h5>
+          <h5 className='title' style={{fontSize: "x-large", color: "white"}}>GO's You Manage</h5>
         </CardHeader>
         <CardBody>
-          <h5 className='card-category' style={{fontSize: "large", color: "darkgrey", fontFamily:"'Lucida Console', monospace", marginLeft: "15px"}}>No orders here...</h5>
+          <h5 className='title' style={{fontSize: "large", color: "darkgrey"}}>No orders here...</h5>
         </CardBody>
       </Card>);
     } else if (data.length == 0 && !isManager) {
       return (
-        <Card className='card-chart' style={{minHeight: '300px', maxHeight:'500px', overflowY: 'scroll', overflow: 'auto'}}>
+        <Card className='card-chart' style={{minHeight: '300px', maxHeight:'300px'}}>
           <CardHeader>
-            <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Joined</h5>
+            <h5 className='title' style={{fontSize: "x-large", color: "white"}}>GO's You Joined</h5>
           </CardHeader>
           <CardBody>
-            <h5 className='card-category' style={{fontSize: "large", color: "darkgrey", fontFamily:"'Lucida Console', monospace", marginLeft: "15px"}}>No orders here...</h5>
+            <h5 className='title' style={{fontSize: "large", color: "darkgrey", marginLeft: "15px"}}>No orders here...</h5>
           </CardBody>
         </Card>);
     } else {
       if (isManager) {
         return (
-        <Card className='card-chart' style={{minHeight: '300px', maxHeight:'500px', overflowY: 'scroll', overflow: 'auto'}}>
+        <Card className='card-chart' style={{minHeight: '300px', maxHeight:'300px'}}>
           <CardHeader>
-            <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Manage</h5>
+            <h5 className='title' style={{marginBottom: '0px', height: '40px', fontSize: "x-large", color: "white"}}>GO's You Manage</h5>
           </CardHeader>
-          <CardBody>
-            {data.slice(firstManage, firstManage + 3).map(order => (
-               <OrderListItem key={order._id} ident={order._id} name={order.name} updatedAt={order.updatedAt} />
-            ))}
-        <div className="card">
-            <Paginator first={firstManage} rows={3} totalRecords={managed.length} onPageChange={onPageChange} template={{ layout: 'PrevPageLink CurrentPageReport NextPageLink' }} />
-        </div>
-          </CardBody>
+          <ScrollPanel style={{width: '100%', height: '250px'}}> 
+            <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
+              {//todo add filter here for active orders only + deadline check
+              data.map(order => (
+                <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline}/>
+              ))}
+            </CardBody>
+           </ScrollPanel>
         </Card>);
       } else {
         return (
-        <Card className='card-chart' style={{minHeight: '300px', maxHeight: '500px'}}>
-          <CardHeader>
-            <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>GO's You Joined</h5>
-          </CardHeader>
-          <CardBody>
-            {data.map(order => (
-               <OrderListItem key={order._id} ident={order._id} name={order.name} updatedAt={order.updatedAt} />
-            ))}
-          </CardBody>
-          <CardFooter>
-            <Link>
-              See All
-            </Link>
-          </CardFooter>
-        </Card>);
+          <Card className='card-chart' style={{minHeight: '300px', maxHeight:'300px'}}>
+            <CardHeader>
+              <h5 className='title' style={{marginBottom: '0px', height: '40px', fontSize: "x-large", color: "white"}}>GO's You Joined</h5>
+            </CardHeader>
+            <ScrollPanel style={{width: '100%', height: '250px'}}> 
+              <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
+                {//todo add filter here for active orders only + deadline check
+                data.map(order => (
+                  <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline}/>
+                ))}
+              </CardBody>
+             </ScrollPanel>
+          </Card>);
       }
     }
+  }
+
+  function convertTime(time) {
+    var date = new Date(time).toLocaleDateString();
+    return date;
+  }
+
+  function completedOrders(data) {
+    var activeOrders = data;//.filter(order => order.status === );
+    if (activeOrders.length != 0) {
+      return (
+        <Card className='card-chart' style={{minHeight: '400px', maxHeight:'400px'}}>
+          <CardHeader>
+            <h5 className='title' style={{marginBottom: '0px', height: '40px', fontSize: "x-large", color: "white"}}>Submitted Orders</h5>
+          </CardHeader>
+          <ScrollPanel style={{width: '100%', height: '350px'}}> 
+            <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
+              {activeOrders.map(order => (
+                <ConfirmationListItem key={order._id} ident={order._id} name={order.name} lastUpdatedAt={order.updatedAt} status={1}/>
+              ))}
+            </CardBody>
+          </ScrollPanel>
+        </Card>
+      );
+    }
+    return (
+      <Card className='card-chart'>
+        <CardHeader>
+          <h5 className='title' style={{marginBottom: '0px', height: '40px', fontSize: "x-large", color: "white"}}>Submitted Orders</h5>
+        </CardHeader>
+        <CardBody>
+          <h5 className='title' style={{fontSize: "large", color: "darkgrey", marginLeft: "15px"}}>No orders here...</h5>
+        </CardBody>
+      </Card>
+    );
   }
   
   return (
@@ -121,8 +140,11 @@ function Dashboard(props) {
       <div className='content'>
         <Row>
           <Col>
+            <h5 className='title' style={{display: "flex", alignItems: "center", justifyContent: "center", float: "left", height: '40px', color: "white", fontSize: "x-large"}}>Active/Completed Group Orders</h5>
+          </Col>
+          <Col>
             <Link to='/creategroup'>
-              <Button color='info' size='lg' className='mr-3 mb-3' style={{width: '30%'}}>
+              <Button color='info' size='lg' className='mr-3 mb-3' style={{width: '75%', float:"right", marginRight: '0px'}}>
                 Add New Group Order
               </Button>
             </Link>
@@ -141,15 +163,8 @@ function Dashboard(props) {
           </Col>
         </Row>
         <Row>
-          <Col>
-            <Card className='card-chart'>
-            <CardHeader>
-              <h5 className='card-category' style={{fontSize: "x-large", color: "white", fontFamily:"'Lucida Console', monospace"}}>Notifications</h5>
-            </CardHeader>
-            <CardBody>
-              <h5 className='card-category' style={{fontSize: "large", color: "darkgrey", fontFamily:"'Lucida Console', monospace", marginLeft: "15px"}}>No notifications here...</h5>
-            </CardBody>
-          </Card>
+          <Col> 
+            {completedOrders(data)}
           </Col>
         </Row>
       </div>
