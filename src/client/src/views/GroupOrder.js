@@ -46,6 +46,7 @@ function GroupOrder(props) {
     });
     const [loading, setLoading] = useState(true);
 
+    var grouporderStatus;
     const [isCreateOrderModalOpen, setCreateOrderModalOpen] = useState(false);
     const [selectedGroupOrderId, setSelectedGroupOrderId] = useState();
 
@@ -69,9 +70,9 @@ function GroupOrder(props) {
                 setApprovedOrders(approvedOrders);
                 setCanceledOrders(canceledOrders);
                 setLoading(false);
-                var orderStatus = 1;
-                console.log(orderStatus);
-                if (orderStatus === 1) {
+                var groupOrderStatus = response.data.GroupOrder.status;
+                console.log(response.data);
+                if (groupOrderStatus === 1) {
                     // if order completed
                     document.addEventListener('DOMContentLoaded', function() {
                         document.getElementById("inviteJoiner").remove();
@@ -156,11 +157,7 @@ function GroupOrder(props) {
     };
     
     //todo edit?
-    const managerBodyTemplate = (rowData, orderComplete) => {
-        if (orderComplete) {
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-            </div>
-        }
+    const managerBodyTemplate = (rowData) => {
         return (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <Button style={{ whiteSpace: 'nowrap', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
@@ -170,6 +167,40 @@ function GroupOrder(props) {
             </div>
         );
     };
+
+    const pendingOrdersBody = (orderComplete) => {
+        if (!orderComplete) {
+            return (
+            <Row>
+                <Col xs='12'>
+                    <Card className='card-chart'>
+                    <CardHeader>
+                        <Row>
+                            <Col className='text-left' sm='6'>
+                                <CardTitle tag='h2'>Requested</CardTitle>
+                            </Col>
+                        </Row>
+                    </CardHeader>
+                    <CardBody>
+                        <DataTable value={pendingOrders} paginator rows={10} dataKey="_id" filters={filters} filterDisplay="row" loading={loading}
+                                globalFilterFields={['name', 'weight', 'price', 'user', 'status']}  emptyMessage="No orders found.">
+                            <Column field="name" header="Order Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                            <Column header="Weight" filterField="weight" style={{ minWidth: '12rem' }} body={weightBodyTemplate} filter filterPlaceholder="Search by weight" />
+                            <Column header="Price" filterField="price" style={{ minWidth: '12rem' }} body={priceBodyTemplate} filter filterPlaceholder="Search by price"/>
+                            <Column header="Joiner" filterField="user" style={{ minWidth: '12rem' }} body={userBodyTemplate} filter filterPlaceholder="Search by joiner"/>
+                            <Column header="Status" filterField="status" style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterPlaceholder="Search by status"/>
+                            {user?._id && manager?._id && user._id === manager._id && (
+                                <Column style={{ minWidth: '10rem' }} body={managerBodyTemplate}/>
+                            )}
+                        </DataTable>
+                    </CardBody>
+                    </Card>
+                </Col>
+            </Row>
+
+            );
+        }
+    }
 
     const approveOnClick = (e) => {
         const orderId = e.target.dataset.orderid;
@@ -249,34 +280,9 @@ function GroupOrder(props) {
                     <h1 tag='h1'>Checkout</h1>
                 </Col>
             </Row>
+            
             {setButtons(1)}
-            <Row>
-                <Col xs='12'>
-                    <Card className='card-chart'>
-                    <CardHeader>
-                        <Row>
-                            <Col className='text-left' sm='6'>
-                                <CardTitle tag='h2'>Requested</CardTitle>
-                            </Col>
-                        </Row>
-                    </CardHeader>
-                    <CardBody>
-                        <DataTable value={pendingOrders} paginator rows={10} dataKey="_id" filters={filters} filterDisplay="row" loading={loading}
-                                globalFilterFields={['name', 'weight', 'price', 'user', 'status']}  emptyMessage="No orders found.">
-                            <Column field="name" header="Order Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-                            <Column header="Weight" filterField="weight" style={{ minWidth: '12rem' }} body={weightBodyTemplate} filter filterPlaceholder="Search by weight" />
-                            <Column header="Price" filterField="price" style={{ minWidth: '12rem' }} body={priceBodyTemplate} filter filterPlaceholder="Search by price"/>
-                            <Column header="Joiner" filterField="user" style={{ minWidth: '12rem' }} body={userBodyTemplate} filter filterPlaceholder="Search by joiner"/>
-                            <Column header="Status" filterField="status" style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterPlaceholder="Search by status"/>
-                            {user?._id && manager?._id && user._id === manager._id && (
-                                <Column style={{ minWidth: '10rem' }} body={managerBodyTemplate}/>
-                            )}
-                        </DataTable>
-                    </CardBody>
-                    </Card>
-                </Col>
-            </Row>
-
+            {pendingOrdersBody(1)}
             <Row>
                 <Col xs='12'>
                     <Card className='card-chart'>
