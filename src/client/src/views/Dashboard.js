@@ -7,7 +7,9 @@ import OrderListItem from '../components/OrderListItem';
 import ConfirmationListItem from '../components/ConfirmationListItem';
 import '../assets/css/OrderItem.css';
 import { useAuth } from "contexts/AuthContext.js";
+import CreateOrderModal from './CreateOrderModal'; 
 import { Paginator } from 'primereact/paginator';
+
 
 import {
   Button,
@@ -25,6 +27,12 @@ function Dashboard(props) {
   const [managed, setManaged] = useState([]);
   const [joined, setJoined] = useState([]);
   const {user} = useAuth();
+  const [isCreateOrderModalOpen, setCreateOrderModalOpen] = useState(false);
+
+  const toggleCreateOrderModal = () => {
+    setCreateOrderModalOpen(!isCreateOrderModalOpen);
+  }
+
   const [firstManage, setFirstManage] = useState(0);
 
   const onPageChange = (event) => {

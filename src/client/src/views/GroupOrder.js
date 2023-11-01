@@ -6,7 +6,10 @@ import { Column } from 'primereact/column';
 import axios from 'axios';
 
 import { useAuth } from "contexts/AuthContext.js"; 
+import CreateOrderModal from './CreateOrderModal';
+
 import "primereact/resources/themes/lara-light-indigo/theme.css";
+
 import {
     Button,
     Card,
@@ -22,7 +25,7 @@ import {
 } from 'reactstrap';
 
 function GroupOrder(props) {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
     // Table of Orders in GroupOrder
@@ -43,11 +46,13 @@ function GroupOrder(props) {
     });
     const [loading, setLoading] = useState(true);
 
+    const [isCreateOrderModalOpen, setCreateOrderModalOpen] = useState(false);
+    const [selectedGroupOrderId, setSelectedGroupOrderId] = useState();
+
     // Invite User Modal
     const [modal, setModal] = useState(false);
     const [modalCancelable, setModalCancelable] = useState(true);
     const [email, setEmail] = useState("");
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -95,7 +100,7 @@ function GroupOrder(props) {
                     </Col>
                     {user?._id && manager?._id && user._id === manager._id && (
                     <Col className='text-left' >
-                        <Button color='info' size='lg' className='mr-3 mb-3' >
+                        <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleInviteModal}>
                             Invite Joiners
                         </Button>
                     </Col>
@@ -200,8 +205,10 @@ function GroupOrder(props) {
         });
     }
 
+
     const handleNavigation = () => {
-        navigate('/admin/createOrder', { state: { groupOrder_id: groupOrder._id } });
+        setSelectedGroupOrderId(groupOrder._id);
+        setCreateOrderModalOpen(true);
     };
 
     const toggleInviteModal = () => {
@@ -317,6 +324,9 @@ function GroupOrder(props) {
                     </Card>
                 </Col>
             </Row>
+
+            <CreateOrderModal isOpen={isCreateOrderModalOpen} toggle={() => setCreateOrderModalOpen(false)} groupOrderId={selectedGroupOrderId} />
+
             <Modal isOpen={modal} toggle={toggleInviteModal}>
                 <ModalHeader toggle={toggleInviteModal}>
                     <div className="text-dark mb-0" style={{fontSize: '30px'}}>Invite Joiners</div>
