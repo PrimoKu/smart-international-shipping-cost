@@ -24,13 +24,24 @@ function Dashboard(props) {
   const [managed, setManaged] = useState([]);
   const [joined, setJoined] = useState([]);
   const {user} = useAuth();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/groupOrders/', { withCredentials: true });
         setData((response.data.managed).concat((response.data.joined)));
-        setManaged(response.data.managed);
-        setJoined(response.data.joined);
+        //todo sort these by deadline and filter out the completed orders
+        var sortedManaged = response.data.managed;
+        sortedManaged = [...sortedManaged].sort((a,b) => {
+          return new Date(a.deadline) - new Date(b.deadline);
+        });
+        console.log(response.data)
+        setManaged(sortedManaged);
+        var sortedJoined = response.data.joined;
+        sortedJoined = [...sortedJoined].sort(function(a,b) {
+          return new Date(a.deadline) - new Date(b.deadline);
+        });
+        setJoined(sortedJoined);
       } catch (error) {
         console.error("An error occurred while fetching data", error);
       }
@@ -69,7 +80,7 @@ function Dashboard(props) {
           <ScrollPanel style={{width: '100%', height: '250px'}}> 
             <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
               {//todo add filter here for active orders only + deadline check
-              data.map(order => (
+              managed.map(order => (
                 <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline}/>
               ))}
             </CardBody>
@@ -84,7 +95,7 @@ function Dashboard(props) {
             <ScrollPanel style={{width: '100%', height: '250px'}}> 
               <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
                 {//todo add filter here for active orders only + deadline check
-                data.map(order => (
+                joined.map(order => (
                   <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline}/>
                 ))}
               </CardBody>
