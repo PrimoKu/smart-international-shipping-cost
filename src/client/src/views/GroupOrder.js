@@ -100,6 +100,13 @@ function GroupOrder(props) {
                         </Button>
                     </Col>
                     )}
+                    <Col className='text-left' >
+                      <Link to= {`/admin/checkout/${id}`} onClick={console.log(groupOrder)}>
+                          <Button color='info' size='lg' className='mr-3 mb-3' >
+                              Checkout
+                          </Button>
+                      </Link>
+                    </Col>  
                 </Row>
             );
         }
@@ -194,7 +201,7 @@ function GroupOrder(props) {
     }
 
     const handleNavigation = () => {
-        navigate('/createOrder', { state: { groupOrder_id: groupOrder._id } });
+        navigate('/admin/createOrder', { state: { groupOrder_id: groupOrder._id } });
     };
 
     const toggleInviteModal = () => {
@@ -229,6 +236,10 @@ function GroupOrder(props) {
                 <Col className='text-left' >
                     <h5 className='card-category'>Manager</h5>
                     <h1 tag='h1'>{manager.name}</h1>
+                </Col>
+                <Col className='text-left' >
+                    <h5 className='card-category'>Ready</h5>
+                    <h1 tag='h1'>Checkout</h1>
                 </Col>
             </Row>
             {setButtons(1)}
