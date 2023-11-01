@@ -87,6 +87,7 @@ const getWithDetails = async (id) => {
                 name: { $first: "$name" },
                 country: { $first: "$country" },
                 deadline: { $first: "$deadline" },
+                status: { $first: "$status" },
                 createdAt: { $first: "$createdAt" },
                 updatedAt: { $first: "$updatedAt" },
                 __v: { $first: "$__v" },

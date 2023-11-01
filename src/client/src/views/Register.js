@@ -152,18 +152,19 @@ function Register() {
                                                 <div className={password === passwordCheck ? "text-success" : "text-warning"} id="password_match_error">{passwordMatchError}</div>
                                             </FormGroup>
                                             <FormGroup>
-                                                    <select
-                                                        className="form-control-user"
-                                                        style={{ height: '50px', fontSize: '18px' }}
-                                                        value={role}
-                                                        onChange={(e) => setRole(e.target.value)}
-                                                        required
-                                                    >
-                                                        <option value="" disabled>Select a role</option>
-                                                        <option value="0">User</option>
-                                                        <option value="1">Shipper</option>
-                                                    </select>
-                                                </FormGroup>
+                                                <Input
+                                                    type="select"
+                                                    className="form-control-user"
+                                                    style={{ height: '50px', fontSize: '18px' }}
+                                                    value={role}
+                                                    onChange={(e) => setRole(e.target.value)}
+                                                    required
+                                                >
+                                                    <option value="" disabled>Select a role</option>
+                                                    <option value="0">User</option>
+                                                    <option value="1">Shipper</option>
+                                                </Input>
+                                            </FormGroup>
                                             <div className="text-danger" id="validation_error">{validationError}</div>
                                             <Button type="submit" className="btn-info" block>
                                                 Register
