@@ -32,13 +32,29 @@ function AdminNavbar(props) {
   const [modalContent, setModalContent] = useState("");
   const [modalCancelable, setModalCancelable] = useState(true);
   const [color, setcolor] = React.useState("navbar-transparent");
+  const [notifications, setNotifications] = useState([]);
   React.useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/notifications/', { withCredentials: true });
+        console.log(response.data);
+        
+        // Filter notifications by user ID (assuming user.id exists in your user object)
+        const userNotifications = response.data.filter(notifications => notifications.user_id === user?._id);
+        
+        setNotifications(userNotifications);
+      } catch (error) {
+        console.error("An error occurred while fetching notifications", error);
+      }
+    };
+    fetchNotifications(); // Fetch notifications when the component mounts
     window.addEventListener("resize", updateColor);
     // Specify how to clean up after this effect:
     return function cleanup() {
       window.removeEventListener("resize", updateColor);
     };
-  });
+  }, [user]);
+
   // function that adds color white/transparent to the navbar on resize (this is for the collapse)
   const updateColor = () => {
     if (window.innerWidth < 993 && collapseOpen) {
@@ -132,12 +148,14 @@ function AdminNavbar(props) {
                   <p className="d-lg-none">Notifications</p>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-navbar" right tag="ul">
-                  <NavLink tag="li">
-                    <DropdownItem className="nav-item">
-                      Mike John responded to your email
-                    </DropdownItem>
-                  </NavLink>
-                </DropdownMenu>
+                    {notifications.map((notifications, index) => (
+                      <NavLink tag="li" key={index}>
+                        <DropdownItem className="nav-item">
+                          {notifications.message} {/* Display the message from notifications */}
+                        </DropdownItem>
+                      </NavLink>
+                    ))}
+                  </DropdownMenu>
               </UncontrolledDropdown>
               {isAuthenticated 
                 ? 

@@ -11,6 +11,7 @@
     - `name`: Required name of the user.
     - `email`: Required email of the user.
     - `password`: Required name of the password.
+    - `role`: Required role of the user.
 - **Response**:
   - **Status codes**: 
     - `201 CREATED`: Successfully registered.
@@ -20,6 +21,7 @@
         "_id": <user._id>,
         "name": <user.name>,
         "email": <user.email>,
+        "role": <user.role>,
     }
     ```
 ### Endpoints: Login
@@ -117,7 +119,7 @@
 ### Endpoint: Add a new order
 - **HTTP Method**: `POST`
 - **Path**: `/orders`
-- **Description**: Add a new order to the system.
+- **Description**: Add a new order to the system. The status is 0 as default.
 - **Parameters**:
   - **Request body**:
     ```json
@@ -223,6 +225,7 @@
         "name": <groupOrder.name>,
         "country": <groupOrder.country>,
         "deadline": <groupOrder.deadline>,
+        "status": <groupOrder.status>,
         "order_ids": [
             <order._id>
             ...
@@ -237,7 +240,7 @@
 ### Endpoint: Add a new group order
 - **HTTP Method**: `POST`
 - **Path**: `/groupOrders`
-- **Description**: Add a new group order to the system.
+- **Description**: Add a new group order to the system. The status is 0 as default.
 - **Parameters**:
   - **Request body**:
     ```json
@@ -259,6 +262,7 @@
         "name": <groupOrder.name>,
         "country": <groupOrder.country>,
         "deadline": <groupOrder.deadline>,
+        "status": 0,
         "order_ids": [],
         "createdAt": <groupOrder.createdAt>,
         "updatedAt": <groupOrder.updatedAt>

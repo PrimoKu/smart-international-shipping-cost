@@ -34,11 +34,12 @@ var routes = [
     layout: '/admin',
   },
   {
-    path: "/checkout",
+    path: "/checkout/:id",
     name: "Checkout",
     icon: "tim-icons icon-cart",
     component: <Checkout />,
     layout: "/admin",
+    hidden: true,
   },
   // {
   //   path: '/order',
@@ -61,13 +62,13 @@ var routes = [
   //   component: <Map />,
   //   layout: '/admin',
   // },
-  // {
-  //   path: '/notifications',
-  //   name: 'Notifications',
-  //   icon: 'tim-icons icon-bell-55',
-  //   component: <Notifications />,
-  //   layout: '/admin',
-  // },
+  {
+    path: '/notifications/:id',
+    name: 'Notifications',
+    icon: 'tim-icons icon-bell-55',
+    component: <Notifications />,
+    layout: '/admin',
+  },
   // {
   //   path: "/tables",
   //   name: "Table List",

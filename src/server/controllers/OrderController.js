@@ -21,9 +21,11 @@ class OrderController {
         const { name, weight, price, groupOrder_id } = req.body;
         let order;
         try {
+            const groupOrder = await groupOrderRepo.get(groupOrder_id);
+            if(!groupOrder) { return res.status(404).json({ message: "Group order not found!" }); }
+
             order = await orderRepo.create(req.user.id, groupOrder_id, name, weight, price);
             if(order) {
-                const groupOrder = await groupOrderRepo.update(groupOrder_id, { $push: { order_ids: order._id }});
                 return res.status(201).json({Order: order, GroupOrder: groupOrder});
             } else {
                 return res.status(442).json({ message: "Create order failed!" });
