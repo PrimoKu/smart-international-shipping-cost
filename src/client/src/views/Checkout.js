@@ -49,7 +49,7 @@ function Checkout() {
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
   const onDropdownClick = (e) => {
-    setFilteredOrders(e.target.value ? orders.filter(order => order.user[0].name == e.target.value) : orders);
+    setFilteredOrders(e.target.value ? orders.filter(order => order.user_id == e.target.value) : orders);
   }
 
   return (
@@ -65,7 +65,7 @@ function Checkout() {
               <DropdownMenu>
                 <DropdownItem onClick={onDropdownClick} value={""}>All Joiners</DropdownItem>
                 <DropdownItem divider />
-                {joiners.map(joiner => <DropdownItem onClick={onDropdownClick} value={joiner.name}>{joiner.name}</DropdownItem>)}
+                {joiners.map(joiner => <DropdownItem key={joiner._id} onClick={onDropdownClick} value={joiner._id}>{joiner.name}</DropdownItem>)}
               </DropdownMenu>
             </Dropdown>
           </Col>
@@ -88,8 +88,10 @@ function Checkout() {
                   </thead>
                   <tbody>
                     {filteredOrders.map(order => (
-                      <tr>
-                        <td>{order.user[0].name}</td>
+                      <tr key={order._id}>
+                        <td>{joiners.map(joiner => { if(joiner._id == order.user_id) {
+                          return joiner.name
+                        }})}</td>
                         <td>{order.name}</td>
                         <td>{order.weight}</td>
                         <td className="text-center">{order.price}</td>

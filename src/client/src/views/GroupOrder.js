@@ -106,6 +106,7 @@ function GroupOrder(props) {
                         </Button>
                     </Col>
                     )}
+                    {user?._id && manager?._id && user._id === manager._id && (
                     <Col className='text-left' >
                       <Link to= {`/admin/checkout/${id}`}>
                           <Button color='info' size='lg' className='mr-3 mb-3' >
@@ -113,6 +114,7 @@ function GroupOrder(props) {
                           </Button>
                       </Link>
                     </Col>  
+                    )}
                 </Row>
             );
         }
@@ -273,10 +275,12 @@ function GroupOrder(props) {
                     <h5 className='card-category'>Manager</h5>
                     <h1 tag='h1'>{manager.name}</h1>
                 </Col>
+                {user?._id && manager?._id && user._id === manager._id && (
                 <Col className='text-left' >
                     <h5 className='card-category'>Ready</h5>
                     <h1 tag='h1'>Checkout</h1>
                 </Col>
+                )}
             </Row>
             
             {setButtons(groupOrderStatus)}
