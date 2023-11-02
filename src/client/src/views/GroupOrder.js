@@ -147,7 +147,7 @@ function GroupOrder(props) {
         const user = users.find(obj => obj._id === rowData.user_id);
         return (
             <div className="flex align-items-center gap-2">
-                <span>{user.name}</span>
+                <span>{user?.name}</span>
             </div>
         );
     };

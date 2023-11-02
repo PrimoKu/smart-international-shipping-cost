@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import OrderListItem from '../components/OrderListItem';
+import ConfirmationListItem from '../components/ConfirmationListItem';
 import '../assets/css/OrderItem.css';
 import { useAuth } from "contexts/AuthContext.js";
 import CreateOrderModal from './CreateOrderModal'; 
@@ -19,6 +20,7 @@ import {
   Col,
   CardFooter,
 } from 'reactstrap';
+import { ScrollPanel } from 'primereact/scrollpanel';
 import { ToggleButton } from 'primereact/togglebutton';
 import CreateGroupModal from './CreateGroupModal';
 
@@ -45,7 +47,8 @@ function Dashboard(props) {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/groupOrders/', { withCredentials: true });
-        setData((response.data.managed).concat((response.data.joined)));
+        const fetchedData = (response.data.managed).concat((response.data.joined));
+        setData(fetchedData);
         var sortedManaged = response.data.managed;
         sortedManaged = [...sortedManaged].sort((a,b) => {
           return new Date(a.deadline) - new Date(b.deadline);
@@ -58,7 +61,8 @@ function Dashboard(props) {
           return new Date(a.deadline) - new Date(b.deadline);
         });
         setJoined(sortedJoined);
-        setSubmitted(data.filter(order => order.status !== 0))
+
+        setSubmitted(fetchedData.filter(order => order.status !== 0))
         console.log("HERE")
         console.log(submitted);
 
@@ -120,6 +124,7 @@ function Dashboard(props) {
                 <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline}/>
               ))}
             </CardBody>
+            </ScrollPanel>
           </Card>);
       } else {
         return (
@@ -179,10 +184,10 @@ function Dashboard(props) {
       <div className='content'>
         <Row>
           <Col>
-            <Button color='info' size='lg' className='mr-3 mb-3' style={{ width: '30%' }} onClick={toggleCreateGroupModal}>
+            <Button color='info' size='lg' className='mr-3 mb-3' style={{ width: '30%' }} onClick={toggleCreateOrderModal}>
               Add New Group Order
             </Button>
-            <CreateGroupModal isOpen={isCreateGroupModalOpen} toggle={toggleCreateGroupModal} />
+            <CreateGroupModal isOpen={isCreateOrderModalOpen} toggle={toggleCreateOrderModal} />
           </Col>
         </Row>
         <Row>
