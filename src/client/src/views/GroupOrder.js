@@ -55,6 +55,7 @@ function GroupOrder(props) {
     const [modalCancelable, setModalCancelable] = useState(true);
     const [email, setEmail] = useState("");
 
+    var groupOrderStatus;
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -70,8 +71,7 @@ function GroupOrder(props) {
                 setApprovedOrders(approvedOrders);
                 setCanceledOrders(canceledOrders);
                 setLoading(false);
-                var groupOrderStatus = response.data.GroupOrder.status;
-                console.log(response.data);
+                groupOrderStatus = response.data.GroupOrder.status;
                 if (groupOrderStatus === 1) {
                     // if order completed
                     document.addEventListener('DOMContentLoaded', function() {
@@ -107,7 +107,7 @@ function GroupOrder(props) {
                     </Col>
                     )}
                     <Col className='text-left' >
-                      <Link to= {`/admin/checkout/${id}`} onClick={console.log(groupOrder)}>
+                      <Link to= {`/admin/checkout/${id}`}>
                           <Button color='info' size='lg' className='mr-3 mb-3' >
                               Checkout
                           </Button>
@@ -210,7 +210,6 @@ function GroupOrder(props) {
 
         axios.put(`http://localhost:8080/api/orders/approve/${orderId}`, formData, { withCredentials: true })
         .then(res => {
-            console.log(res);
             window.location.reload();
         })
         .catch((error) => {
@@ -227,7 +226,6 @@ function GroupOrder(props) {
 
         axios.put(`http://localhost:8080/api/orders/cancel/${orderId}`, formData, { withCredentials: true })
         .then(res => {
-            console.log(res);
             window.location.reload();
         })
         .catch((error) => {
@@ -281,8 +279,8 @@ function GroupOrder(props) {
                 </Col>
             </Row>
             
-            {setButtons(1)}
-            {pendingOrdersBody(1)}
+            {setButtons(groupOrderStatus)}
+            {pendingOrdersBody(groupOrderStatus)}
             <Row>
                 <Col xs='12'>
                     <Card className='card-chart'>

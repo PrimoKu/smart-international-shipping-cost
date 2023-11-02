@@ -26,6 +26,7 @@ function Dashboard(props) {
   const [data, setData] = useState([]);
   const [managed, setManaged] = useState([]);
   const [joined, setJoined] = useState([]);
+  const [submitted, setSubmitted] = useState([]);
   const {user} = useAuth();
 
   const [isCreateOrderModalOpen, setCreateOrderModalOpen] = useState(false);
@@ -45,18 +46,21 @@ function Dashboard(props) {
       try {
         const response = await axios.get('http://localhost:8080/api/groupOrders/', { withCredentials: true });
         setData((response.data.managed).concat((response.data.joined)));
-        //todo sort these by deadline and filter out the completed orders
         var sortedManaged = response.data.managed;
         sortedManaged = [...sortedManaged].sort((a,b) => {
           return new Date(a.deadline) - new Date(b.deadline);
         });
-        console.log(response.data)
+        sortedManaged = sortedManaged.filter(order => order.status === 0)
         setManaged(sortedManaged);
         var sortedJoined = response.data.joined;
+        sortedJoined = sortedJoined.filter(order => order.status === 0)
         sortedJoined = [...sortedJoined].sort(function(a,b) {
           return new Date(a.deadline) - new Date(b.deadline);
         });
         setJoined(sortedJoined);
+        setSubmitted(data.filter(order => order.status !== 0))
+        console.log("HERE")
+        console.log(submitted);
       } catch (error) {
         console.error("An error occurred while fetching data", error);
       }
@@ -94,7 +98,7 @@ function Dashboard(props) {
           </CardHeader>
           <ScrollPanel style={{width: '100%', height: '250px'}}> 
             <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
-              {//todo add filter here for active orders only + deadline check
+              {
               managed.map(order => (
                 <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline}/>
               ))}
@@ -109,7 +113,7 @@ function Dashboard(props) {
             </CardHeader>
             <ScrollPanel style={{width: '100%', height: '250px'}}> 
               <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
-                {//todo add filter here for active orders only + deadline check
+                {
                 joined.map(order => (
                   <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline}/>
                 ))}
@@ -125,9 +129,8 @@ function Dashboard(props) {
     return date;
   }
 
-  function completedOrders(data) {
-    var activeOrders = data;//.filter(order => order.status === );
-    if (activeOrders.length != 0) {
+  function completedOrders() {
+    if (submitted != 0) {
       return (
         <Card className='card-chart' style={{minHeight: '400px', maxHeight:'400px'}}>
           <CardHeader>
@@ -135,8 +138,8 @@ function Dashboard(props) {
           </CardHeader>
           <ScrollPanel style={{width: '100%', height: '350px'}}> 
             <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
-              {activeOrders.map(order => (
-                <ConfirmationListItem key={order._id} ident={order._id} name={order.name} lastUpdatedAt={order.updatedAt} status={1}/>
+              {submitted.map(order => (
+                <ConfirmationListItem key={order._id} ident={order._id} name={order.name} lastUpdatedAt={order.updatedAt} status={order.status}/>
               ))}
             </CardBody>
           </ScrollPanel>
@@ -184,7 +187,7 @@ function Dashboard(props) {
         </Row>
         <Row>
           <Col> 
-            {completedOrders(data)}
+            {completedOrders()}
           </Col>
         </Row>
       </div>
