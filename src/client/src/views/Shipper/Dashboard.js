@@ -6,120 +6,99 @@ import axios from 'axios';
 import OrderListItem from '../../components/OrderListItem';
 import '../../assets/css/OrderItem.css';
 import { useAuth } from "contexts/AuthContext.js";
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Card, CardHeader, CardBody, CardTitle, Row, Col, Button } from "reactstrap";
 
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  Row,
-  Col,
-  CardFooter,
-} from 'reactstrap';
+const Dashboard = () => {
+  const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState([]);
+  const [showAccepted, setShowAccepted] = useState(true);
+  const [showNotAccepted, setShowNotAccepted] = useState(true);
 
-
-function Dashboard(props) {
-  const [data, setData] = useState([]);
-  const [submitted, setSubmitted] = useState([]);
-  const [shipping, setShipping] = useState([]);
-  const { user } = useAuth();
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/groupOrders/', { withCredentials: true });
-        console.log(response.data);
-        var submitted = response.data.filter(order => order.status === 2);
-        var shipping = response.data.filter(order => order.status === 3);
-        var delivered = response.data.filter(order => order.status === 4);
-        setSubmitted(submitted);
-        setShipping(shipping);
+        const response = await axios.get("http://localhost:8080/api/orders", { withCredentials: true });
+        setOrders(response.data);
+        setLoading(false);
       } catch (error) {
         console.error("An error occurred while fetching data", error);
+        setLoading(false);
       }
     };
     fetchData();
   }, []);
 
-  function getJoinerOrders(data) {
-    var joined = data.filter(order => order.shipper_id == user?._id);
-    return joined;
-  }
+  const acceptedOrders = orders.filter(order => order.status === "Accepted");
+  const notAcceptedOrders = orders.filter(order => order.status !== "Accepted");
 
-  function ordersEmpty(data, isManager) {
-    if (data.length == 0 && isManager) {
-      return (
-        <Card className='card-chart' style={{ minHeight: '300px' }}>
-          <CardHeader>
-            <h5 className='card-category' style={{ fontSize: "x-large", color: "white", fontFamily: "'Lucida Console', monospace" }}>All Group Orders</h5>
-          </CardHeader>
-          <CardBody>
-            <h5 className='card-category' style={{ fontSize: "large", color: "darkgrey", fontFamily: "'Lucida Console', monospace", marginLeft: "15px" }}>No orders here...</h5>
-          </CardBody>
-        </Card>);
-    } else if (data.length == 0 && !isManager) {
-      return (
-        <Card className='card-chart' style={{ minHeight: '300px', maxHeight: '300px', overflowY: 'scroll', overflow: 'auto' }}>
-          <CardHeader>
-            <h5 className='card-category' style={{ fontSize: "x-large", color: "white", fontFamily: "'Lucida Console', monospace" }}>Group Orders Accepted</h5>
-          </CardHeader>
-          <CardBody>
-            <h5 className='card-category' style={{ fontSize: "large", color: "darkgrey", fontFamily: "'Lucida Console', monospace", marginLeft: "15px" }}>No orders here...</h5>
-          </CardBody>
-        </Card>);
-    } else {
-      if (isManager) {
-        return (
-          <Card className='card-chart' style={{ minHeight: '300px', maxHeight: '300px', overflowY: 'scroll', overflow: 'auto' }}>
-            <CardHeader>
-              <h5 className='card-category' style={{ fontSize: "x-large", color: "white", fontFamily: "'Lucida Console', monospace" }}>All Group Orders</h5>
-            </CardHeader>
-            <CardBody>
-              {data.map(order => (
-                <OrderListItem key={order._id} ident={order._id} name={order.name} updatedAt={order.updatedAt} />
-              ))}
-            </CardBody>
-          </Card>);
-      } else {
-        return (
-          <Card className='card-chart' style={{ minHeight: '300px' }}>
-            <CardHeader>
-              <h5 className='card-category' style={{ fontSize: "x-large", color: "white", fontFamily: "'Lucida Console', monospace" }}>Group Orders Accepted</h5>
-            </CardHeader>
-            <CardBody>
-              {data.map(order => (
-                <OrderListItem key={order._id} ident={order._id} name={order.name} updatedAt={order.updatedAt} />
-              ))}
-            </CardBody>
-            <CardFooter>
-              <Link>
-                See All
-              </Link>
-            </CardFooter>
-          </Card>);
-      }
-    }
-  }
+  const showAll = () => {
+    setShowAccepted(true);
+    setShowNotAccepted(true);
+  };
+
+  const showAcceptedHandler = () => {
+    setShowAccepted(true);
+    setShowNotAccepted(false);
+  };
+
+  const showNotAcceptedHandler = () => {
+    setShowAccepted(false);
+    setShowNotAccepted(true);
+  };
 
   return (
-    <>
-      <div className='content'>
+    <div className="content">
+      <Row>
+        <Col xs="12">
+          <Button color="primary" onClick={showAll}>All</Button>
+          <Button color="primary" onClick={showAcceptedHandler}>Accept</Button>
+          <Button color="primary" onClick={showNotAcceptedHandler}>Not Accepted</Button>
+        </Col>
+      </Row>
+      {showAccepted && (
         <Row>
-          <Col xs='12'>
-            <Row>
-              <Col>
-                {ordersEmpty(submitted, true)}
-              </Col>
-              <Col>
-                {ordersEmpty(shipping, false)}
-              </Col>
-            </Row>
+          <Col xs="12">
+            <Card className="card-chart">
+              <CardHeader>
+                <Row>
+                  <Col className="text-left" sm="6">
+                    <CardTitle tag="h2">Accepted</CardTitle>
+                  </Col>
+                </Row>
+              </CardHeader>
+              <CardBody>
+                <DataTable value={acceptedOrders} paginator rows={10} dataKey="_id" loading={loading} style={{ width: '100%' }}>
+                  {/* ... columns */}
+                </DataTable>
+              </CardBody>
+            </Card>
           </Col>
         </Row>
-        
-      </div>
-    </>
+      )}
+      {showNotAccepted && (
+        <Row>
+          <Col xs="12">
+            <Card className="card-chart">
+              <CardHeader>
+                <Row>
+                  <Col className="text-left" sm="6">
+                    <CardTitle tag="h2">Not Accepted</CardTitle>
+                  </Col>
+                </Row>
+              </CardHeader>
+              <CardBody>
+                <DataTable value={notAcceptedOrders} paginator rows={10} dataKey="_id" loading={loading} style={{ width: '100%' }}>
+                  {/* ... columns */}
+                </DataTable>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      )}
+    </div>
   );
-}
+};
 
 export default Dashboard;
