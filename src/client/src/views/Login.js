@@ -109,9 +109,9 @@ function Login() {
                                                     placeholder="Email"
                                                     required
                                                     style={{ height: '50px', fontSize: '18px' }}
-                                                    onChange={(e) => setEmail(e.target.value)}
-                                                    // defaultValue={"testUser@jhu.edu"}
-                                                    // readOnly
+                                                    // onChange={(e) => setEmail(e.target.value)}
+                                                    defaultValue={"testUser@jhu.edu"}
+                                                    readOnly
                                                 />
                                             </FormGroup>
                                             <FormGroup>
@@ -123,23 +123,11 @@ function Login() {
                                                     required
                                                     autoComplete="off"
                                                     style={{ height: '50px', fontSize: '18px' }}
-                                                    onChange={(e) => setPassword(e.target.value)}
-                                                    // defaultValue={"Default Password"}
-                                                    // readOnly
+                                                    // onChange={(e) => setPassword(e.target.value)}
+                                                    defaultValue={"Default Password"}
+                                                    readOnly
                                                 />
                                                 <div className="text-warning" id="login_error"></div>
-                                            </FormGroup>
-                                            <FormGroup>
-                                                <select
-                                                    className="form-control-user"
-                                                    style={{ height: '50px', fontSize: '18px' }}
-                                                    value={role}
-                                                    onChange={(e) => setRole(e.target.value)}
-                                                    required
-                                                >
-                                                    <option value="0">User</option>
-                                                    <option value="1">Shipper</option>
-                                                </select>
                                             </FormGroup>
                                             <div className="text-danger" id="login_error">{loginError}</div>
                                             <Button type="submit" className="btn-info" block>
