@@ -13,10 +13,12 @@ import {
   BackgroundColorContext,
   backgroundColors,
 } from "contexts/BackgroundColorContext";
+import { useAuth } from "../../contexts/AuthContext.js";
 
 var ps;
 
 function Sidebar(props) {
+  const { user } = useAuth();
   const location = useLocation();
   const sidebarRef = React.useRef(null);
   // verifies if routeName is the one active (in browser input)
@@ -102,7 +104,7 @@ function Sidebar(props) {
               </div>
             ) : null}
             <Nav>
-              {routes.filter(route => !route.hidden).map((prop, key) => {
+              {routes.filter(route => !route.hidden && route.type === user?.role).map((prop, key) => {
                 if (prop.redirect) return null;
                 return (
                   <li

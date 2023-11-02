@@ -14,9 +14,12 @@ import routes from 'routes.js';
 import logo from 'assets/img/react-logo.png';
 import { BackgroundColorContext } from 'contexts/BackgroundColorContext';
 
+import { useAuth } from "../../contexts/AuthContext.js";
+
 var ps;
 
 function Admin(props) {
+  const { user } = useAuth();
   const location = useLocation();
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(
@@ -57,7 +60,7 @@ function Admin(props) {
   };
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
-      if (prop.layout === '/admin') {
+      if (prop.layout === '/admin' && prop.type === user?.role) {
         return (
           <Route path={prop.path} element={prop.component} key={key} exact />
         );
@@ -74,6 +77,7 @@ function Admin(props) {
     }
     return 'Brand';
   };
+ 
   return (
     <BackgroundColorContext.Consumer>
       {({ color, changeColor }) => (

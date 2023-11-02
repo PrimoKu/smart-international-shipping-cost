@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import OrderListItem from '../components/OrderListItem';
-import ConfirmationListItem from '../components/ConfirmationListItem';
 import '../assets/css/OrderItem.css';
 import { useAuth } from "contexts/AuthContext.js";
 import CreateOrderModal from './CreateOrderModal'; 
@@ -20,7 +19,8 @@ import {
   Col,
   CardFooter,
 } from 'reactstrap';
-import { ScrollPanel } from 'primereact/scrollpanel';
+import { ToggleButton } from 'primereact/togglebutton';
+import CreateGroupModal from './CreateGroupModal';
 
 function Dashboard(props) {
   const [data, setData] = useState([]);
@@ -61,12 +61,29 @@ function Dashboard(props) {
         setSubmitted(data.filter(order => order.status !== 0))
         console.log("HERE")
         console.log(submitted);
+
       } catch (error) {
         console.error("An error occurred while fetching data", error);
       }
     };
     fetchData();
   }, []);
+
+  function getManagerOrders(data) {
+    var managed = data.filter(order => order.manager_id === user?._id);
+    //if (managed.length >= 3) {
+    //  managed = managed.slice(0, 3);
+    //}
+    return managed;
+  }
+
+  function getJoinerOrders(data) {
+    var joined = data.filter(order => order.manager_id !== user?._id);
+    //if (joined.length >= 3) {
+    //  joined = joined.slice(0, 3);
+    //}
+    return joined;
+  }
 
   function ordersEmpty(data, isManager) {
     if (data.length == 0 && isManager) {
@@ -81,12 +98,12 @@ function Dashboard(props) {
       </Card>);
     } else if (data.length == 0 && !isManager) {
       return (
-        <Card className='card-chart' style={{minHeight: '300px', maxHeight:'300px'}}>
+        <Card className='card-chart' style={{ minHeight: '300px', maxHeight: '300px', overflowY: 'scroll', overflow: 'auto' }}>
           <CardHeader>
-            <h5 className='title' style={{fontSize: "x-large", color: "white"}}>GO's You Joined</h5>
+            <h5 className='card-category' style={{ fontSize: "x-large", color: "white", fontFamily: "'Lucida Console', monospace" }}>GO's You Joined</h5>
           </CardHeader>
           <CardBody>
-            <h5 className='title' style={{fontSize: "large", color: "darkgrey", marginLeft: "15px"}}>No orders here...</h5>
+            <h5 className='card-category' style={{ fontSize: "large", color: "darkgrey", fontFamily: "'Lucida Console', monospace", marginLeft: "15px" }}>No orders here...</h5>
           </CardBody>
         </Card>);
     } else {
@@ -103,13 +120,12 @@ function Dashboard(props) {
                 <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline}/>
               ))}
             </CardBody>
-           </ScrollPanel>
-        </Card>);
+          </Card>);
       } else {
         return (
-          <Card className='card-chart' style={{minHeight: '300px', maxHeight:'300px'}}>
+          <Card className='card-chart' style={{ minHeight: '300px' }}>
             <CardHeader>
-              <h5 className='title' style={{marginBottom: '0px', height: '40px', fontSize: "x-large", color: "white"}}>GO's You Joined</h5>
+              <h5 className='card-category' style={{ fontSize: "x-large", color: "white", fontFamily: "'Lucida Console', monospace" }}>GO's You Joined</h5>
             </CardHeader>
             <ScrollPanel style={{width: '100%', height: '250px'}}> 
               <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
@@ -163,14 +179,10 @@ function Dashboard(props) {
       <div className='content'>
         <Row>
           <Col>
-            <h5 className='title' style={{display: "flex", alignItems: "center", justifyContent: "center", float: "left", height: '40px', color: "white", fontSize: "x-large"}}>Active/Completed Group Orders</h5>
-          </Col>
-          <Col>
-            <Link to='/creategroup'>
-              <Button color='info' size='lg' className='mr-3 mb-3' style={{width: '75%', float:"right", marginRight: '0px'}}>
-                Add New Group Order
-              </Button>
-            </Link>
+            <Button color='info' size='lg' className='mr-3 mb-3' style={{ width: '30%' }} onClick={toggleCreateGroupModal}>
+              Add New Group Order
+            </Button>
+            <CreateGroupModal isOpen={isCreateGroupModalOpen} toggle={toggleCreateGroupModal} />
           </Col>
         </Row>
         <Row>
