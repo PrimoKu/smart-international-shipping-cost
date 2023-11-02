@@ -19,25 +19,25 @@ function ConfirmationListItem({ident, name, lastUpdatedAt, status}) {
   }
 
   function getStatus() {
-    if (status === 1) {
+    if (status === 2) {
       return "UNSHIPPED";
-    } else if (status == 2) {
-      return "IN PROGRESS";
     } else if (status == 3) {
+      return "SHIPPING";
+    } else if (status == 1) {
       return "CANCELED"
-    } else if (status == 0) {
-      return "COMPLETE";
+    } else if (status == 4) {
+      return "DELIVERED";
     }
   }
 
   function getColor() {
-    if (status === 1) {
+    if (status === 2) {
       return "red";
-    } else if (status === 2) {
-      return "yellow";
     } else if (status === 3) {
+      return "white";
+    } else if (status === 1) {
       return "gray"
-    } else if (status === 0) {
+    } else if (status === 4) {
       return "lightgreen";
     }
   }

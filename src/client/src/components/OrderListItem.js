@@ -40,8 +40,8 @@ function OrderListItem({ident, name, deadline}) {
   function getTimeDiffMonths() {
     var currentTime = new Date();
     var months = (deadlineDate.getFullYear() - currentTime.getFullYear()) * 12;
-    months -= deadlineDate.getMonth();
-    months += currentTime.getMonth();
+    months -= currentTime.getMonth();
+    months += deadlineDate.getMonth();
     return Math.ceil(months);
   }
 
@@ -67,13 +67,12 @@ function OrderListItem({ident, name, deadline}) {
   }
 
   function getTimeRemaining() {
-    console.log(deadline);
     if (deadline == undefined || deadline == null || deadline == "") {
       return "ERR";
     } else {
       var daysLeft = getTimeDiffDays();
       if (daysLeft <= 1) {
-        return getTimeDiffHours() + " HRS"
+        return getTimeDiffHours() + " HOURS"
       } else if (daysLeft <= 7) {
         return getTimeDiffDays() + " DAYS"
       } else if (daysLeft <= 30) {
@@ -102,7 +101,7 @@ function OrderListItem({ident, name, deadline}) {
           </div>
         </Col>
         <Col>
-          <div style={{float: "right", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", marginRight: "20px", color:`${color}`}}>{getTimeRemaining()}</div>
+          <div style={{fontSize: "medium", float: "right", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", marginRight: "10px", color:`${color}`}}>{getTimeRemaining()}</div>
         </Col>
       </Row>
     </button>

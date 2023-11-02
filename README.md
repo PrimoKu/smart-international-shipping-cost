@@ -181,6 +181,12 @@ Iteration 2:
 3) User registration / login / information input has been updated, and checkout has been improved
 4) Additional API functionality has been added, see the documentation or just explore :^)
 
+Iteration 3:
+1) A new type of user, a Shipper, is now supported! Their role is to fulfill user orders.
+2) User orders are now given status, deadline, and other indicators to help inform the user about their order.
+3) Group management has been implemented, and now individual users can join orders, request additions, and so on.
+5) ...many more changes, both big and small. Refer to the project backlog!
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -195,10 +201,13 @@ Iteration 2:
 - [x] UML diagram and SRS documentation
 - [x] Iteration 2
 - [x] Additional views to allow for user input (payment, personal details, etc.)
-- [ ] Adding group functionality
+- [x] Adding group functionality
 - [x] Create a home page for order management
-- [ ] Iteration 3
+- [x] Iteration 3
+- [x] Fleshing out iteration 2 interfaces with additional information and inputs
+- [x] Shipper perspective and individual order management on both ends
 - [ ] Enforcing styling among multiple interfaces
+- [ ] Iteration 4
 
 See the [open issues](https://github.com/jhu-oose-f23/team-BlueJay/issues) for a full list of proposed features (and known issues).
 

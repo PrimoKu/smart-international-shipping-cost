@@ -22,10 +22,9 @@ import {
 
 
 function Login() {
-    // const [email, setEmail] = useState("yku4@jh.edu");
-    // const [password, setPassword] = useState("ku850728");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("yku4@jh.edu");
+    const [password, setPassword] = useState("ku850728");
+    const [role, setRole] = useState("0"); 
     const [loginError, setLoginError] = useState("");
     const [imageSize] = useState(60);
 
@@ -38,7 +37,11 @@ function Login() {
 
         axios.post('http://localhost:8080/api/users/login', formData, { withCredentials: true })
         .then(res => {
-            window.location.assign('/admin/dashboard');
+            if (role === "1") {  // If the role is "shipper"
+                window.location.assign('/shipper/dashboard');  // Redirect to shipper's dashboard, this need to be changed
+            } else {
+                window.location.assign('/admin/dashboard');  // For regular users
+            }
         })
         .catch((error) => {
             if (error.response && error.response.data) {
@@ -125,6 +128,18 @@ function Login() {
                                                     // readOnly
                                                 />
                                                 <div className="text-warning" id="login_error"></div>
+                                            </FormGroup>
+                                            <FormGroup>
+                                                <select
+                                                    className="form-control-user"
+                                                    style={{ height: '50px', fontSize: '18px' }}
+                                                    value={role}
+                                                    onChange={(e) => setRole(e.target.value)}
+                                                    required
+                                                >
+                                                    <option value="0">User</option>
+                                                    <option value="1">Shipper</option>
+                                                </select>
                                             </FormGroup>
                                             <div className="text-danger" id="login_error">{loginError}</div>
                                             <Button type="submit" className="btn-info" block>

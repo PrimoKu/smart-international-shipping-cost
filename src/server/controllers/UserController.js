@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const userRepo = require("../repositories/UserRepository");
+const { UserRoleList } = require("../enums/UserRoleEnums");
 
 class UserController {
 
@@ -10,7 +11,7 @@ class UserController {
     //@route POST /api/users/register
     //@access public
     registerUser = asyncHandler(async (req, res) => {
-        const { name, email, password } = req.body;
+        const { name, email, password, role } = req.body;
         console.log(req.body);
         let user;
         try {
@@ -20,13 +21,14 @@ class UserController {
             }
             const hashedPassword = await bcrypt.hash(password, 10);
             console.log("Hashed Password: ", hashedPassword);
-            user = await User.create({ name, email, password: hashedPassword });
+            user = await User.create({ name, email, password: hashedPassword, role });
             if(user != null && user != undefined) {
                 const accessToken = jwt.sign({
                     user: {
                         name: user.name,
                         email: user.email,
                         id: user.id,
+                        role: UserRoleList.find(role => role.value === user.role)?.text || null,
                     },
                 },
                 process.env.ACCESS_TOKEN_SECRET,
@@ -107,13 +109,18 @@ class UserController {
     //@access private
     currentUser = asyncHandler(async (req, res) => {
         try {
-            const user = await userRepo.getWithDetails(req.user.id);
-            if(!user) {
-                return res.status(404).json({ message: "User not found!" });
+
+            if(req.user.id) {
+                const user = await userRepo.getWithDetails(req.user.id);
+                if(!user) {
+                    return res.status(404).json({ message: "User not found!" });
+                }
+                res.status(200).json(user);
+            } else {
+                return res.status(401).json({ message: "No authentication" });
             }
-            res.status(200).json(user);
+
         } catch (error) {
-            console.log(error);
             res.status(500);
             throw new Error("Server Error!");
         }

@@ -1,6 +1,6 @@
 const {check, validationResult} = require('express-validator');
 const GroupOrder = require("../models/GroupOrder");
-const { USStates } = require("../enums/USStatesEnum");
+const { USStates } = require("../enums/USStatesEnums");
 
 exports.OrderCreateValidator = [
     check('name')

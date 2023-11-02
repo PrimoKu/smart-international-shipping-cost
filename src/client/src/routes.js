@@ -50,7 +50,7 @@ var routes = [
     hidden: false,
   },
   {
-    path: "/checkout",
+    path: "/checkout/:id",
     name: "Checkout",
     type: 0,
     icon: "tim-icons icon-cart",

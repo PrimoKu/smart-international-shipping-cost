@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-
 import CreateOrder from './views/CreateOrder.js';
 import Home from './views/Home.js';
 import AdminLayout from "./layouts/Admin/Admin.js";
@@ -12,6 +11,7 @@ import ShipperMain from './views/ShipperMain.js';
 
 
 import { AuthProvider } from "contexts/AuthContext.js"; 
+import { PrimeReactProvider } from 'primereact/api';
 
 import './assets/scss/black-dashboard-react.scss';
 import './assets/demo/demo.css';
@@ -20,13 +20,15 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import ThemeContextWrapper from './components/ThemeWrapper/ThemeWrapper.js';
 import BackgroundColorWrapper from './components/BackgroundColorWrapper/BackgroundColorWrapper.js';
-
-
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ThemeContextWrapper>
     <BackgroundColorWrapper>
       <BrowserRouter>
+      <PrimeReactProvider>
         <AuthProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
@@ -39,6 +41,7 @@ root.render(
             <Route path='*' element={<Home />} /> {/* Default route */}
           </Routes>
         </AuthProvider>
+        </PrimeReactProvider>
       </BrowserRouter>
     </BackgroundColorWrapper>
   </ThemeContextWrapper>

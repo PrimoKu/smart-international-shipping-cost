@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { PrimeReactProvider, FilterMatchMode, FilterOperator } from 'primereact/api';
+import { FilterMatchMode } from 'primereact/api';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import axios from 'axios';
-import "primereact/resources/themes/lara-light-indigo/theme.css";
 
-import { useAuth } from "contexts/AuthContext.js";
+import { useAuth } from "contexts/AuthContext.js"; 
+import CreateOrderModal from './CreateOrderModal';
+
+import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import {
     Button,
@@ -16,13 +18,18 @@ import {
     CardTitle,
     Row,
     Col,
+    FormGroup,
+    Form,
+    Input,
+    Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
 //import ViewJoinersModal from './ViewJoinersModal';
 
 function GroupOrder(props) {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
+    // Table of Orders in GroupOrder
     const [groupOrder, setGroupOrder] = useState("");
     const [pendingOrders, setPendingOrders] = useState([]);
     const [approvedOrders, setApprovedOrders] = useState([]);
@@ -30,11 +37,6 @@ function GroupOrder(props) {
     const [orderStatusList, setOrderStatusList] = useState([]);
     const [manager, setManager] = useState("");
     const [users, setUsers] = useState([]);
-
-    //const [isViewJoinersModalOpen, setViewJoinersModalOpen] = useState(false);
-    //const toggleViewJoinersModal = () => {
-    //    setViewJoinersModalOpen(!isViewJoinersModalOpen);
-    //}
 
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -45,6 +47,17 @@ function GroupOrder(props) {
         user: { value: null, matchMode: FilterMatchMode.IN }
     });
     const [loading, setLoading] = useState(true);
+
+    var grouporderStatus;
+    const [isCreateOrderModalOpen, setCreateOrderModalOpen] = useState(false);
+    const [selectedGroupOrderId, setSelectedGroupOrderId] = useState();
+
+    // Invite User Modal
+    const [modal, setModal] = useState(false);
+    const [modalCancelable, setModalCancelable] = useState(true);
+    const [email, setEmail] = useState("");
+
+    var groupOrderStatus;
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -60,9 +73,8 @@ function GroupOrder(props) {
                 setApprovedOrders(approvedOrders);
                 setCanceledOrders(canceledOrders);
                 setLoading(false);
-                var orderStatus = 1;
-                console.log(orderStatus);
-                if (orderStatus === 1) {
+                groupOrderStatus = response.data.GroupOrder.status;
+                if (groupOrderStatus === 1) {
                     // if order completed
                     document.addEventListener('DOMContentLoaded', function () {
                         document.getElementById("inviteJoiner").remove();
@@ -95,22 +107,21 @@ function GroupOrder(props) {
                     </Col>
 
                     {user?._id && manager?._id && user._id === manager._id && (
-                        <Col className='text-left' >
-                            <Button color='info' size='lg' className='mr-3 mb-3' >
-                                Invite Joiners
-                            </Button>
-                        
-                    
-                            {/* <Button color='info' size='lg' className='mr-3 mb-3' style={{ width: '60%' }} onClick={toggleViewJoinersModal}>
-                                view all joiners
-                            </Button>
-                            <ViewJoinersModal isOpen={isViewJoinersModalOpen} toggle={toggleViewJoinersModal} /> */}
-                            </Col>
-
-                )}
-                
-
-                    
+                    <Col className='text-left' >
+                        <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleInviteModal}>
+                            Invite Joiners
+                        </Button>
+                    </Col>
+                    )}
+                    {user?._id && manager?._id && user._id === manager._id && (
+                    <Col className='text-left' >
+                      <Link to= {`/admin/checkout/${id}`}>
+                          <Button color='info' size='lg' className='mr-3 mb-3' >
+                              Checkout
+                          </Button>
+                      </Link>
+                    </Col>  
+                    )}
                 </Row>
             );
         }
@@ -133,9 +144,10 @@ function GroupOrder(props) {
     };
 
     const userBodyTemplate = (rowData) => {
+        const user = users.find(obj => obj._id === rowData.user_id);
         return (
             <div className="flex align-items-center gap-2">
-                <span>{rowData.user[0].name}</span>
+                <span>{user.name}</span>
             </div>
         );
     };
@@ -154,11 +166,7 @@ function GroupOrder(props) {
     };
 
     //todo edit?
-    const managerBodyTemplate = (rowData, orderComplete) => {
-        if (orderComplete) {
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-            </div>
-        }
+    const managerBodyTemplate = (rowData) => {
         return (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <Button style={{ whiteSpace: 'nowrap', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -169,6 +177,40 @@ function GroupOrder(props) {
         );
     };
 
+    const pendingOrdersBody = (orderComplete) => {
+        if (!orderComplete) {
+            return (
+            <Row>
+                <Col xs='12'>
+                    <Card className='card-chart'>
+                    <CardHeader>
+                        <Row>
+                            <Col className='text-left' sm='6'>
+                                <CardTitle tag='h2'>Requested</CardTitle>
+                            </Col>
+                        </Row>
+                    </CardHeader>
+                    <CardBody>
+                        <DataTable value={pendingOrders} paginator rows={10} dataKey="_id" filters={filters} filterDisplay="row" loading={loading}
+                                globalFilterFields={['name', 'weight', 'price', 'user', 'status']}  emptyMessage="No orders found.">
+                            <Column field="name" header="Order Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                            <Column header="Weight" filterField="weight" style={{ minWidth: '12rem' }} body={weightBodyTemplate} filter filterPlaceholder="Search by weight" />
+                            <Column header="Price" filterField="price" style={{ minWidth: '12rem' }} body={priceBodyTemplate} filter filterPlaceholder="Search by price"/>
+                            <Column header="Joiner" filterField="user" style={{ minWidth: '12rem' }} body={userBodyTemplate} filter filterPlaceholder="Search by joiner"/>
+                            <Column header="Status" filterField="status" style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterPlaceholder="Search by status"/>
+                            {user?._id && manager?._id && user._id === manager._id && (
+                                <Column style={{ minWidth: '10rem' }} body={managerBodyTemplate}/>
+                            )}
+                        </DataTable>
+                    </CardBody>
+                    </Card>
+                </Col>
+            </Row>
+
+            );
+        }
+    }
+
     const approveOnClick = (e) => {
         const orderId = e.target.dataset.orderid;
 
@@ -176,14 +218,13 @@ function GroupOrder(props) {
         formData.append('status', orderStatusList[1].value);
 
         axios.put(`http://localhost:8080/api/orders/approve/${orderId}`, formData, { withCredentials: true })
-            .then(res => {
-                console.log(res);
-                window.location.reload();
-            })
-            .catch((error) => {
-                if (error.response && error.response.data) {
-                }
-            });
+        .then(res => {
+            window.location.reload();
+        })
+        .catch((error) => {
+            if (error.response && error.response.data) {
+            }
+        });
     }
 
     const cancelOnClick = (e) => {
@@ -193,113 +234,141 @@ function GroupOrder(props) {
         formData.append('status', orderStatusList[1].value);
 
         axios.put(`http://localhost:8080/api/orders/cancel/${orderId}`, formData, { withCredentials: true })
-            .then(res => {
-                console.log(res);
-                window.location.reload();
-            })
-            .catch((error) => {
-                if (error.response && error.response.data) {
-                }
-            });
+        .then(res => {
+            window.location.reload();
+        })
+        .catch((error) => {
+            if (error.response && error.response.data) {
+            }
+        });
     }
+
 
     const handleNavigation = () => {
-        navigate('/createOrder', { state: { groupOrder_id: groupOrder._id } });
+        setSelectedGroupOrderId(groupOrder._id);
+        setCreateOrderModalOpen(true);
     };
 
-    if (!groupOrder) {
-        return <div>Loading...</div>;
+    const toggleInviteModal = () => {
+        setModal(!modal);
+        setModalCancelable(true);
     }
+
+    const handleInvite = async (e) => {
+        e.preventDefault();
+        
+        let formData = new FormData();
+        formData.append('userEmail', email);
+
+        axios.post(`http://localhost:8080/api/groupOrders/invite/${groupOrder._id}`, formData, { withCredentials: true })
+        .then(res => {
+            window.location.reload();
+        })
+        .catch((error) => {
+            if (error.response && error.response.data) {
+            }
+        });
+    };
+
     return (
-        <PrimeReactProvider>
-            <div className='content'>
-                <Row sm='2' md='3' lg='4'>
-                    <Col className='text-left' >
-                        <h5 className='card-category'>GroupOrder</h5>
-                        <h1 tag='h1'>{groupOrder.name}</h1>
-                    </Col>
-                    <Col className='text-left' >
-                        <h5 className='card-category'>Manager</h5>
-                        <h1 tag='h1'>{manager.name}</h1>
-                    </Col>
-                </Row>
-                {setButtons(0)}
-                <Row>
-                    <Col xs='12'>
-                        <Card className='card-chart'>
-                            <CardHeader>
-                                <Row>
-                                    <Col className='text-left' sm='6'>
-                                        <CardTitle tag='h2'>Requested</CardTitle>
-                                    </Col>
-                                </Row>
-                            </CardHeader>
-                            <CardBody>
-                                <DataTable value={pendingOrders} paginator rows={10} dataKey="_id" filters={filters} filterDisplay="row" loading={loading}
-                                    globalFilterFields={['name', 'weight', 'price', 'user', 'status']} emptyMessage="No orders found.">
-                                    <Column field="name" header="Order Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-                                    <Column header="Weight" filterField="weight" style={{ minWidth: '12rem' }} body={weightBodyTemplate} filter filterPlaceholder="Search by weight" />
-                                    <Column header="Price" filterField="price" style={{ minWidth: '12rem' }} body={priceBodyTemplate} filter filterPlaceholder="Search by price" />
-                                    <Column header="Joiner" filterField="user" style={{ minWidth: '12rem' }} body={userBodyTemplate} filter filterPlaceholder="Search by joiner" />
-                                    <Column header="Status" filterField="status" style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterPlaceholder="Search by status" />
-                                    {user?._id && manager?._id && user._id === manager._id && (
-                                        <Column style={{ minWidth: '10rem' }} body={managerBodyTemplate} />
-                                    )}
-                                </DataTable>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
+        // <PrimeReactProvider>
+        <div className='content'>
+            <Row sm='2' md='3' lg='4'>
+                <Col className='text-left' >
+                    <h5 className='card-category'>GroupOrder</h5>
+                    <h1 tag='h1'>{groupOrder.name}</h1>
+                </Col>
+                <Col className='text-left' >
+                    <h5 className='card-category'>Manager</h5>
+                    <h1 tag='h1'>{manager.name}</h1>
+                </Col>
+                {user?._id && manager?._id && user._id === manager._id && (
+                <Col className='text-left' >
+                    <h5 className='card-category'>Ready</h5>
+                    <h1 tag='h1'>Checkout</h1>
+                </Col>
+                )}
+            </Row>
+            
+            {setButtons(groupOrderStatus)}
+            {pendingOrdersBody(groupOrderStatus)}
+            <Row>
+                <Col xs='12'>
+                    <Card className='card-chart'>
+                    <CardHeader>
+                        <Row>
+                            <Col className='text-left' sm='6'>
+                                <CardTitle tag='h2'>Accepted</CardTitle>
+                            </Col>
+                        </Row>
+                    </CardHeader>
+                    <CardBody>
+                        <DataTable value={approvedOrders} paginator rows={10} dataKey="_id" filters={filters} filterDisplay="row" loading={loading}
+                                globalFilterFields={['name', 'weight', 'price', 'user', 'status']}  emptyMessage="No orders found.">
+                            <Column field="name" header="Order Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                            <Column header="Weight" filterField="weight" style={{ minWidth: '8rem' }} body={weightBodyTemplate} filter filterPlaceholder="Search by weight" />
+                            <Column header="Price" filterField="price" style={{ minWidth: '8rem' }} body={priceBodyTemplate} filter filterPlaceholder="Search by price"/>
+                            <Column header="Joiner" filterField="user" style={{ minWidth: '12rem' }} body={userBodyTemplate} filter filterPlaceholder="Search by joiner"/>
+                            <Column header="Status" filterField="status" style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterPlaceholder="Search by status"/>
+                        </DataTable>
+                    </CardBody>
+                    </Card>
+                </Col>
+            </Row>
 
-                <Row>
-                    <Col xs='12'>
-                        <Card className='card-chart'>
-                            <CardHeader>
-                                <Row>
-                                    <Col className='text-left' sm='6'>
-                                        <CardTitle tag='h2'>Accepted</CardTitle>
-                                    </Col>
-                                </Row>
-                            </CardHeader>
-                            <CardBody>
-                                <DataTable value={approvedOrders} paginator rows={10} dataKey="_id" filters={filters} filterDisplay="row" loading={loading}
-                                    globalFilterFields={['name', 'weight', 'price', 'user', 'status']} emptyMessage="No orders found.">
-                                    <Column field="name" header="Order Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-                                    <Column header="Weight" filterField="weight" style={{ minWidth: '8rem' }} body={weightBodyTemplate} filter filterPlaceholder="Search by weight" />
-                                    <Column header="Price" filterField="price" style={{ minWidth: '8rem' }} body={priceBodyTemplate} filter filterPlaceholder="Search by price" />
-                                    <Column header="Joiner" filterField="user" style={{ minWidth: '12rem' }} body={userBodyTemplate} filter filterPlaceholder="Search by joiner" />
-                                    <Column header="Status" filterField="status" style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterPlaceholder="Search by status" />
-                                </DataTable>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
+            <Row>
+                <Col xs='12'>
+                    <Card className='card-chart'>
+                    <CardHeader>
+                        <Row>
+                            <Col className='text-left' sm='6'>
+                                <CardTitle tag='h2'>Canceled</CardTitle>
+                            </Col>
+                        </Row>
+                    </CardHeader>
+                    <CardBody>
+                        <DataTable value={canceledOrders} paginator rows={10} dataKey="_id" filters={filters} filterDisplay="row" loading={loading}
+                                globalFilterFields={['name', 'weight', 'price', 'user', 'status']}  emptyMessage="No orders found.">
+                            <Column field="name" header="Order Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                            <Column header="Weight" filterField="weight" style={{ minWidth: '8rem' }} body={weightBodyTemplate} filter filterPlaceholder="Search by weight" />
+                            <Column header="Price" filterField="price" style={{ minWidth: '8rem' }} body={priceBodyTemplate} filter filterPlaceholder="Search by price"/>
+                            <Column header="Joiner" filterField="user" style={{ minWidth: '12rem' }} body={userBodyTemplate} filter filterPlaceholder="Search by joiner"/>
+                            <Column header="Status" filterField="status" style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterPlaceholder="Search by status"/>
+                        </DataTable>
+                    </CardBody>
+                    </Card>
+                </Col>
+            </Row>
 
-                <Row>
-                    <Col xs='12'>
-                        <Card className='card-chart'>
-                            <CardHeader>
-                                <Row>
-                                    <Col className='text-left' sm='6'>
-                                        <CardTitle tag='h2'>Canceled</CardTitle>
-                                    </Col>
-                                </Row>
-                            </CardHeader>
-                            <CardBody>
-                                <DataTable value={canceledOrders} paginator rows={10} dataKey="_id" filters={filters} filterDisplay="row" loading={loading}
-                                    globalFilterFields={['name', 'weight', 'price', 'user', 'status']} emptyMessage="No orders found.">
-                                    <Column field="name" header="Order Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-                                    <Column header="Weight" filterField="weight" style={{ minWidth: '8rem' }} body={weightBodyTemplate} filter filterPlaceholder="Search by weight" />
-                                    <Column header="Price" filterField="price" style={{ minWidth: '8rem' }} body={priceBodyTemplate} filter filterPlaceholder="Search by price" />
-                                    <Column header="Joiner" filterField="user" style={{ minWidth: '12rem' }} body={userBodyTemplate} filter filterPlaceholder="Search by joiner" />
-                                    <Column header="Status" filterField="status" style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterPlaceholder="Search by status" />
-                                </DataTable>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
-            </div>
-        </PrimeReactProvider>
+            <CreateOrderModal isOpen={isCreateOrderModalOpen} toggle={() => setCreateOrderModalOpen(false)} groupOrderId={selectedGroupOrderId} />
+
+            <Modal isOpen={modal} toggle={toggleInviteModal}>
+                <ModalHeader toggle={toggleInviteModal}>
+                    <div className="text-dark mb-0" style={{fontSize: '30px'}}>Invite Joiners</div>
+                </ModalHeader>
+                <Form id="form_invite" onSubmit={handleInvite}>
+                    <ModalBody style={{height: '75px'}}>
+                        <div className="text-dark">
+                                <FormGroup>
+                                    <Input
+                                        type="email"
+                                        name="email"
+                                        placeholder="Email"
+                                        required
+                                        style={{ height: '50px', fontSize: '18px' }}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
+                                </FormGroup>
+                        </div>
+                    </ModalBody>
+                    <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+                        <Button type="submit" className="btn-success mx-1">Invite</Button>
+                        <Button className="btn-secondary mx-1" onClick={toggleInviteModal} style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
+                    </ModalFooter>
+                </Form>
+            </Modal>
+        </div>
+        // </PrimeReactProvider>
     );
 }
 
