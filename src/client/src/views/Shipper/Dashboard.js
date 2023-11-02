@@ -20,8 +20,8 @@ import {
 
 function Dashboard(props) {
   const [data, setData] = useState([]);
-  const [managed, setManaged] = useState([]);
-  const [joined, setJoined] = useState([]);
+  const [submitted, setSubmitted] = useState([]);
+  const [shipping, setShipping] = useState([]);
   const { user } = useAuth();
   
   useEffect(() => {
@@ -29,8 +29,11 @@ function Dashboard(props) {
       try {
         const response = await axios.get('http://localhost:8080/api/groupOrders/', { withCredentials: true });
         console.log(response.data);
-        setManaged(response.data.managed);
-        setJoined(response.data.joined);
+        var submitted = response.data.filter(order => order.status === 2);
+        var shipping = response.data.filter(order => order.status === 3);
+        var delivered = response.data.filter(order => order.status === 4);
+        setSubmitted(submitted);
+        setShipping(shipping);
       } catch (error) {
         console.error("An error occurred while fetching data", error);
       }
@@ -105,10 +108,10 @@ function Dashboard(props) {
           <Col xs='12'>
             <Row>
               <Col>
-                {ordersEmpty(managed, true)}
+                {ordersEmpty(submitted, true)}
               </Col>
               <Col>
-                {ordersEmpty(joined, false)}
+                {ordersEmpty(shipping, false)}
               </Col>
             </Row>
           </Col>
