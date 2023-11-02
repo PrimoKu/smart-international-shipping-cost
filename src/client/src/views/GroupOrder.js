@@ -6,17 +6,18 @@ import { Column } from 'primereact/column';
 import axios from 'axios';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 
-import { useAuth } from "contexts/AuthContext.js"; 
+import { useAuth } from "contexts/AuthContext.js";
 
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Row,
-  Col,
+    Button,
+    Card,
+    CardHeader,
+    CardBody,
+    CardTitle,
+    Row,
+    Col,
 } from 'reactstrap';
+//import ViewJoinersModal from './ViewJoinersModal';
 
 function GroupOrder(props) {
     const navigate = useNavigate();
@@ -29,6 +30,11 @@ function GroupOrder(props) {
     const [orderStatusList, setOrderStatusList] = useState([]);
     const [manager, setManager] = useState("");
     const [users, setUsers] = useState([]);
+
+    //const [isViewJoinersModalOpen, setViewJoinersModalOpen] = useState(false);
+    //const toggleViewJoinersModal = () => {
+    //    setViewJoinersModalOpen(!isViewJoinersModalOpen);
+    //}
 
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -58,7 +64,7 @@ function GroupOrder(props) {
                 console.log(orderStatus);
                 if (orderStatus === 1) {
                     // if order completed
-                    document.addEventListener('DOMContentLoaded', function() {
+                    document.addEventListener('DOMContentLoaded', function () {
                         document.getElementById("inviteJoiner").remove();
                         document.getElementById("newOrder").remove();
                     });
@@ -73,7 +79,10 @@ function GroupOrder(props) {
     function setButtons(orderComplete) {
         if (orderComplete) {
             return (
-                <h2 tag='h2' style={{width: "100%"}}> This order cannot be edited at this time.</h2>
+                <CardHeader>
+                <h2 tag='h2' style={{ width: "100%" }}> This order cannot be edited at this time.</h2>
+                </CardHeader>
+            
             );
         } else {
             return (
@@ -82,14 +91,26 @@ function GroupOrder(props) {
                         <Button color='info' size='lg' className='mr-3 mb-3' onClick={handleNavigation}>
                             Add New Order
                         </Button>
+
                     </Col>
+
                     {user?._id && manager?._id && user._id === manager._id && (
-                    <Col className='text-left' >
-                        <Button color='info' size='lg' className='mr-3 mb-3' >
-                            Invite Joiners
-                        </Button>
-                    </Col>
-                    )}
+                        <Col className='text-left' >
+                            <Button color='info' size='lg' className='mr-3 mb-3' >
+                                Invite Joiners
+                            </Button>
+                        
+                    
+                            {/* <Button color='info' size='lg' className='mr-3 mb-3' style={{ width: '60%' }} onClick={toggleViewJoinersModal}>
+                                view all joiners
+                            </Button>
+                            <ViewJoinersModal isOpen={isViewJoinersModalOpen} toggle={toggleViewJoinersModal} /> */}
+                            </Col>
+
+                )}
+                
+
+                    
                 </Row>
             );
         }
@@ -131,7 +152,7 @@ function GroupOrder(props) {
             </div>
         );
     };
-    
+
     //todo edit?
     const managerBodyTemplate = (rowData, orderComplete) => {
         if (orderComplete) {
@@ -140,9 +161,9 @@ function GroupOrder(props) {
         }
         return (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                <Button style={{ whiteSpace: 'nowrap', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
+                <Button style={{ whiteSpace: 'nowrap', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     color='success' data-orderid={rowData._id} onClick={approveOnClick}>Approve</Button>
-                <Button style={{ whiteSpace: 'nowrap', padding: '10px 10px' }}  
+                <Button style={{ whiteSpace: 'nowrap', padding: '10px 10px' }}
                     color='danger' data-orderid={rowData._id} onClick={cancelOnClick}>Cancel</Button>
             </div>
         );
@@ -155,14 +176,14 @@ function GroupOrder(props) {
         formData.append('status', orderStatusList[1].value);
 
         axios.put(`http://localhost:8080/api/orders/approve/${orderId}`, formData, { withCredentials: true })
-        .then(res => {
-            console.log(res);
-            window.location.reload();
-        })
-        .catch((error) => {
-            if (error.response && error.response.data) {
-            }
-        });
+            .then(res => {
+                console.log(res);
+                window.location.reload();
+            })
+            .catch((error) => {
+                if (error.response && error.response.data) {
+                }
+            });
     }
 
     const cancelOnClick = (e) => {
@@ -172,14 +193,14 @@ function GroupOrder(props) {
         formData.append('status', orderStatusList[1].value);
 
         axios.put(`http://localhost:8080/api/orders/cancel/${orderId}`, formData, { withCredentials: true })
-        .then(res => {
-            console.log(res);
-            window.location.reload();
-        })
-        .catch((error) => {
-            if (error.response && error.response.data) {
-            }
-        });
+            .then(res => {
+                console.log(res);
+                window.location.reload();
+            })
+            .catch((error) => {
+                if (error.response && error.response.data) {
+                }
+            });
     }
 
     const handleNavigation = () => {
@@ -191,93 +212,93 @@ function GroupOrder(props) {
     }
     return (
         <PrimeReactProvider>
-        <div className='content'>
-            <Row sm='2' md='3' lg='4'>
-                <Col className='text-left' >
-                    <h5 className='card-category'>GroupOrder</h5>
-                    <h1 tag='h1'>{groupOrder.name}</h1>
-                </Col>
-                <Col className='text-left' >
-                    <h5 className='card-category'>Manager</h5>
-                    <h1 tag='h1'>{manager.name}</h1>
-                </Col>
-            </Row>
-            {setButtons(1)}
-            <Row>
-                <Col xs='12'>
-                    <Card className='card-chart'>
-                    <CardHeader>
-                        <Row>
-                            <Col className='text-left' sm='6'>
-                                <CardTitle tag='h2'>Requested</CardTitle>
-                            </Col>
-                        </Row>
-                    </CardHeader>
-                    <CardBody>
-                        <DataTable value={pendingOrders} paginator rows={10} dataKey="_id" filters={filters} filterDisplay="row" loading={loading}
-                                globalFilterFields={['name', 'weight', 'price', 'user', 'status']}  emptyMessage="No orders found.">
-                            <Column field="name" header="Order Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-                            <Column header="Weight" filterField="weight" style={{ minWidth: '12rem' }} body={weightBodyTemplate} filter filterPlaceholder="Search by weight" />
-                            <Column header="Price" filterField="price" style={{ minWidth: '12rem' }} body={priceBodyTemplate} filter filterPlaceholder="Search by price"/>
-                            <Column header="Joiner" filterField="user" style={{ minWidth: '12rem' }} body={userBodyTemplate} filter filterPlaceholder="Search by joiner"/>
-                            <Column header="Status" filterField="status" style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterPlaceholder="Search by status"/>
-                            {user?._id && manager?._id && user._id === manager._id && (
-                                <Column style={{ minWidth: '10rem' }} body={managerBodyTemplate}/>
-                            )}
-                        </DataTable>
-                    </CardBody>
-                    </Card>
-                </Col>
-            </Row>
+            <div className='content'>
+                <Row sm='2' md='3' lg='4'>
+                    <Col className='text-left' >
+                        <h5 className='card-category'>GroupOrder</h5>
+                        <h1 tag='h1'>{groupOrder.name}</h1>
+                    </Col>
+                    <Col className='text-left' >
+                        <h5 className='card-category'>Manager</h5>
+                        <h1 tag='h1'>{manager.name}</h1>
+                    </Col>
+                </Row>
+                {setButtons(0)}
+                <Row>
+                    <Col xs='12'>
+                        <Card className='card-chart'>
+                            <CardHeader>
+                                <Row>
+                                    <Col className='text-left' sm='6'>
+                                        <CardTitle tag='h2'>Requested</CardTitle>
+                                    </Col>
+                                </Row>
+                            </CardHeader>
+                            <CardBody>
+                                <DataTable value={pendingOrders} paginator rows={10} dataKey="_id" filters={filters} filterDisplay="row" loading={loading}
+                                    globalFilterFields={['name', 'weight', 'price', 'user', 'status']} emptyMessage="No orders found.">
+                                    <Column field="name" header="Order Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                                    <Column header="Weight" filterField="weight" style={{ minWidth: '12rem' }} body={weightBodyTemplate} filter filterPlaceholder="Search by weight" />
+                                    <Column header="Price" filterField="price" style={{ minWidth: '12rem' }} body={priceBodyTemplate} filter filterPlaceholder="Search by price" />
+                                    <Column header="Joiner" filterField="user" style={{ minWidth: '12rem' }} body={userBodyTemplate} filter filterPlaceholder="Search by joiner" />
+                                    <Column header="Status" filterField="status" style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterPlaceholder="Search by status" />
+                                    {user?._id && manager?._id && user._id === manager._id && (
+                                        <Column style={{ minWidth: '10rem' }} body={managerBodyTemplate} />
+                                    )}
+                                </DataTable>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                </Row>
 
-            <Row>
-                <Col xs='12'>
-                    <Card className='card-chart'>
-                    <CardHeader>
-                        <Row>
-                            <Col className='text-left' sm='6'>
-                                <CardTitle tag='h2'>Accepted</CardTitle>
-                            </Col>
-                        </Row>
-                    </CardHeader>
-                    <CardBody>
-                        <DataTable value={approvedOrders} paginator rows={10} dataKey="_id" filters={filters} filterDisplay="row" loading={loading}
-                                globalFilterFields={['name', 'weight', 'price', 'user', 'status']}  emptyMessage="No orders found.">
-                            <Column field="name" header="Order Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-                            <Column header="Weight" filterField="weight" style={{ minWidth: '8rem' }} body={weightBodyTemplate} filter filterPlaceholder="Search by weight" />
-                            <Column header="Price" filterField="price" style={{ minWidth: '8rem' }} body={priceBodyTemplate} filter filterPlaceholder="Search by price"/>
-                            <Column header="Joiner" filterField="user" style={{ minWidth: '12rem' }} body={userBodyTemplate} filter filterPlaceholder="Search by joiner"/>
-                            <Column header="Status" filterField="status" style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterPlaceholder="Search by status"/>
-                        </DataTable>
-                    </CardBody>
-                    </Card>
-                </Col>
-            </Row>
+                <Row>
+                    <Col xs='12'>
+                        <Card className='card-chart'>
+                            <CardHeader>
+                                <Row>
+                                    <Col className='text-left' sm='6'>
+                                        <CardTitle tag='h2'>Accepted</CardTitle>
+                                    </Col>
+                                </Row>
+                            </CardHeader>
+                            <CardBody>
+                                <DataTable value={approvedOrders} paginator rows={10} dataKey="_id" filters={filters} filterDisplay="row" loading={loading}
+                                    globalFilterFields={['name', 'weight', 'price', 'user', 'status']} emptyMessage="No orders found.">
+                                    <Column field="name" header="Order Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                                    <Column header="Weight" filterField="weight" style={{ minWidth: '8rem' }} body={weightBodyTemplate} filter filterPlaceholder="Search by weight" />
+                                    <Column header="Price" filterField="price" style={{ minWidth: '8rem' }} body={priceBodyTemplate} filter filterPlaceholder="Search by price" />
+                                    <Column header="Joiner" filterField="user" style={{ minWidth: '12rem' }} body={userBodyTemplate} filter filterPlaceholder="Search by joiner" />
+                                    <Column header="Status" filterField="status" style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterPlaceholder="Search by status" />
+                                </DataTable>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                </Row>
 
-            <Row>
-                <Col xs='12'>
-                    <Card className='card-chart'>
-                    <CardHeader>
-                        <Row>
-                            <Col className='text-left' sm='6'>
-                                <CardTitle tag='h2'>Canceled</CardTitle>
-                            </Col>
-                        </Row>
-                    </CardHeader>
-                    <CardBody>
-                        <DataTable value={canceledOrders} paginator rows={10} dataKey="_id" filters={filters} filterDisplay="row" loading={loading}
-                                globalFilterFields={['name', 'weight', 'price', 'user', 'status']}  emptyMessage="No orders found.">
-                            <Column field="name" header="Order Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-                            <Column header="Weight" filterField="weight" style={{ minWidth: '8rem' }} body={weightBodyTemplate} filter filterPlaceholder="Search by weight" />
-                            <Column header="Price" filterField="price" style={{ minWidth: '8rem' }} body={priceBodyTemplate} filter filterPlaceholder="Search by price"/>
-                            <Column header="Joiner" filterField="user" style={{ minWidth: '12rem' }} body={userBodyTemplate} filter filterPlaceholder="Search by joiner"/>
-                            <Column header="Status" filterField="status" style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterPlaceholder="Search by status"/>
-                        </DataTable>
-                    </CardBody>
-                    </Card>
-                </Col>
-            </Row>
-        </div>
+                <Row>
+                    <Col xs='12'>
+                        <Card className='card-chart'>
+                            <CardHeader>
+                                <Row>
+                                    <Col className='text-left' sm='6'>
+                                        <CardTitle tag='h2'>Canceled</CardTitle>
+                                    </Col>
+                                </Row>
+                            </CardHeader>
+                            <CardBody>
+                                <DataTable value={canceledOrders} paginator rows={10} dataKey="_id" filters={filters} filterDisplay="row" loading={loading}
+                                    globalFilterFields={['name', 'weight', 'price', 'user', 'status']} emptyMessage="No orders found.">
+                                    <Column field="name" header="Order Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                                    <Column header="Weight" filterField="weight" style={{ minWidth: '8rem' }} body={weightBodyTemplate} filter filterPlaceholder="Search by weight" />
+                                    <Column header="Price" filterField="price" style={{ minWidth: '8rem' }} body={priceBodyTemplate} filter filterPlaceholder="Search by price" />
+                                    <Column header="Joiner" filterField="user" style={{ minWidth: '12rem' }} body={userBodyTemplate} filter filterPlaceholder="Search by joiner" />
+                                    <Column header="Status" filterField="status" style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterPlaceholder="Search by status" />
+                                </DataTable>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                </Row>
+            </div>
         </PrimeReactProvider>
     );
 }

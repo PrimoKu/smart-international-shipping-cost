@@ -16,7 +16,7 @@ import {
   Col,
 } from "reactstrap";
 
-function UserProfile() {
+function UserProfile() { 
   const [showUserEdit, setShowUserEdit] = useState(false);
   const [showPaymentEdit, setShowPaymentEdit] = useState(false);
   const [data, setData] = useState([]);

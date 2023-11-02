@@ -1,7 +1,12 @@
 const GroupOrder = require("../models/GroupOrder");
 const { ObjectId } = require('mongoose').Types;
 
-const getAll = async (user_id) => {
+const getAll = async () => {
+    const groupOrders = await GroupOrder.find().sort({ 'updatedAt': -1 }).exec();
+    return groupOrders;
+}
+
+const getAllWithUser = async (user_id) => {
     const groupOrders = await GroupOrder.find({manager_id: user_id}).sort({ 'updatedAt': -1 }).exec();
     return groupOrders;
 }
@@ -81,6 +86,7 @@ const getWithDetails = async (id) => {
                 name: { $first: "$name" },
                 country: { $first: "$country" },
                 deadline: { $first: "$deadline" },
+                status: { $first: "$status" },
                 createdAt: { $first: "$createdAt" },
                 updatedAt: { $first: "$updatedAt" },
                 __v: { $first: "$__v" },
@@ -154,5 +160,6 @@ module.exports = {
     update,
     getWithDetails,
     getWithManager,
-    getOrdersWhereUserIsNotManager
+    getOrdersWhereUserIsNotManager,
+    getAllWithUser
 }

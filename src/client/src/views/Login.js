@@ -22,8 +22,10 @@ import {
 
 
 function Login() {
-    const [email, setEmail] = useState("yku4@jh.edu");
-    const [password, setPassword] = useState("ku850728");
+    // const [email, setEmail] = useState("yku4@jh.edu");
+    // const [password, setPassword] = useState("ku850728");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState("");
     const [imageSize] = useState(60);
 
@@ -104,9 +106,9 @@ function Login() {
                                                     placeholder="Email"
                                                     required
                                                     style={{ height: '50px', fontSize: '18px' }}
-                                                    // onChange={(e) => setEmail(e.target.value)}
-                                                    defaultValue={"testUser@jhu.edu"}
-                                                    readOnly
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    // defaultValue={"testUser@jhu.edu"}
+                                                    // readOnly
                                                 />
                                             </FormGroup>
                                             <FormGroup>
@@ -118,9 +120,9 @@ function Login() {
                                                     required
                                                     autoComplete="off"
                                                     style={{ height: '50px', fontSize: '18px' }}
-                                                    // onChange={(e) => setPassword(e.target.value)}
-                                                    defaultValue={"Default Password"}
-                                                    readOnly
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    // defaultValue={"Default Password"}
+                                                    // readOnly
                                                 />
                                                 <div className="text-warning" id="login_error"></div>
                                             </FormGroup>
