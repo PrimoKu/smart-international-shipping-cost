@@ -56,7 +56,7 @@ var routes = [
     icon: "tim-icons icon-cart",
     component: <Checkout />,
     layout: "/admin",
-    hidden: false,
+    hidden: true,
   },
 ];
 
