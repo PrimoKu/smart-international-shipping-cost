@@ -4,8 +4,9 @@ Our main goals were to implement the shipper interfaces and to fill out many sma
 
 In the first goal, we were only partially successful: I think every member had a very busy week, where many ended up starting later than intended, 
 or having a few absences from meetings. This led to some confusion when getting closer to the deadline due to lack of communication, especially when
-one person's tasks relied upon another's to be completed, resulting in some tasks being set aside due to the approaching deadline. The frontend is 
-patchy at the moment, but is being worked on, and the required backend functionality is implemented. 
+one person's tasks relied upon another's to be completed, resulting in some tasks being set aside due to the approaching deadline. Another issue was 
+confusion over the workflows that needed to be implemented in the app, mostly due to absences from meetings. The frontend is patchy at the moment, 
+but is being worked on, and the required backend functionality is implemented. 
 
 We were mostly successful in our second goal: the UI is a lot more fleshed-out than in the previous iteration, and introduces much-needed features to get the
 regular user interface up to a good standard. More graphical improvements will be made in the next iteration, especially on the home screen and shipper POV.
