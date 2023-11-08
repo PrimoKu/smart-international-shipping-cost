@@ -47,7 +47,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Team BlueJay is developing an international shipping app intended to reduce individual overseas shipping costs by bundling them in a group!
+Team BlueJay is developing an international shipping app for organizing multiple individual orders in a group to save on individual overseas shipping costs!
 
 This idea was inspired by Shichang, and her experiences with ordering international products. She found that by grouping various orders together in one package for overseas shipping, this would reduce the price for all involved, and the initial solution was to use an Excel spreadsheet to track each person's order cost, weight, and payment status. 
 
