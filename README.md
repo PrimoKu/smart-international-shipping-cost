@@ -169,18 +169,6 @@ npm start
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Iteration 1: 
-1) The main page contains all elements currently accessible via our routes. 
-2) So far, you can create an order, and login/register. Your data in both cases will be stored in our MongoDB database.
-3) Login and register will take you to separate pages for those specific functions.
-4) "Create order" creates a modal, which allows you to upload orders to the interface and the database.
-
-Iteration 2:
-1) The starting screen has been streamlined for login/registration, though this is likely to be removed or changed.
-2) The dashboard interface is now accessible and connected to the order management interface
-3) User registration / login / information input has been updated, and checkout has been improved
-4) Additional API functionality has been added, see the documentation or just explore :^)
-
 Iteration 3:
 1) A new type of user, a Shipper, is now supported! Their role is to fulfill user orders.
 2) User orders are now given status, deadline, and other indicators to help inform the user about their order.
@@ -194,7 +182,6 @@ Iteration 3:
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Iteration 1
 - [x] Basic UI elements
 - [x] Navigation between UI elements
 - [x] MongoDB backend integration
@@ -203,11 +190,10 @@ Iteration 3:
 - [x] Additional views to allow for user input (payment, personal details, etc.)
 - [x] Adding group functionality
 - [x] Create a home page for order management
-- [x] Iteration 3
 - [x] Fleshing out iteration 2 interfaces with additional information and inputs
-- [x] Shipper perspective and individual order management on both ends
+- [ ] Shipper perspective and individual order management on both ends
 - [ ] Enforcing styling among multiple interfaces
-- [ ] Iteration 4
+- [ ] UI improvements 
 
 See the [open issues](https://github.com/jhu-oose-f23/team-BlueJay/issues) for a full list of proposed features (and known issues).
 
