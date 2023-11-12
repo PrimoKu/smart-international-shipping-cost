@@ -1,8 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const GroupOrder = require("../models/GroupOrder");
+const Order = require("../models/Order");
 const groupOrderRepo = require("../repositories/GroupOrderRepository");
 const userRepo = require("../repositories/UserRepository");
-const orderRepo = require("../repositories/OrderRepository");
 const notificationRepo = require("../repositories/NotificationRepository");
 const { OrderStatus, OrderStatusList } = require("../enums/OrderStatusEnums");
 const { UserRole, UserRoleList } = require("../enums/UserRoleEnums");
@@ -136,30 +136,23 @@ class GroupOrderController {
         }
     });
 
-    //@des Delete a joiner from a group order
-    //@route DELETE /api/groupOrders/delete/:id/:joinerId
+    //@des Remove a joiner from a group order
+    //@route PUT /api/groupOrders/:id/remove/:joinerId
     //@access private
-    deleteFromGroupOrder = asyncHandler(async (req, res) => {
-        const groupId = req.params.id;
-        const joinerId = req.params.joinerId;
+    removeFromGroupOrder = asyncHandler(async (req, res) => {
+        const groupOrder_Id = req.params.id;
+        const joiner_Id = req.params.joinerId;
 
         try {
-            // Find the group order by its ID.
-            const groupOrder = await groupOrderRepo.get(groupId);
-            const orders = await orderRepo.getByGroupId(groupId);
+            const groupOrder = await groupOrderRepo.get(groupOrder_Id);
 
             if (!groupOrder) {
                 return res.status(404).json({ message: "Group Order not found!" });
             }
+            const updatedGroupOrder = await GroupOrder.updateOne( { _id: groupOrder_Id }, { $pull: { user_ids: joiner_Id } });
+            const deletedOrders = await Order.deleteMany({ groupOrder_id: groupOrder_Id, user_id: joiner_Id });
 
-            // Remove the joiner from the list of users.
-            const updatedUsers = groupOrder.user_ids.filter(user => user._id.toString() !== joinerId);
-            //const updatedOrders = orders.user_ids.filter(user => user._id.toString() !== joinerId);
-            const updatedGroupOrder = await groupOrderRepo.update(req.params.id, {user_ids: updatedUsers});
-
-            //const updatedOrders = groupOrder.order_ids.filter(order => order.toString() !== joinerId);
-
-            res.status(200).json(updatedGroupOrder);
+            res.status(200).json({ updatedGroupOrder, deletedOrders });
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: "Server Error!" });
