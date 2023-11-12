@@ -147,7 +147,9 @@ function GroupOrder(props) {
         const user = users.find(obj => obj._id === rowData.user_id);
         return (
             <div className="flex align-items-center gap-2">
-                <span>{user?.name}</span>
+                <span>{user.name}</span>
+                <Button style={{ whiteSpace: 'nowrap', padding: '10px 10px' }}  
+                    color='danger' onClick={() => deleteJoiner(user._id)}>Delete</Button>
             </div>
         );
     };
@@ -156,6 +158,17 @@ function GroupOrder(props) {
         const status = orderStatusList.find(obj => obj.value === value);
         return status ? status.text : null;
     }
+
+    const deleteJoiner = async (joinerUserId) => {
+        try {
+          // Send an HTTP DELETE request to your server's endpoint to delete the joiner.
+          await axios.put(`http://localhost:8080/api/groupOrders/delete/${id}/${joinerUserId}`, { withCredentials: true });
+
+        } catch (error) {
+          console.error("An error occurred while deleting the joiner", error);
+        }
+      };
+    
 
     const statusBodyTemplate = (rowData) => {
         return (
