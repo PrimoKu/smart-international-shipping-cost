@@ -37,7 +37,6 @@ function AdminNavbar(props) {
     const fetchNotifications = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/notifications/', { withCredentials: true });
-        console.log(response.data);
         
         // Filter notifications by user ID (assuming user.id exists in your user object)
         const userNotifications = response.data.filter(notifications => notifications.user_id === user?._id);

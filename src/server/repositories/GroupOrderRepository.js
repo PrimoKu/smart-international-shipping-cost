@@ -163,5 +163,6 @@ module.exports = {
     update,
     getWithDetails,
     getWithManager,
-    getOrdersWhereUserIsNotManager
+    getOrdersWhereUserIsNotManager,
+    getAllWithUser
 }

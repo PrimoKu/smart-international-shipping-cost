@@ -129,18 +129,6 @@ function Login() {
                                                 />
                                                 <div className="text-warning" id="login_error"></div>
                                             </FormGroup>
-                                            <FormGroup>
-                                                <select
-                                                    className="form-control-user"
-                                                    style={{ height: '50px', fontSize: '18px' }}
-                                                    value={role}
-                                                    onChange={(e) => setRole(e.target.value)}
-                                                    required
-                                                >
-                                                    <option value="0">User</option>
-                                                    <option value="1">Shipper</option>
-                                                </select>
-                                            </FormGroup>
                                             <div className="text-danger" id="login_error">{loginError}</div>
                                             <Button type="submit" className="btn-info" block>
                                                 Login

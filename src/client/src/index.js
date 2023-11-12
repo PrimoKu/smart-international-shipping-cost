@@ -7,7 +7,8 @@ import AdminLayout from "./layouts/Admin/Admin.js";
 import Login from "./views/Login.js";
 import Register from "./views/Register.js";
 import Checkout from './views/Checkout.js';
-import CreateGroup from 'views/CreateGroup.js';
+import ShipperMain from './views/ShipperMain.js';
+
 
 import { AuthProvider } from "contexts/AuthContext.js"; 
 import { PrimeReactProvider } from 'primereact/api';
@@ -35,7 +36,7 @@ root.render(
             <Route path="/admin/*" element={<AdminLayout />} />
             <Route path='/' element={<Home />} />
             <Route path='/createorder' element={<CreateOrder />} />
-            <Route path='/creategroup' element={<CreateGroup />} />
+            {/* <Route path="/ShipperMain" element={<ShipperMain />} /> */}
             <Route path="/checkout" element={<Checkout />} />
             <Route path='*' element={<Home />} /> {/* Default route */}
           </Routes>

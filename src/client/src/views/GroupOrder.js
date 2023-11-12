@@ -23,6 +23,7 @@ import {
     Input,
     Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
+//import ViewJoinersModal from './ViewJoinersModal';
 
 function GroupOrder(props) {
     // const navigate = useNavigate();
@@ -36,6 +37,7 @@ function GroupOrder(props) {
     const [orderStatusList, setOrderStatusList] = useState([]);
     const [manager, setManager] = useState("");
     const [users, setUsers] = useState([]);
+
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         name: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -74,7 +76,7 @@ function GroupOrder(props) {
                 groupOrderStatus = response.data.GroupOrder.status;
                 if (groupOrderStatus === 1) {
                     // if order completed
-                    document.addEventListener('DOMContentLoaded', function() {
+                    document.addEventListener('DOMContentLoaded', function () {
                         document.getElementById("inviteJoiner").remove();
                         document.getElementById("newOrder").remove();
                     });
@@ -89,7 +91,10 @@ function GroupOrder(props) {
     function setButtons(orderComplete) {
         if (orderComplete) {
             return (
-                <h2 tag='h2' style={{width: "100%"}}> This order cannot be edited at this time.</h2>
+                <CardHeader>
+                <h2 tag='h2' style={{ width: "100%" }}> This order cannot be edited at this time.</h2>
+                </CardHeader>
+            
             );
         } else {
             return (
@@ -98,7 +103,9 @@ function GroupOrder(props) {
                         <Button color='info' size='lg' className='mr-3 mb-3' onClick={handleNavigation}>
                             Add New Order
                         </Button>
+
                     </Col>
+
                     {user?._id && manager?._id && user._id === manager._id && (
                     <Col className='text-left' >
                         <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleInviteModal}>
@@ -106,6 +113,7 @@ function GroupOrder(props) {
                         </Button>
                     </Col>
                     )}
+                    {user?._id && manager?._id && user._id === manager._id && (
                     <Col className='text-left' >
                       <Link to= {`/admin/checkout/${id}`}>
                           <Button color='info' size='lg' className='mr-3 mb-3' >
@@ -113,6 +121,7 @@ function GroupOrder(props) {
                           </Button>
                       </Link>
                     </Col>  
+                    )}
                 </Row>
             );
         }
@@ -168,14 +177,14 @@ function GroupOrder(props) {
             </div>
         );
     };
-    
+
     //todo edit?
     const managerBodyTemplate = (rowData) => {
         return (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                <Button style={{ whiteSpace: 'nowrap', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
+                <Button style={{ whiteSpace: 'nowrap', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     color='success' data-orderid={rowData._id} onClick={approveOnClick}>Approve</Button>
-                <Button style={{ whiteSpace: 'nowrap', padding: '10px 10px' }}  
+                <Button style={{ whiteSpace: 'nowrap', padding: '10px 10px' }}
                     color='danger' data-orderid={rowData._id} onClick={cancelOnClick}>Cancel</Button>
             </div>
         );
@@ -286,10 +295,12 @@ function GroupOrder(props) {
                     <h5 className='card-category'>Manager</h5>
                     <h1 tag='h1'>{manager.name}</h1>
                 </Col>
+                {user?._id && manager?._id && user._id === manager._id && (
                 <Col className='text-left' >
                     <h5 className='card-category'>Ready</h5>
                     <h1 tag='h1'>Checkout</h1>
                 </Col>
+                )}
             </Row>
             
             {setButtons(groupOrderStatus)}
