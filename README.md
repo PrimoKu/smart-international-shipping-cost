@@ -193,7 +193,8 @@ Iteration 3:
 - [x] Fleshing out iteration 2 interfaces with additional information and inputs
 - [ ] Shipper perspective and individual order management on both ends
 - [ ] Enforcing styling among multiple interfaces
-- [ ] UI improvements 
+- [ ] UI improvements
+- [ ] Deployment 
 
 See the [open issues](https://github.com/jhu-oose-f23/team-BlueJay/issues) for a full list of proposed features (and known issues).
 
