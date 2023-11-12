@@ -16,7 +16,7 @@ const get = async (id) => {
     const order = await Order.findById(id);
     return order;
 }
-//TODO
+
 const getByGroupId = async (groupOrder_id) => {
     const order = await Order.find({groupOrder_id: groupOrder_id});
     return order;

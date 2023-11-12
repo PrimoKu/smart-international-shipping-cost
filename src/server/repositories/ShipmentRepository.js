@@ -1,8 +1,8 @@
 const Shipment = require("../models/Shipment");
 
-const get = async (id) => {
-    const shipment = await Shipment.findById(id);
-    return shipment;
+const get = async (user_id) => {
+    const shipment = await Shipment.find({user_id: user_id});
+    return shipment[0];
 }
 
 const create = async (user_id, first_name, last_name, address_1, address_2, state, city, zip_code) => {
@@ -10,8 +10,8 @@ const create = async (user_id, first_name, last_name, address_1, address_2, stat
     return shipment;
 }
 
-const update = async (id, data) => {
-    const shipment = await Shipment.findByIdAndUpdate(id, data, { new: true });
+const update = async (user_id, data) => {
+    const shipment = await Shipment.findOneAndUpdate( { user_id: user_id }, data, { new: true } );
     return shipment;
 }
 

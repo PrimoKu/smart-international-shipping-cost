@@ -30,6 +30,20 @@ const getWithDetails = async(id) => {
                 path: "$shipment",
                 preserveNullAndEmptyArrays: true
             }
+        },
+        {
+            $lookup: {
+                from: 'payments', 
+                localField: '_id',
+                foreignField: 'user_id',
+                as: 'payment' 
+            }
+        },
+        {
+            $unwind: {
+                path: "$payment",
+                preserveNullAndEmptyArrays: true
+            }
         }
     ]);
     const user = results && results.length ? results[0] : null;

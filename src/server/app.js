@@ -40,6 +40,7 @@ app.use(upload.array());
 
 app.use('/api/users', require("./routes/UserRoutes"));
 app.use('/api/shipments', require("./routes/ShipmentRoutes"));
+app.use('/api/payments', require("./routes/PaymentRoutes"));
 app.use('/api/orders', require("./routes/OrderRoutes"));
 app.use('/api/groupOrders', require("./routes/GroupOrderRoutes"));
 app.use('/api/notifications', require("./routes/NotificationRoutes"));
