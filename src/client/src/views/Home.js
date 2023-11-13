@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
-import { Row, Col, Card, CardBody, CardTitle, Button, CardImgOverlay, CardImg, CardText } from 'reactstrap';
+import { Row, Col, Card, 
+        CardBody, CardTitle, 
+        Button, CardImgOverlay, 
+        CardImg, CardText } from 'reactstrap';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import logo from 'assets/img/react-logo.png';
