@@ -37,14 +37,16 @@ function GroupOrder(props) {
     const [orderStatusList, setOrderStatusList] = useState([]);
     const [manager, setManager] = useState("");
     const [users, setUsers] = useState([]);
-
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         name: { value: null, matchMode: FilterMatchMode.CONTAINS },
         weight: { value: null, matchMode: FilterMatchMode.CONTAINS },
         price: { value: null, matchMode: FilterMatchMode.CONTAINS },
         status: { value: null, matchMode: FilterMatchMode.EQUALS },
-        user: { value: null, matchMode: FilterMatchMode.IN }
+        user: { value: null, matchMode: FilterMatchMode.CONTAINS }
+    });
+    const [joinersFilters, setJoinersFilters] = useState({
+        name: { value: null, matchMode: FilterMatchMode.CONTAINS }
     });
     const [loading, setLoading] = useState(true);
 
@@ -53,8 +55,10 @@ function GroupOrder(props) {
     const [selectedGroupOrderId, setSelectedGroupOrderId] = useState();
 
     // Invite User Modal
-    const [modal, setModal] = useState(false);
-    const [modalCancelable, setModalCancelable] = useState(true);
+    const [inviteModal, setInviteModal] = useState(false);
+    const [inviteModalCancelable, setInviteModalCancelable] = useState(true);
+    const [joinersModal, setJoinersModal] = useState(false);
+    const [joinersModalCancelable, setJoinersModalCancelable] = useState(true);
     const [email, setEmail] = useState("");
 
     var groupOrderStatus;
@@ -62,6 +66,7 @@ function GroupOrder(props) {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/groupOrders/${id}`, { withCredentials: true })
+                console.log(response.data.GroupOrder);
                 setGroupOrder(response.data.GroupOrder);
                 setOrderStatusList(response.data.OrderStatusList);
                 setManager(response.data.GroupOrder.manager);
@@ -122,6 +127,13 @@ function GroupOrder(props) {
                       </Link>
                     </Col>  
                     )}
+                    {user?._id && manager?._id && user._id === manager._id && (
+                    <Col className='text-left' >
+                          <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleJoinersModal}>
+                              Manage
+                          </Button>
+                    </Col>  
+                    )}
                 </Row>
             );
         }
@@ -148,9 +160,18 @@ function GroupOrder(props) {
         return (
             <div className="flex align-items-center gap-2">
                 <span>{user.name}</span>
-                <Button style={{ whiteSpace: 'nowrap', padding: '10px 10px' }}  
-                    color='danger' onClick={() => deleteJoiner(user._id)}>Delete</Button>
             </div>
+        );
+    };
+
+    const joinersBodyTemplate = (rowData) => {
+        return (
+            <div className="flex align-items-center" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <span>{rowData.name}</span>
+            <Button style={{ whiteSpace: 'nowrap' }}  color='danger' onClick={() => removeJoiner(rowData._id)}>
+                Remove
+            </Button>
+        </div>
         );
     };
 
@@ -159,15 +180,17 @@ function GroupOrder(props) {
         return status ? status.text : null;
     }
 
-    const deleteJoiner = async (joinerUserId) => {
-        try {
-          // Send an HTTP DELETE request to your server's endpoint to delete the joiner.
-          await axios.put(`http://localhost:8080/api/groupOrders/delete/${id}/${joinerUserId}`, { withCredentials: true });
-
-        } catch (error) {
-          console.error("An error occurred while deleting the joiner", error);
-        }
-      };
+    const removeJoiner = async (joinerId) => {
+        axios.delete(`http://localhost:8080/api/groupOrders/${id}/remove/${joinerId}`, { withCredentials: true })
+        .then(response => {
+            window.location.reload();
+        })
+        .catch((error) => {
+            if (error.response && error.response.data) {
+                console.log(error.response);
+            }
+        });
+    };
     
 
     const statusBodyTemplate = (rowData) => {
@@ -263,8 +286,13 @@ function GroupOrder(props) {
     };
 
     const toggleInviteModal = () => {
-        setModal(!modal);
-        setModalCancelable(true);
+        setInviteModal(!inviteModal);
+        setInviteModalCancelable(true);
+    }
+
+    const toggleJoinersModal = () => {
+        setJoinersModal(!joinersModal);
+        setJoinersModalCancelable(true);
     }
 
     const handleInvite = async (e) => {
@@ -299,6 +327,12 @@ function GroupOrder(props) {
                 <Col className='text-left' >
                     <h5 className='card-category'>Ready</h5>
                     <h1 tag='h1'>Checkout</h1>
+                </Col>
+                )}
+                {user?._id && manager?._id && user._id === manager._id && (
+                <Col className='text-left' >
+                    <h5 className='card-category'>Manage</h5>
+                    <h1 tag='h1'>Joiners</h1>
                 </Col>
                 )}
             </Row>
@@ -355,7 +389,7 @@ function GroupOrder(props) {
 
             <CreateOrderModal isOpen={isCreateOrderModalOpen} toggle={() => setCreateOrderModalOpen(false)} groupOrderId={selectedGroupOrderId} />
 
-            <Modal isOpen={modal} toggle={toggleInviteModal}>
+            <Modal isOpen={inviteModal} toggle={toggleInviteModal}>
                 <ModalHeader toggle={toggleInviteModal}>
                     <div className="text-dark mb-0" style={{fontSize: '30px'}}>Invite Joiners</div>
                 </ModalHeader>
@@ -376,7 +410,23 @@ function GroupOrder(props) {
                     </ModalBody>
                     <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
                         <Button type="submit" className="btn-success mx-1">Invite</Button>
-                        <Button className="btn-secondary mx-1" onClick={toggleInviteModal} style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
+                        <Button className="btn-secondary mx-1" onClick={toggleInviteModal} style={inviteModalCancelable ? {} : { display: 'none' }}>Close</Button>
+                    </ModalFooter>
+                </Form>
+            </Modal>
+
+            <Modal isOpen={joinersModal} toggle={toggleJoinersModal}>
+                <ModalHeader toggle={toggleJoinersModal}>
+                    <div className="text-dark mb-0" style={{fontSize: '30px'}}>Joiners</div>
+                </ModalHeader>
+                <Form id="form_invite">
+                    <ModalBody>
+                        <DataTable value={users.filter(obj => obj._id !== manager._id)} paginator rows={5} dataKey="_id" filters={joinersFilters} filterDisplay="row" loading={loading} emptyMessage="No joiners found.">
+                            <Column header="Joiner" filterField="name" style={{ minWidth: '12rem' }} body={joinersBodyTemplate} filter filterPlaceholder="Search by joiner"/>
+                        </DataTable>
+                    </ModalBody>
+                    <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+                        <Button className="btn-secondary mx-1" onClick={toggleJoinersModal} style={joinersModalCancelable ? {} : { display: 'none' }}>Close</Button>
                     </ModalFooter>
                 </Form>
             </Modal>

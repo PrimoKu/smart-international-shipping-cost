@@ -10,7 +10,6 @@ router.route('/:id').get(requireAuth, groupOrderController.getGroupOrder).put(re
 
 router.route('/invite/:id').post(requireAuth, groupOrderController.inviteToGroupOrder);
 router.route('/add/:id').put(requireAuth, groupOrderController.addToGroupOrder);
-//TODO
-router.route('/:id/remove/:joinerId').put(requireAuth, groupOrderController.removeFromGroupOrder);
+router.route('/:id/remove/:joinerId').delete(requireAuth, groupOrderController.removeFromGroupOrder);
 
 module.exports = router;
