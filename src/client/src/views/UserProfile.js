@@ -104,8 +104,8 @@ function UserProfile() {
                     <p>Email: {user?.email || 'Loading...'}</p>
                     {/* The below fields are just placeholders as they were not provided in the given API */}
                     {/* <p>Password: [Your Password]</p> */}
-                    <p>Legal First Name: {user?.shipment.firstName || 'Loading...'}</p>
-                    <p>Legal Last Name: {user?.shipment.lastName || 'Loading...'}</p>
+                    <p>Legal First Name: {user?.shipment.first_name || 'Loading...'}</p>
+                    <p>Legal Last Name: {user?.shipment.last_name || 'Loading...'}</p>
                     <p>Legal ID: [Your Legal ID]</p>
                     <p>Gender: [Your Gender]</p>
                     <p>Birth Date: [Your Birth Date]</p>
@@ -205,13 +205,12 @@ function UserProfile() {
                 {!showPaymentEdit ? (
                   <div>
                     {/* Displaying the shipment data if it exists */}
-                    <p>Credit Card Type: [Your Credit Card Type]</p>
-                    <p>Bank Name: [Your Bank Name]</p>
-                    <p>Bank Account Number: [Your Bank Account Number]</p>
-                    <p>Payment: [Your Payment]</p>
-                    <p>Address 1: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].address_1 : 'Loading...'}</p>
-                    <p>Address 2: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].address_2 : 'Loading...'}</p>
-                    <p>State: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].state : 'Loading...'}</p>
+                    <p>Bank Name: {user?.payment.bank_name || 'Loading...'}</p>
+                    <p>Card Type: {user?.payment.card_type || 'Loading...'}</p>
+                    <p>Bank Account Number: {user?.payment.card_number || 'Loading...'}</p>
+                    <p>Address 1: {user?.payment.bill_address_1 && user?.payment.bill_address_1.length > 0 ? user?.payment.bill_address_1 : 'Loading...'}</p>
+                    <p>Address 2: {user?.payment.bill_address_2 && user?.payment.bill_address_2 > 0 ? user?.payment.bill_address_2 : '[Current None]'}</p>
+                    <p>State: {user?.payment.state && user?.payment.state > 0 ? user?.payment.state : '[Current None]'}</p>
                     <p>City: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].city : 'Loading...'}</p>
                     <p>Zip Code: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].zip_code : 'Loading...'}</p>
                   </div>
