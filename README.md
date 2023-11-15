@@ -175,6 +175,15 @@ Iteration 3:
 3) Group management has been implemented, and now individual users can join orders, request additions, and so on.
 5) ...many more changes, both big and small. Refer to the project backlog!
 
+Iteration 4:
+1) Shipper interfaces are now complete
+2) Added additional group management features
+3) Deployed app to (URL)
+4) Added environmental variables for src/client, as below:
+REACT_APP_SERVER_URL=http://localhost:8080
+REACT_APP_GOOGLE_CLIENT_ID=110092633486-irit56mv86as5eloift7coseep94icn6.apps.googleusercontent.com
+REACT_APP_GOOGLE_CLIENT_SECRET=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
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -191,10 +200,10 @@ Iteration 3:
 - [x] Adding group functionality
 - [x] Create a home page for order management
 - [x] Fleshing out iteration 2 interfaces with additional information and inputs
-- [ ] Shipper perspective and individual order management on both ends
+- [x] Shipper perspective and individual order management on both ends
 - [ ] Enforcing styling among multiple interfaces
-- [ ] UI improvements
-- [ ] Deployment 
+- [x] UI improvements
+- [x] Deployment 
 
 See the [open issues](https://github.com/jhu-oose-f23/team-BlueJay/issues) for a full list of proposed features (and known issues).
 
