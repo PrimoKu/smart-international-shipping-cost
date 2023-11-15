@@ -50,7 +50,7 @@ function CreateOrderModal({ isOpen, toggle, groupOrderId }) {
 
     axios.post('http://localhost:8080/api/orders', formData, { withCredentials: true })
     .then(response => {
-        showModal("Order", "Create succeeded!", true);
+        window.location.reload();
     })
     .catch((error) => {
         if (error.response && error.response.data) {
