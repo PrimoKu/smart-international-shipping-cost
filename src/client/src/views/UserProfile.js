@@ -98,7 +98,7 @@ function UserProfile() {
     <>
       <div className="content">
         <Row>
-          <Col md="8">
+          <Col md="12">
             {/* User Information Card */}
             <Card>
               <CardHeader>
@@ -108,9 +108,9 @@ function UserProfile() {
                 <Form>
                   <Row>
                     {/* User ID */}
-                    <Col className="pr-md-1" md="6">
+                    <Col className="pr-md-1" md="4">
                       <FormGroup>
-                        <Label>User ID</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>User ID</Label>
                         {!showUserEdit ? (
                           <p className="form-control-static">{user?._id ?? "defaultId"}</p>
                         ) : (
@@ -119,9 +119,9 @@ function UserProfile() {
                       </FormGroup>
                     </Col>
                     {/* User Name */}
-                    <Col className="pl-md-1" md="6">
+                    <Col className="pl-md-1" md="4">
                       <FormGroup>
-                        <Label>User Name</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>User Name</Label>
                         {!showUserEdit ? (
                           <p className="form-control-static">{user?.name || 'Loading...'}</p>
                         ) : (
@@ -129,13 +129,10 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                  </Row>
-
-                  <Row>
                     {/* Email */}
-                    <Col className="pr-md-1" md="6">
+                    <Col className="pr-md-1" md="4">
                       <FormGroup>
-                        <Label>Email</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Email</Label>
                         {!showUserEdit ? (
                           <p className="form-control-static">{user?.email || 'Loading...'}</p>
                         ) : (
@@ -155,9 +152,9 @@ function UserProfile() {
               <CardBody>
                 <Form>
                   <Row>
-                    <Col md="5">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>First Name</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>First Name</Label>
                         {!showShipmentEdit ? (
                           <p className="form-control-static">{user?.shipment.first_name || '[None]'}</p>
                         ) : (
@@ -171,9 +168,9 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                    <Col md="3">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>Last Name</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Last Name</Label>
                         {!showShipmentEdit ? (
                           <p className="form-control-static">{user?.shipment.last_name || '[None]'}</p>
                         ) : (
@@ -187,11 +184,9 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
-                    <Col md="5">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>Address 1</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Address 1</Label>
                         {!showShipmentEdit ? (
                           <p className="form-control-static">{user?.shipment.address_1 || '[None]'}</p>
                         ) : (
@@ -205,9 +200,9 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                    <Col md="3">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>Address 2</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Address 2</Label>
                         {!showShipmentEdit ? (
                           <p className="form-control-static">{user?.shipment.address_2 || '[None]'}</p>
                         ) : (
@@ -221,11 +216,9 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
-                    <Col md="5">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>City</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>City</Label>
                         {!showShipmentEdit ? (
                           <p className="form-control-static">{user?.shipment.city || '[None]'}</p>
                         ) : (
@@ -239,9 +232,9 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                    <Col md="3">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>State</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>State</Label>
                         {!showShipmentEdit ? (
                           <p className="form-control-static">{user?.shipment.state || '[None]'}</p>
                         ) : (
@@ -255,9 +248,9 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                    <Col md="3">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>Zip Code</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Zip Code</Label>
                         {!showShipmentEdit ? (
                           <p className="form-control-static">{user?.shipment.zip_code || '[None]'}</p>
                         ) : (
@@ -293,9 +286,9 @@ function UserProfile() {
               <CardBody>
                 <Form>
                   <Row>
-                    <Col md="5">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>Card Type</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Card Type</Label>
                         {!showPaymentEdit ? (
                           <p className="form-control-static">{user?.payment.card_type || '[None]'}</p>
                         ) : (
@@ -309,9 +302,9 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                    <Col md="3">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>Card Number</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Card Number</Label>
                         {!showPaymentEdit ? (
                           <p className="form-control-static">{user?.payment.card_number || '[None]'}</p>
                         ) : (
@@ -325,11 +318,9 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
-                    <Col md="5">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>Bank Name</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Bank Name</Label>
                         {!showPaymentEdit ? (
                           <p className="form-control-static">{user?.payment.bank_name || '[None]'}</p>
                         ) : (
@@ -343,9 +334,9 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                    <Col md="3">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>Billing Address 1</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Billing Address 1</Label>
                         {!showPaymentEdit ? (
                           <p className="form-control-static">{user?.payment.bill_address_1 || '[None]'}</p>
                         ) : (
@@ -359,11 +350,9 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
-                    <Col md="5">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>Billing Address 2</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Billing Address 2</Label>
                         {!showPaymentEdit ? (
                           <p className="form-control-static">{user?.payment.bill_address_2 || '[None]'}</p>
                         ) : (
@@ -377,9 +366,9 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                    <Col md="3">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>State</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>State</Label>
                         {!showPaymentEdit ? (
                           <p className="form-control-static">{user?.payment.state || '[None]'}</p>
                         ) : (
@@ -393,9 +382,9 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                    <Col md="3">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>City</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>City</Label>
                         {!showPaymentEdit ? (
                           <p className="form-control-static">{user?.payment.city || '[None]'}</p>
                         ) : (
@@ -409,9 +398,9 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                    <Col md="3">
+                    <Col md="4">
                       <FormGroup>
-                        <Label>Zip Code</Label>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Zip Code</Label>
                         {!showPaymentEdit ? (
                           <p className="form-control-static">{user?.payment.zip_code || '[None]'}</p>
                         ) : (

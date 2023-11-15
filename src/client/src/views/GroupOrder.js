@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { FilterMatchMode } from 'primereact/api';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import axios from 'axios';
 
 import { useAuth } from "contexts/AuthContext.js"; 
-import CreateOrderModal from './CreateOrderModal';
+// import CreateOrderModal from './CreateOrderModal';
+
 
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 
@@ -21,6 +22,7 @@ import {
     FormGroup,
     Form,
     Input,
+    Label,
     Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
 //import ViewJoinersModal from './ViewJoinersModal';
@@ -59,6 +61,9 @@ function GroupOrder(props) {
     const [inviteModalCancelable, setInviteModalCancelable] = useState(true);
     const [joinersModal, setJoinersModal] = useState(false);
     const [joinersModalCancelable, setJoinersModalCancelable] = useState(true);
+
+    const [createOrderModal, setCreateOrderModal] = useState(false);
+    const [createOrderModalCancelable, setCreateOrderModalCancelable] = useState(true);
     const [email, setEmail] = useState("");
 
     var groupOrderStatus;
@@ -105,7 +110,7 @@ function GroupOrder(props) {
             return (
                 <Row sm='2' md='3' lg='4'>
                     <Col className='text-left' >
-                        <Button color='info' size='lg' className='mr-3 mb-3' onClick={handleNavigation}>
+                        <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleCreateOrderModal}>
                             Add New Order
                         </Button>
 
@@ -295,6 +300,11 @@ function GroupOrder(props) {
         setJoinersModalCancelable(true);
     }
 
+    const toggleCreateOrderModal = () => {
+        setCreateOrderModal(!createOrderModal);
+        setCreateOrderModalCancelable(true);
+    }
+
     const handleInvite = async (e) => {
         e.preventDefault();
         
@@ -310,6 +320,56 @@ function GroupOrder(props) {
             }
         });
     };
+
+
+    const location = useLocation();
+    const groupOrderId = location.state?.groupOrder_id;
+    const [order, setOrder] = useState({
+      name: '',
+      price: '',
+      weight: '',
+      groupOrder_id: '',
+      date: '',
+    });
+    const [modal, setModal] = useState(false);
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalContent, setModalContent] = useState("");
+    const [modalCancelable, setModalCancelable] = useState(true);
+    const navigate = useNavigate();
+  
+    const toggleModal = () => {
+      if (modalCancelable) {
+        setModal(!modal);
+      }
+    };
+    const showModal = (title, content, cancelable = true) => {
+      setModalTitle(title);
+      setModalContent(content);
+      setModalCancelable(cancelable);
+      setModal(true);
+    };
+    const handleSubmit = async () => {
+      let formData = new FormData();
+      formData.append('name', order.name);
+      formData.append('price', order.price);
+      formData.append('weight', order.weight);
+      formData.append('groupOrder_id', groupOrderId);
+  
+      axios.post('http://localhost:8080/api/orders', formData, { withCredentials: true })
+      .then(response => {
+          showModal("Order", "Create succeeded!", true);
+      })
+      .catch((error) => {
+          if (error.response && error.response.data) {
+              console.log(error.response);
+          }
+      });
+    };
+
+    const handleModalClosed = () => {
+        window.location.assign(`/admin/groupOrder/${groupOrderId}`);
+      }
+
 
     return (
         // <PrimeReactProvider>
@@ -387,7 +447,7 @@ function GroupOrder(props) {
                 </Col>
             </Row>
 
-            <CreateOrderModal isOpen={isCreateOrderModalOpen} toggle={() => setCreateOrderModalOpen(false)} groupOrderId={selectedGroupOrderId} />
+            {/* <CreateOrderModal isOpen={isCreateOrderModalOpen} toggle={() => setCreateOrderModalOpen(false)} groupOrderId={selectedGroupOrderId} /> */}
 
             <Modal isOpen={inviteModal} toggle={toggleInviteModal}>
                 <ModalHeader toggle={toggleInviteModal}>
@@ -426,10 +486,78 @@ function GroupOrder(props) {
                         </DataTable>
                     </ModalBody>
                     <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
-                        <Button className="btn-secondary mx-1" onClick={toggleJoinersModal} style={joinersModalCancelable ? {} : { display: 'none' }}>Close</Button>
+                        <Button className="btn-secondary mx-1" onClick={toggleJoinersModal} style={createOrderModalCancelable ? {} : { display: 'none' }}>Close</Button>
                     </ModalFooter>
                 </Form>
             </Modal>
+
+
+
+            <Modal isOpen={createOrderModal} toggle={toggleCreateOrderModal}>
+      <ModalHeader toggle={toggleCreateOrderModal}>Create Order</ModalHeader>
+      <ModalBody>
+      <Card className='text-center'>
+            <CardBody>
+              <CardTitle tag='h3'>Fill Order Details</CardTitle>
+              <Form>
+                <FormGroup>
+                  <Label for='name'>Order Name</Label>
+                  <Input
+                    type='text'
+                    id='name'
+                    placeholder='Enter order name'
+                    value={order.name}
+                    onChange={(e) => setOrder({ ...order, name: e.target.value })}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for='price'>Price</Label>
+                  <Input
+                    type='number'
+                    id='price'
+                    placeholder='Enter price'
+                    value={order.price}
+                    onChange={(e) => setOrder({ ...order, price: e.target.value })}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for='weight'>Weight</Label>
+                  <Input
+                    type='number'
+                    id='weight'
+                    placeholder='Enter weight'
+                    value={order.weight}
+                    onChange={(e) => setOrder({ ...order, weight: e.target.value })}
+                  />
+                </FormGroup>
+                <Button color='info' size='lg' block onClick={handleSubmit}>
+                  Submit
+                </Button>
+              </Form>
+            </CardBody>
+          </Card>
+      </ModalBody>
+      <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+                        <Button className="btn-secondary mx-1" onClick={toggleCreateOrderModal} style={joinersModalCancelable ? {} : { display: 'none' }}>Close</Button>
+                    </ModalFooter>
+
+      <Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
+            <ModalHeader toggle={toggleModal}>
+                <div className="text-dark mb-0" style={{fontSize: '30px'}}>{modalTitle}</div>
+            </ModalHeader>
+            <ModalBody style={{height: '75px'}}><p style={{fontSize: '20px'}}>{modalContent}</p></ModalBody>
+            <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+                <Button color="secondary" onClick={toggleModal} style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
+            </ModalFooter>
+          </Modal>
+
+          <Link to='/admin/dashboard'>
+        <Button>Return to Home</Button>
+        </Link>
+    </Modal>
+
+
+
         </div>
         // </PrimeReactProvider>
     );

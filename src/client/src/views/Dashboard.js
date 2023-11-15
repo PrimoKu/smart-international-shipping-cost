@@ -7,7 +7,6 @@ import OrderListItem from '../components/OrderListItem';
 import ConfirmationListItem from '../components/ConfirmationListItem';
 import '../assets/css/OrderItem.css';
 import { useAuth } from "contexts/AuthContext.js";
-import CreateOrderModal from './CreateOrderModal'; 
 import { Paginator } from 'primereact/paginator';
 
 
