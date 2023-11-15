@@ -52,10 +52,6 @@ function GroupOrder(props) {
     });
     const [loading, setLoading] = useState(true);
 
-    var grouporderStatus;
-    const [isCreateOrderModalOpen, setCreateOrderModalOpen] = useState(false);
-    const [selectedGroupOrderId, setSelectedGroupOrderId] = useState();
-
     // Invite User Modal
     const [inviteModal, setInviteModal] = useState(false);
     const [inviteModalCancelable, setInviteModalCancelable] = useState(true);
@@ -284,12 +280,6 @@ function GroupOrder(props) {
         });
     }
 
-
-    const handleNavigation = () => {
-        setSelectedGroupOrderId(groupOrder._id);
-        setCreateOrderModalOpen(true);
-    };
-
     const toggleInviteModal = () => {
         setInviteModal(!inviteModal);
         setInviteModalCancelable(true);
@@ -491,70 +481,76 @@ function GroupOrder(props) {
                 </Form>
             </Modal>
 
-
-
-            <Modal isOpen={createOrderModal} toggle={toggleCreateOrderModal}>
-      <ModalHeader toggle={toggleCreateOrderModal}>Create Order</ModalHeader>
-      <ModalBody>
-      <Card className='text-center'>
+    <Modal isOpen={createOrderModal} toggle={toggleCreateOrderModal}>
+    <ModalHeader toggle={toggleCreateOrderModal}>
+        <div className="text-dark mb-0" style={{fontSize: '30px'}}>Create Order</div>
+    </ModalHeader>
+    <ModalBody>
+        {/* <Card className='text-center'>
             <CardBody>
-              <CardTitle tag='h3'>Fill Order Details</CardTitle>
-              <Form>
-                <FormGroup>
-                  <Label for='name'>Order Name</Label>
-                  <Input
-                    type='text'
-                    id='name'
-                    placeholder='Enter order name'
-                    value={order.name}
-                    onChange={(e) => setOrder({ ...order, name: e.target.value })}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label for='price'>Price</Label>
-                  <Input
-                    type='number'
-                    id='price'
-                    placeholder='Enter price'
-                    value={order.price}
-                    onChange={(e) => setOrder({ ...order, price: e.target.value })}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label for='weight'>Weight</Label>
-                  <Input
-                    type='number'
-                    id='weight'
-                    placeholder='Enter weight'
-                    value={order.weight}
-                    onChange={(e) => setOrder({ ...order, weight: e.target.value })}
-                  />
-                </FormGroup>
-                <Button color='info' size='lg' block onClick={handleSubmit}>
-                  Submit
-                </Button>
-              </Form>
-            </CardBody>
-          </Card>
-      </ModalBody>
-      <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
-                        <Button className="btn-secondary mx-1" onClick={toggleCreateOrderModal} style={joinersModalCancelable ? {} : { display: 'none' }}>Close</Button>
-                    </ModalFooter>
+                <CardTitle tag='h3'>Fill Order Details</CardTitle> */}
+                <Form>
+                    <FormGroup>
+                        <Label for='name'>Order Name</Label>
+                        <Input
+                            type='text'
+                            id='name'
+                            placeholder='Enter order name'
+                            value={order.name}
+                            onChange={(e) => setOrder({ ...order, name: e.target.value })}
+                            style={{ height: '50px', fontSize: '18px' }}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for='price'>Price</Label>
+                        <Input
+                            type='number'
+                            id='price'
+                            placeholder='Enter price'
+                            value={order.price}
+                            onChange={(e) => setOrder({ ...order, price: e.target.value })}
+                            style={{ height: '50px', fontSize: '18px' }}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for='weight'>Weight</Label>
+                        <Input
+                            type='number'
+                            id='weight'
+                            placeholder='Enter weight'
+                            value={order.weight}
+                            onChange={(e) => setOrder({ ...order, weight: e.target.value })}
+                            style={{ height: '50px', fontSize: '18px' }}
+                        />
+                    </FormGroup>
+                    <Button color='info' size='lg' block onClick={handleSubmit} className="btn-success mx-1">
+                        Submit
+                    </Button>
+                </Form>
+            {/* </CardBody>
+        </Card> */}
+    </ModalBody>
+    <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+        <Button className="btn-secondary mx-1" onClick={toggleCreateOrderModal} style={joinersModalCancelable ? {} : { display: 'none' }}>Close</Button>
+    </ModalFooter>
 
-      <Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
-            <ModalHeader toggle={toggleModal}>
-                <div className="text-dark mb-0" style={{fontSize: '30px'}}>{modalTitle}</div>
-            </ModalHeader>
-            <ModalBody style={{height: '75px'}}><p style={{fontSize: '20px'}}>{modalContent}</p></ModalBody>
-            <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
-                <Button color="secondary" onClick={toggleModal} style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
-            </ModalFooter>
-          </Modal>
+    <Link to='/admin/dashboard'>
+        <Button className="btn-success mx-1">Return to Home</Button>
+    </Link>
 
-          <Link to='/admin/dashboard'>
-        <Button>Return to Home</Button>
-        </Link>
-    </Modal>
+</Modal>
+
+<Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
+    <ModalHeader toggle={toggleModal}>
+        <div className="text-dark mb-0" style={{fontSize: '30px'}}>{modalTitle}</div>
+    </ModalHeader>
+    <ModalBody>
+        <p style={{fontSize: '20px'}}>{modalContent}</p>
+    </ModalBody>
+    <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+        <Button color="secondary" onClick={toggleModal} className="btn-secondary mx-1" style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
+    </ModalFooter>
+</Modal>
 
 
 
