@@ -59,6 +59,7 @@ class PaymentController {
     //@route POST /api/payments/upsert
     //@access private
     upsertPayment = asyncHandler(async (req, res) => {
+        console.log(req.body);
         const { cardType, cardNumber, bankName, billAddress1, billAddress2, state, city, zipCode } = req.body;
         try {
             let payment = await paymentRepo.get(req.user.id);

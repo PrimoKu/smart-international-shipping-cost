@@ -44,17 +44,15 @@ class ShipmentController {
     //@route POST /api/shipments/upsert
     //@access private
     upsertShipment = asyncHandler(async (req, res) => {
-        
         const { firstName, lastName, address1, address2, state, city, zipCode } = req.body;
         try {
             let shipment = await shipmentRepo.get(req.user.id);
-            console.log(shipment);
             if (shipment) {
-                shipment = await shipmentRepo.update(req.user.id, { firstName, lastName, address1, address2, state, city, zipCode });
+                shipment = await shipmentRepo.update(req.user.id, { first_name: firstName, last_name: lastName, address_1: address1, address_2: address2, state: state, city: city, zip_code: zipCode });
             } else {
                 shipment = await shipmentRepo.create(req.user.id, firstName, lastName, address1, address2, state, city, zipCode);
             }
-
+            console.log(shipment);
             return res.status(200).json(shipment);
 
         } catch (error) {
