@@ -35,6 +35,7 @@ function GroupOrder(props) {
     const [approvedOrders, setApprovedOrders] = useState([]);
     const [canceledOrders, setCanceledOrders] = useState([]);
     const [orderStatusList, setOrderStatusList] = useState([]);
+    const [isDisbandModalOpen, setIsDisbandModalOpen] = useState(false);
     const [manager, setManager] = useState("");
     const [users, setUsers] = useState([]);
     const [filters, setFilters] = useState({
@@ -131,6 +132,13 @@ function GroupOrder(props) {
                     <Col className='text-left' >
                           <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleJoinersModal}>
                               Manage
+                          </Button>
+                    </Col>  
+                    )}
+                    {user?._id && manager?._id && user._id === manager._id && (
+                    <Col className='text-left' >
+                          <Button color="danger" onClick={() => setIsDisbandModalOpen(true)}>
+                              Disband Group Order
                           </Button>
                     </Col>  
                     )}
@@ -295,6 +303,14 @@ function GroupOrder(props) {
         setJoinersModalCancelable(true);
     }
 
+    const handleDisbandGroupOrder = async () => {
+        // API call to disband the group order
+        // Example: axios.post('api/groupOrders/disband', { id: groupOrder._id })
+        // Close the modal after the action
+        setIsDisbandModalOpen(false);
+        // Redirect or update UI as necessary
+    };
+
     const handleInvite = async (e) => {
         e.preventDefault();
         
@@ -429,6 +445,17 @@ function GroupOrder(props) {
                         <Button className="btn-secondary mx-1" onClick={toggleJoinersModal} style={joinersModalCancelable ? {} : { display: 'none' }}>Close</Button>
                     </ModalFooter>
                 </Form>
+            </Modal>
+
+            <Modal isOpen={isDisbandModalOpen} toggle={() => setIsDisbandModalOpen(false)}>
+                <ModalHeader toggle={() => setIsDisbandModalOpen(false)}>Confirm Disband</ModalHeader>
+                    <ModalBody>
+                        Are you sure you want to disband this group order?
+                    </ModalBody>
+                <ModalFooter>
+                    <Button color="danger" onClick={handleDisbandGroupOrder}>Disband</Button>
+                    <Button color="secondary" onClick={() => setIsDisbandModalOpen(false)}>Cancel</Button>
+                </ModalFooter>
             </Modal>
         </div>
         // </PrimeReactProvider>
