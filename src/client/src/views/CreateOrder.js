@@ -47,7 +47,7 @@ function CreateOrder() {
     formData.append('weight', order.weight);
     formData.append('groupOrder_id', groupOrderId);
 
-    axios.post('http://localhost:8080/api/orders', formData, { withCredentials: true })
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/api/orders`, formData, { withCredentials: true })
     .then(response => {
         showModal("Order", "Create succeeded!", true);
     })

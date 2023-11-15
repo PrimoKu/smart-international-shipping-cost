@@ -68,7 +68,7 @@ function UserProfile() {
 
   const submitShipmentData = async () => {
     try {
-        const response = await axios.post('http://localhost:8080/api/shipments', {
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/shipments`, {
             firstName,
             lastName,
             address1,

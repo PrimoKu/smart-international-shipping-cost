@@ -65,7 +65,7 @@ function GroupOrder(props) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/groupOrders/${id}`, { withCredentials: true })
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/${id}`, { withCredentials: true })
                 console.log(response.data.GroupOrder);
                 setGroupOrder(response.data.GroupOrder);
                 setOrderStatusList(response.data.OrderStatusList);
@@ -181,7 +181,7 @@ function GroupOrder(props) {
     }
 
     const removeJoiner = async (joinerId) => {
-        axios.delete(`http://localhost:8080/api/groupOrders/${id}/remove/${joinerId}`, { withCredentials: true })
+        axios.delete(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/${id}/remove/${joinerId}`, { withCredentials: true })
         .then(response => {
             window.location.reload();
         })
@@ -253,7 +253,7 @@ function GroupOrder(props) {
         let formData = new FormData();
         formData.append('status', orderStatusList[1].value);
 
-        axios.put(`http://localhost:8080/api/orders/approve/${orderId}`, formData, { withCredentials: true })
+        axios.put(`${process.env.REACT_APP_SERVER_URL}/api/orders/approve/${orderId}`, formData, { withCredentials: true })
         .then(res => {
             window.location.reload();
         })
@@ -269,7 +269,7 @@ function GroupOrder(props) {
         let formData = new FormData();
         formData.append('status', orderStatusList[1].value);
 
-        axios.put(`http://localhost:8080/api/orders/cancel/${orderId}`, formData, { withCredentials: true })
+        axios.put(`${process.env.REACT_APP_SERVER_URL}/api/orders/cancel/${orderId}`, formData, { withCredentials: true })
         .then(res => {
             window.location.reload();
         })
@@ -301,7 +301,7 @@ function GroupOrder(props) {
         let formData = new FormData();
         formData.append('userEmail', email);
 
-        axios.post(`http://localhost:8080/api/groupOrders/invite/${groupOrder._id}`, formData, { withCredentials: true })
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/invite/${groupOrder._id}`, formData, { withCredentials: true })
         .then(res => {
             window.location.reload();
         })

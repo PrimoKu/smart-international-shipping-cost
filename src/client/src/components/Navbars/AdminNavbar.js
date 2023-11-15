@@ -36,7 +36,7 @@ function AdminNavbar(props) {
   React.useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/notifications/', { withCredentials: true });
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/notifications/`, { withCredentials: true });
         
         // Filter notifications by user ID (assuming user.id exists in your user object)
         const userNotifications = response.data.filter(notifications => notifications.user_id === user?._id);
@@ -90,7 +90,7 @@ function AdminNavbar(props) {
 
   const handleLogout = async () => {
     try {
-      await axios.get('http://localhost:8080/api/users/logout', { withCredentials: true });
+      await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/users/logout`, { withCredentials: true });
       showModal("BlueJay", "Logout succeeded!", true);
     } catch (error) {
       if (error.response && error.response.data) {
