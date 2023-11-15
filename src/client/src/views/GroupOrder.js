@@ -52,6 +52,7 @@ function GroupOrder(props) {
     });
     const [loading, setLoading] = useState(true);
 
+
     // Invite User Modal
     const [inviteModal, setInviteModal] = useState(false);
     const [inviteModalCancelable, setInviteModalCancelable] = useState(true);
@@ -452,7 +453,7 @@ function GroupOrder(props) {
                                         name="email"
                                         placeholder="Email"
                                         required
-                                        style={{ height: '50px', fontSize: '18px' }}
+                                        style={{ height: '50px', fontSize: '18px', color: 'black' }}
                                         onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </FormGroup>
@@ -498,7 +499,7 @@ function GroupOrder(props) {
                             placeholder='Enter order name'
                             value={order.name}
                             onChange={(e) => setOrder({ ...order, name: e.target.value })}
-                            style={{ height: '50px', fontSize: '18px' }}
+                            style={{ height: '50px', fontSize: '18px', color: 'black' }}
                         />
                     </FormGroup>
                     <FormGroup>
@@ -509,7 +510,7 @@ function GroupOrder(props) {
                             placeholder='Enter price'
                             value={order.price}
                             onChange={(e) => setOrder({ ...order, price: e.target.value })}
-                            style={{ height: '50px', fontSize: '18px' }}
+                            style={{ height: '50px', fontSize: '18px', color: 'black' }}
                         />
                     </FormGroup>
                     <FormGroup>
@@ -520,7 +521,7 @@ function GroupOrder(props) {
                             placeholder='Enter weight'
                             value={order.weight}
                             onChange={(e) => setOrder({ ...order, weight: e.target.value })}
-                            style={{ height: '50px', fontSize: '18px' }}
+                            style={{ height: '50px', fontSize: '18px', color: 'black' }}
                         />
                     </FormGroup>
                     <Button color='info' size='lg' block onClick={handleSubmit} className="btn-success mx-1">
