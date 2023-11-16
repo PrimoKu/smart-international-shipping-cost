@@ -33,7 +33,7 @@ function Checkout() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/groupOrders/${id}`, { withCredentials: true });
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/${id}`, { withCredentials: true });
         setGroupOrder(response.data.GroupOrder);
         setOrders(response.data.GroupOrder.orders.filter(order => order.status === 1)); //approved orders
         setFilteredOrders(response.data.GroupOrder.orders.filter(order => order.status === 1));

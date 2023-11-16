@@ -41,7 +41,7 @@ function CreateGroup() {
     formData.append('country', group.country);
 
 
-    axios.post('http://localhost:8080/api/groupOrders/', formData, { withCredentials: true })
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/`, formData, { withCredentials: true })
       .then(response => {
         showModal("Group", "Create succeeded!", true);
       })

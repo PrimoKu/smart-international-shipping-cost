@@ -17,6 +17,11 @@ const get = async (id) => {
     return order;
 }
 
+const getByGroupId = async (groupOrder_id) => {
+    const order = await Order.find({groupOrder_id: groupOrder_id});
+    return order;
+}
+
 const update = async (id, data) => {
     const order = await Order.findByIdAndUpdate(id, data, { new: true });
     return order;
@@ -27,4 +32,5 @@ module.exports = {
     create,
     get,
     update,
+    getByGroupId
 }
