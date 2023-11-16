@@ -16,12 +16,13 @@ import {
 function CreateOrder() {
   const location = useLocation();
   const groupOrderId = location.state?.groupOrder_id;
+  console.log("Groupid", groupOrderId)
   const [order, setOrder] = useState({
     name: '',
     price: '',
     weight: '',
     groupOrder_id: '',
-    date: '',
+    // date: '',
   });
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");

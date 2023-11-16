@@ -12,7 +12,7 @@ function FixedPlugin(props) {
   };
   return (
     <div className="fixed-plugin">
-      <Dropdown isOpen={dropDownIsOpen} toggle={handleClick}>
+      {/* <Dropdown isOpen={dropDownIsOpen} toggle={handleClick}>
         <DropdownToggle tag="div">
           <i className="fa fa-cog fa-2x" />
         </DropdownToggle>
@@ -68,7 +68,7 @@ function FixedPlugin(props) {
             </ThemeContext.Consumer>
           </li>
         </ul>
-      </Dropdown>
+      </Dropdown> */}
     </div>
   );
 }

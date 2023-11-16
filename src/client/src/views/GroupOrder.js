@@ -315,12 +315,13 @@ function GroupOrder(props) {
 
     const location = useLocation();
     const groupOrderId = location.state?.groupOrder_id;
+    // The Group Id is undefied!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    console.log("Groupid", groupOrderId)
     const [order, setOrder] = useState({
       name: '',
       price: '',
       weight: '',
       groupOrder_id: '',
-      date: '',
     });
     const [modal, setModal] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
@@ -528,33 +529,30 @@ function GroupOrder(props) {
                         Submit
                     </Button>
                 </Form>
-            {/* </CardBody>
-        </Card> */}
-    </ModalBody>
-    <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
-        <Button className="btn-secondary mx-1" onClick={toggleCreateOrderModal} style={joinersModalCancelable ? {} : { display: 'none' }}>Close</Button>
-    </ModalFooter>
+                            {/* </CardBody>
+                        </Card> */}
+                    </ModalBody>
+                    <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+                        <Button className="btn-secondary mx-1" onClick={toggleCreateOrderModal} style={createOrderModalCancelable ? {} : { display: 'none' }}>Close</Button>
+                    </ModalFooter>
 
-    <Link to='/admin/dashboard'>
-        <Button className="btn-success mx-1">Return to Home</Button>
-    </Link>
+                    <Link to='/admin/dashboard'>
+                        <Button className="btn-success mx-1">Return to Home</Button>
+                    </Link>
 
-</Modal>
+                </Modal>
 
-<Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
-    <ModalHeader toggle={toggleModal}>
-        <div className="text-dark mb-0" style={{fontSize: '30px'}}>{modalTitle}</div>
-    </ModalHeader>
-    <ModalBody>
-        <p style={{fontSize: '20px'}}>{modalContent}</p>
-    </ModalBody>
-    <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
-        <Button color="secondary" onClick={toggleModal} className="btn-secondary mx-1" style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
-    </ModalFooter>
-</Modal>
-
-
-
+                <Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
+                    <ModalHeader toggle={toggleModal}>
+                        <div className="text-dark mb-0" style={{fontSize: '30px'}}>{modalTitle}</div>
+                    </ModalHeader>
+                    <ModalBody>
+                        <p style={{fontSize: '20px'}}>{modalContent}</p>
+                    </ModalBody>
+                    <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+                        <Button color="secondary" onClick={toggleModal} className="btn-secondary mx-1" style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
+                    </ModalFooter>
+                </Modal>
         </div>
         // </PrimeReactProvider>
     );
