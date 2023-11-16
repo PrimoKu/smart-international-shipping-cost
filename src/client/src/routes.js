@@ -11,6 +11,8 @@ import UserProfile from 'views/UserProfile.js';
 import Home from 'views/Home.js';
 import GroupOrder from 'views/GroupOrder';
 import ShipperMain from 'views/ShipperMain.js';
+import GroupOrderDetails from 'views/Shipper/GroupOrderDetails.js';
+
 
 var routes = [ 
   {
@@ -39,6 +41,15 @@ var routes = [
     component: <GroupOrder />,
     layout: '/admin',
     hidden: true,
+  },
+  {
+    path: '/groupOrder/:id', // Define the path with a parameter for the group order ID
+    name: 'Group Order Details',
+    type: 1, // type 1 is for Shipper role
+    icon: 'tim-icons icon-bullet-list-67', // Choose an appropriate icon?
+    component: <GroupOrderDetails />,
+    layout: '/admin',
+    hidden: true, // Set true because don't want it to show in a sidebar or navigation menu
   },
   {
     path: '/user-profile',

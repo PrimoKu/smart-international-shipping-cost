@@ -5,9 +5,12 @@ import {
   Row,
   Col,
 } from 'reactstrap';
+import { useAuth } from "../contexts/AuthContext.js";
+import { useNavigate } from 'react-router-dom';
 
 function OrderListItem({ident, name, deadline}) {
-
+  const navigate = useNavigate();
+  const {user} = useAuth();
   var deadlineDate = new Date(deadline);
 
   function convertTime(time) {
@@ -17,6 +20,7 @@ function OrderListItem({ident, name, deadline}) {
 
   function onClick() {
     window.location.assign(`groupOrder/${ident}`)
+    
   }
 
   function getTimeDiffDays() {
