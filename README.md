@@ -187,6 +187,9 @@ REACT_APP_GOOGLE_CLIENT_SECRET=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
 Here is the link to our deployed app (may be behind the GitHub repo since I cannot directly use it due to organization permissions):
 https://bluejaysoose.onrender.com/
 
+Here are the credentials:
+U: yku4@jh.edu
+P: ku850728
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
