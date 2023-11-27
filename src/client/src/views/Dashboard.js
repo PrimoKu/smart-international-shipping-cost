@@ -65,19 +65,6 @@ function Dashboard(props) {
   const [modalCancelable, setModalCancelable] = useState(true);
   const navigate = useNavigate();
 
-  const countryCodes = {
-    "United States": "US",
-    "China": "CN",
-    "Japan": "JP",
-    "Canada": "CA",
-    "United Kingdom": "GB",
-    "Australia": "AU",
-    "South Korea": "KR",
-    "France": "FR",
-    "Italy": "IT",
-    "Russia": "RU",
-    };
-
   const toggleModal = () => {
     if (modalCancelable) {
       setModal(!modal);
