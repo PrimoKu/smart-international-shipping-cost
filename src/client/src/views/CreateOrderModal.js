@@ -13,16 +13,16 @@ import {
   Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
 
-function CreateOrder() {
+function CreateOrderModal({ isOpen, toggle, groupOrderId }) {
   const location = useLocation();
-  const groupOrderId = location.state?.groupOrder_id;
-  console.log("Groupid", groupOrderId)
+  // const groupOrderId = location.state?.groupOrder_id;
+  // console.log(groupOrderId)
   const [order, setOrder] = useState({
     name: '',
     price: '',
     weight: '',
     groupOrder_id: '',
-    // date: '',
+    date: '',
   });
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
@@ -64,13 +64,10 @@ function CreateOrder() {
     window.location.assign(`/admin/groupOrder/${groupOrderId}`);
   }
   return (
-    <div className='wrapper'>
-      <div className='main-panel'>
-        <div className='navbar'>
-          <h1 className='brand-text'>Create Order</h1>
-        </div>
-        <div className='center-content'>
-          <Card className='text-center'>
+    <Modal isOpen={isOpen} toggle={toggle}>
+      <ModalHeader toggle={toggle}>Create Order</ModalHeader>
+      <ModalBody>
+      <Card className='text-center'>
             <CardBody>
               <CardTitle tag='h3'>Fill Order Details</CardTitle>
               <Form>
@@ -104,13 +101,26 @@ function CreateOrder() {
                     onChange={(e) => setOrder({ ...order, weight: e.target.value })}
                   />
                 </FormGroup>
+                {/* <FormGroup>
+                  <Label for='date'>Date</Label>
+                  <Input
+                    type='date'
+                    id='date'
+                    value={order.date}
+                    onChange={(e) => setOrder({ ...order, date: e.target.value })}
+                  />
+                </FormGroup> */}
                 <Button color='info' size='lg' block onClick={handleSubmit}>
                   Submit
                 </Button>
               </Form>
             </CardBody>
           </Card>
-          <Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
+      </ModalBody>
+      <ModalFooter>
+        <Button color="secondary" onClick={toggle}>Close</Button>
+      </ModalFooter>
+      <Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
             <ModalHeader toggle={toggleModal}>
                 <div className="text-dark mb-0" style={{fontSize: '30px'}}>{modalTitle}</div>
             </ModalHeader>
@@ -119,14 +129,13 @@ function CreateOrder() {
                 <Button color="secondary" onClick={toggleModal} style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
             </ModalFooter>
           </Modal>
-        </div>
-        <Link to='/admin/dashboard'>
+
+          <Link to='/admin/dashboard'>
         <Button>Return to Home</Button>
         </Link>
-      </div>
-    </div>
+    </Modal>
   );
 }
 
-export default CreateOrder;
+export default CreateOrderModal;
 

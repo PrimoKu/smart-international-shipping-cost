@@ -117,7 +117,8 @@ function Dashboard(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/groupOrders/', { withCredentials: true });
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/`, { withCredentials: true });
+        console.log(response);
         const fetchedData = (response.data.managed).concat((response.data.joined));
         setData(fetchedData);
         var sortedManaged = response.data.managed;
@@ -144,20 +145,27 @@ function Dashboard(props) {
     fetchData();
   }, []);
 
-  function getManagerOrders(data) {
-    var managed = data.filter(order => order.manager_id === user?._id);
-    //if (managed.length >= 3) {
-    //  managed = managed.slice(0, 3);
-    //}
-    return managed;
-  }
+  const countryCodes = {
+    "United States": "US",
+    "China": "CN",
+    "Japan": "JP",
+    "Canada": "CA",
+    "United Kingdom": "GB",
+    "Australia": "AU", 
+    "South Korea": "KR", 
+    "France": "FR",
+    "Italy": "IT",
+    "Russia": "RU",
+  };
 
-  function getJoinerOrders(data) {
-    var joined = data.filter(order => order.manager_id !== user?._id);
-    //if (joined.length >= 3) {
-    //  joined = joined.slice(0, 3);
-    //}
-    return joined;
+  function getCountryCode(country) {
+    console.log(country);
+    if (countryCodes[country] === undefined || countryCodes[country] === null) {
+      return "";
+    } else {
+      console.log("HERE")
+      return countryCodes[country];
+    }
   }
 
   function ordersEmpty(data, isManager) {
@@ -192,7 +200,7 @@ function Dashboard(props) {
             <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
               {
               managed.map(order => (
-                <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline}/>
+                <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline} countryCode={getCountryCode(order.country)}/>
               ))}
             </CardBody>
             </ScrollPanel>
@@ -207,7 +215,7 @@ function Dashboard(props) {
               <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
                 {
                 joined.map(order => (
-                  <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline}/>
+                  <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline} countryCode={getCountryCode(order.country)}/>
                 ))}
               </CardBody>
              </ScrollPanel>
@@ -231,7 +239,7 @@ function Dashboard(props) {
           <ScrollPanel style={{width: '100%', height: '350px'}}> 
             <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
               {submitted.map(order => (
-                <ConfirmationListItem key={order._id} ident={order._id} name={order.name} lastUpdatedAt={order.updatedAt} status={order.status}/>
+                <ConfirmationListItem key={order._id} ident={order._id} name={order.name} lastUpdatedAt={order.updatedAt} status={order.status} countryCode={getCountryCode(order.country)}/>
               ))}
             </CardBody>
           </ScrollPanel>

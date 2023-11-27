@@ -33,7 +33,7 @@ function Checkout() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/groupOrders/${id}`, { withCredentials: true });
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/${id}`, { withCredentials: true });
         setGroupOrder(response.data.GroupOrder);
         setOrders(response.data.GroupOrder.orders.filter(order => order.status === 1)); //approved orders
         setFilteredOrders(response.data.GroupOrder.orders.filter(order => order.status === 1));
@@ -51,6 +51,14 @@ function Checkout() {
   const onDropdownClick = (e) => {
     setFilteredOrders(e.target.value ? orders.filter(order => order.user_id == e.target.value) : orders);
   }
+
+  const handleSubmit = async () => {
+    groupOrder.status = 2;
+    axios.put(`http://localhost:8080/api/groupOrders/${id}`, groupOrder, { withCredentials: true });
+
+  };
+  const basePrice = filteredOrders.reduce((acc, order) => acc + order.price, 0);
+  const totalShipping = filteredOrders.reduce((acc, order) => acc + (order.price + order.weight), 0);
 
   return (
     <>
@@ -77,13 +85,14 @@ function Checkout() {
                 <CardTitle tag="h2">{groupOrder ? "GO Name: " + groupOrder.name : "Group Order"}</CardTitle>
               </CardHeader>
               <CardBody>
-                <Table className="tablesorter" responsive>
+                <Table className="tablesorter" responsive striped>
                   <thead className="text-primary">
                     <tr>
                       <th>Name</th>
                       <th>Item</th>
                       <th>Item Weight</th>
-                      <th className="text-center">Price</th>
+                      <th className="text-center">Base Price</th>
+                      <th className="text-center">Shipping Price</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -93,8 +102,10 @@ function Checkout() {
                           return joiner.name
                         }})}</td>
                         <td>{order.name}</td>
+                        {console.log(orders)}
                         <td>{order.weight}</td>
                         <td className="text-center">{order.price}</td>
+                        <td className="text-center">{order.price + order.weight}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -112,12 +123,28 @@ function Checkout() {
           <Col className='text-center'>
             <Card>
               <CardHeader>
-                <CardTitle tag="h2">Total: ${filteredOrders.reduce((acc, order) => acc + order.price, 0).toFixed(2)}</CardTitle>
+                <CardTitle tag="h2">Total Base Price: ${basePrice.toFixed(2)}</CardTitle>
+              </CardHeader>
+            </Card>
+          </Col>
+          <Col className='text-center'>
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h2">Total Shipping: ${totalShipping.toFixed(2)}</CardTitle>
               </CardHeader>
             </Card>
           </Col>
           <Col className='text-right'>
-          <Button color="info">Submit Order</Button>
+          <Button onClick={handleSubmit} disabled={groupOrder.status > 0}>Submit Order</Button>
+          </Col>
+        </Row>
+        <Row>
+        <Col className='text-center'>
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h2">Total Price: ${(basePrice + totalShipping).toFixed(2)}</CardTitle>
+              </CardHeader>
+            </Card>
           </Col>
         </Row>
       </div>

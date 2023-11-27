@@ -59,6 +59,20 @@ function UserProfile() {
     formData.append('state', shipmentDetails.state);
     formData.append('city', shipmentDetails.city);
     formData.append('zipCode', shipmentDetails.zipCode);
+  }
+
+  const submitShipmentData = async () => {
+    try {
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/shipments`, {
+            firstName,
+            lastName,
+            address1,
+            address2,
+            state,
+            city,
+            zipCode
+        }, { withCredentials: true });
+        console.log(response.data);
 
     axios.post('http://localhost:8080/api/shipments/upsert', formData, { withCredentials: true })
       .then(response => {
