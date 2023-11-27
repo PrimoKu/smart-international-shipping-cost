@@ -16,12 +16,13 @@ import {
 function CreateOrder() {
   const location = useLocation();
   const groupOrderId = location.state?.groupOrder_id;
+  console.log("Groupid", groupOrderId)
   const [order, setOrder] = useState({
     name: '',
     price: '',
     weight: '',
     groupOrder_id: '',
-    date: '',
+    // date: '',
   });
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
@@ -103,15 +104,6 @@ function CreateOrder() {
                     onChange={(e) => setOrder({ ...order, weight: e.target.value })}
                   />
                 </FormGroup>
-                {/* <FormGroup>
-                  <Label for='date'>Date</Label>
-                  <Input
-                    type='date'
-                    id='date'
-                    value={order.date}
-                    onChange={(e) => setOrder({ ...order, date: e.target.value })}
-                  />
-                </FormGroup> */}
                 <Button color='info' size='lg' block onClick={handleSubmit}>
                   Submit
                 </Button>
