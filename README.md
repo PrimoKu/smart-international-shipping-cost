@@ -188,8 +188,19 @@ Here is the link to our deployed app (may be behind the GitHub repo since I cann
 https://bluejaysoose.onrender.com/
 
 Here are the credentials:
+
+Regular User:
+
 U: yku4@jh.edu
+
 P: ku850728
+
+Shipper:
+
+U: shipper@jhu.edu
+
+P: a12344321
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
