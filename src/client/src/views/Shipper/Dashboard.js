@@ -25,7 +25,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/groupOrders", { withCredentials: true });
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/orders`, { withCredentials: true });
         setOrders(response.data);
         setLoading(false);
       } catch (error) {

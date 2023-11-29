@@ -89,10 +89,10 @@ exports.GroupOrderCreateValidator = [
         .not()
         .isEmpty()
         .withMessage('Group Order country can not be empty!')
-        .bail()
-        .isLength({min: 3})
-        .withMessage('Group Order country requires a minimum 3 of characters!')
         .bail(),
+        // .isLength({min: 3})
+        // .withMessage('Group Order country requires a minimum 3 of characters!')
+        // .bail(),
    (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty())
@@ -131,7 +131,7 @@ exports.ShipmentCreateValidator = [
         .bail(),
     check('address2')
         .escape()
-        .optional()
+        .optional({ checkFalsy: true })
         .isEmpty()
         .isLength({min: 3})
         .withMessage('Address 2 requires a minimum 3 of characters!')
@@ -143,7 +143,92 @@ exports.ShipmentCreateValidator = [
         .withMessage('State can not be empty!')
         .bail()
         .custom((value) => {
-            return USStates.includes(value);
+            const statesValues = Object.values(USStates);
+            return statesValues.includes(value);
+        })
+        .withMessage('Invalid state provided!')
+        .bail(),
+    check('city')
+        .escape()
+        .not()
+        .isEmpty()
+        .withMessage('City can not be empty!')
+        .bail()
+        .isLength({min: 3})
+        .withMessage('City requires a minimum 3 of characters!')
+        .bail(),
+    check('zipCode')
+        .escape()
+        .not()
+        .isEmpty()
+        .withMessage('Zip code can not be empty!')
+        .bail()
+        .isLength({min: 5})
+        .withMessage('Zip code requires a minimum 5 of characters!')
+        .bail(),
+   (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+            return res.status(400).json({errors: errors.array()});
+        next();
+    },
+];
+
+exports.PaymentCreateValidator = [
+    check('cardType')
+        .escape()
+        .not()
+        .isEmpty()
+        .withMessage('Card type can not be empty!')
+        .bail()
+        .isIn(['Credit', 'Debit'])
+        .withMessage('Card type must be either "Credit" or "Debit"!')
+        .bail(),
+    check('cardNumber')
+        .not()
+        .isEmpty()
+        .withMessage('Card number cannot be empty!')
+        .bail()
+        .isNumeric()
+        .withMessage('Card number must be numeric!')
+        .bail()
+        .isLength({ min: 13, max: 19 })
+        .withMessage('Card number must be between 13 and 19 digits long!')
+        .bail(),
+    check('bankName')
+        .escape()
+        .not()
+        .isEmpty()
+        .withMessage('Bank name can not be empty!')
+        .bail()
+        .isLength({min: 3})
+        .withMessage('Bank name requires a minimum 3 of characters!')
+        .bail(),
+    check('billAddress1')
+        .escape()
+        .not()
+        .isEmpty()
+        .withMessage('Billing address 1 can not be empty!')
+        .bail()
+        .isLength({min: 3})
+        .withMessage('Billing address 1 requires a minimum 3 of characters!')
+        .bail(),
+    check('billAddress2')
+        .escape()
+        .optional({ checkFalsy: true })
+        .isEmpty()
+        .isLength({min: 3})
+        .withMessage('Billing address 2 requires a minimum 3 of characters!')
+        .bail(),
+    check('state')
+        .escape()
+        .not()
+        .isEmpty()
+        .withMessage('State can not be empty!')
+        .bail()
+        .custom((value) => {
+            const statesValues = Object.values(USStates);
+            return statesValues.includes(value);
         })
         .withMessage('Invalid state provided!')
         .bail(),

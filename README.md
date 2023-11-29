@@ -47,7 +47,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Team BlueJay is developing an international shipping app intended to reduce individual overseas shipping costs by bundling them in a group!
+Team BlueJay is developing an international shipping app for organizing multiple individual orders in a group to save on individual overseas shipping costs!
 
 This idea was inspired by Shichang, and her experiences with ordering international products. She found that by grouping various orders together in one package for overseas shipping, this would reduce the price for all involved, and the initial solution was to use an Excel spreadsheet to track each person's order cost, weight, and payment status. 
 
@@ -169,23 +169,37 @@ npm start
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Iteration 1: 
-1) The main page contains all elements currently accessible via our routes. 
-2) So far, you can create an order, and login/register. Your data in both cases will be stored in our MongoDB database.
-3) Login and register will take you to separate pages for those specific functions.
-4) "Create order" creates a modal, which allows you to upload orders to the interface and the database.
-
-Iteration 2:
-1) The starting screen has been streamlined for login/registration, though this is likely to be removed or changed.
-2) The dashboard interface is now accessible and connected to the order management interface
-3) User registration / login / information input has been updated, and checkout has been improved
-4) Additional API functionality has been added, see the documentation or just explore :^)
-
 Iteration 3:
 1) A new type of user, a Shipper, is now supported! Their role is to fulfill user orders.
 2) User orders are now given status, deadline, and other indicators to help inform the user about their order.
 3) Group management has been implemented, and now individual users can join orders, request additions, and so on.
 5) ...many more changes, both big and small. Refer to the project backlog!
+
+Iteration 4:
+1) Shipper interfaces are now complete
+2) Added additional group management features
+3) Deployed app to (URL)
+4) Added environmental variables for src/client, as below:
+REACT_APP_SERVER_URL=http://localhost:8080
+REACT_APP_GOOGLE_CLIENT_ID=110092633486-irit56mv86as5eloift7coseep94icn6.apps.googleusercontent.com
+REACT_APP_GOOGLE_CLIENT_SECRET=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
+
+Here is the link to our deployed app (may be behind the GitHub repo since I cannot directly use it due to organization permissions):
+https://bluejaysoose.onrender.com/
+
+Here are the credentials:
+
+Regular User:
+
+U: yku4@jh.edu
+
+P: ku850728
+
+Shipper:
+
+U: shipper@jhu.edu
+
+P: a12344321
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -194,7 +208,6 @@ Iteration 3:
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Iteration 1
 - [x] Basic UI elements
 - [x] Navigation between UI elements
 - [x] MongoDB backend integration
@@ -203,11 +216,11 @@ Iteration 3:
 - [x] Additional views to allow for user input (payment, personal details, etc.)
 - [x] Adding group functionality
 - [x] Create a home page for order management
-- [x] Iteration 3
 - [x] Fleshing out iteration 2 interfaces with additional information and inputs
 - [x] Shipper perspective and individual order management on both ends
 - [ ] Enforcing styling among multiple interfaces
-- [ ] Iteration 4
+- [x] UI improvements
+- [x] Deployment 
 
 See the [open issues](https://github.com/jhu-oose-f23/team-BlueJay/issues) for a full list of proposed features (and known issues).
 

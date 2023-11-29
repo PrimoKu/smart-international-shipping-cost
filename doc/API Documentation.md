@@ -18,10 +18,10 @@
   - **Response body**:
     ```json
     {
-        "_id": <user._id>,
-        "name": <user.name>,
-        "email": <user.email>,
-        "role": <user.role>,
+        "_id": "<user._id>",
+        "name": "<user.name>",
+        "email": "<user.email>",
+        "role": "<user.role>",
     }
     ```
 ### Endpoints: Login
@@ -39,14 +39,14 @@
     ```json
     {
         "user": {
-            "_id": <user._id>,
-            "name": <user.name>,
-            "email": <user.email>,
-            "password": <user.hashedPassword>,
-            "createdAt": <user.createdAt>,
-            "updatedAt": <user.updatedAt>
+            "_id": "<user._id>",
+            "name": "<user.name>",
+            "email": "<user.email>",
+            "password": "<user.hashedPassword>",
+            "createdAt": "<user.createdAt>",
+            "updatedAt": "<user.updatedAt>"
         },
-        "token": <accessToken>,
+        "token": "<accessToken>",
     }
     ```
 ### Endpoints: Current User
@@ -61,31 +61,41 @@
     ```json
     {
         "user": {
-            "_id": <user._id>,
-            "name": <user.name>,
-            "email": <user.email>,
-            "password": <user.hashedPassword>,
-            "createdAt": <user.createdAt>,
-            "updatedAt": <user.updatedAt>,
-            "shipment_id": <user.shipment_id>,
-            "shipment": [
-              {
-                "_id": <shipment._id>,
-                "user_id": <user._id>,
-                "first_name": <shipment.first_name>,
-                "last_name": <shipment.last_name>,
-                "address_1": <shipment.address_1>,
-                "address_2": <shipment.address_2>,
-                "state": <shipment.state>,
-                "city": <shipment.city>,
-                "zip_code": <shipment.zip_code>,
-                "createdAt": <shipment.createdAt>,
-                "updatedAt": <shipment.updatedAt>,
-                "__v": 0
-              }
-            ]
+            "_id": "<user._id>",
+            "name": "<user.name>",
+            "email": "<user.email>",
+            "password": "<user.hashedPassword>",
+            "createdAt": "<user.createdAt>",
+            "updatedAt": "<user.updatedAt>",
+            "shipment_id": "<user.shipment_id>",
+            "shipment":{
+              "_id": "<shipment._id>",
+              "user_id": "<user._id>",
+              "first_name": "<shipment.first_name>",
+              "last_name": "<shipment.last_name>",
+              "address_1": "<shipment.address_1>",
+              "address_2": "<shipment.address_2>",
+              "state": "<shipment.state>",
+              "city": "<shipment.city>",
+              "zip_code": "<shipment.zip_code>",
+              "createdAt": "<shipment.createdAt>",
+              "updatedAt": "<shipment.updatedAt>",
+            },
+            "payment":{
+              "_id": "<payment._id>",
+              "card_type": "<payment.card_type>",
+              "card_number": "<payment.card_number>",
+              "bank_name": "<payment.bank_name>",
+              "bill_address_1": "<payment.bill_address_1>",
+              "bill_address_2": "<payment.bill_address_2>",
+              "state": "<payment.state>",
+              "city": "<payment.city>",
+              "zip_code": "<payment.zip_code>",
+              "createdAt": "<payment.createdAt>",
+              "updatedAt": "<payment.updatedAt>"
+            }
         },
-        "token": <accessToken>,
+        "token": "<accessToken>",
     }
     ```
 
@@ -102,15 +112,15 @@
     ```json
     [
       {
-        "_id": <order._id>,
-        "user_id": <user._id>,
-        "groupOrder_id": <groupOrder._id>,
-        "name": <order.name>,
-        "weight": <order.weight>,
-        "price": <order.price>,
-        "status": <order.status>,
-        "createdAt": <order.createdAt>,
-        "updatedAt": <order.updatedAt>
+        "_id": "<order._id>",
+        "user_id": "<user._id>",
+        "groupOrder_id": "<groupOrder._id>",
+        "name": "<order.name>",
+        "weight": "<order.weight>",
+        "price": "<order.price>",
+        "status": "<order.status>",
+        "createdAt": "<order.createdAt>",
+        "updatedAt": "<order.updatedAt>"
       },
       ...
     ]
@@ -137,15 +147,15 @@
   - **Response body**:
     ```json
     {
-        "_id": <order._id>,
-        "user_id": <user._id>,
-        "groupOrder_id": <groupOrder._id>,
-        "name": <order.name>,
-        "weight": <order.weight>,
-        "price": <order.price>,
-        "status": <order.status>,
-        "createdAt": <order.createdAt>,
-        "updatedAt": <order.updatedAt>
+        "_id": "<order._id>",
+        "user_id": "<user._id>",
+        "groupOrder_id": "<groupOrder._id>",
+        "name": "<order.name>",
+        "weight": "<order.weight>",
+        "price": "<order.price>",
+        "status": "<order.status>",
+        "createdAt": "<order.createdAt>",
+        "updatedAt": "<order.updatedAt>"
     }
     ```
 
@@ -164,15 +174,15 @@
   - **Response body**:
     ```json
     {
-        "_id": <order._id>,
-        "user_id": <user._id>,
-        "groupOrder_id": <groupOrder._id>,
-        "name": <order.name>,
-        "weight": <order.weight>,
-        "price": <order.price>,
-        "status": <order.status>,
-        "createdAt": <order.createdAt>,
-        "updatedAt": <order.updatedAt>
+        "_id": "<order._id>",
+        "user_id": "<user._id>",
+        "groupOrder_id": "<groupOrder._id>",
+        "name": "<order.name>",
+        "weight": "<order.weight>",
+        "price": "<order.price>",
+        "status": "<order.status>",
+        "createdAt": "<order.createdAt>",
+        "updatedAt": "<order.updatedAt>"
     }
     ```
 
@@ -196,15 +206,15 @@
   - **Response body**:
     ```json
     {
-        "_id": <order._id>,
-        "user_id": <user._id>,
-        "groupOrder_id": <groupOrder._id>,
-        "name": <order.name>,
-        "weight": <order.weight>,
-        "price": <order.price>,
-        "status": <order.status>,
-        "createdAt": <order.createdAt>,
-        "updatedAt": <order.updatedAt>
+        "_id": "<order._id>",
+        "user_id": "<user._id>",
+        "groupOrder_id": "<groupOrder._id>",
+        "name": "<order.name>",
+        "weight": "<order.weight>",
+        "price": "<order.price>",
+        "status": "<order.status>",
+        "createdAt": "<order.createdAt>",
+        "updatedAt": "<order.updatedAt>"
     }
     ```
 
@@ -220,18 +230,18 @@
     ```json
     [
       {
-        "_id": <groupOrder._id>,
-        "manager_id": <user._id>,
-        "name": <groupOrder.name>,
-        "country": <groupOrder.country>,
-        "deadline": <groupOrder.deadline>,
-        "status": <groupOrder.status>,
+        "_id": "<groupOrder._id>",
+        "manager_id": "<user._id>",
+        "name": "<groupOrder.name>",
+        "country": "<groupOrder.country>",
+        "deadline": "<groupOrder.deadline>",
+        "status": "<groupOrder.status>",
         "order_ids": [
-            <order._id>
-            ...
+          "<order._id>",
+          "..."
         ],
-        "createdAt": <groupOrder.createdAt>,
-        "updatedAt": <groupOrder.updatedAt>
+        "createdAt": "<groupOrder.createdAt>",
+        "updatedAt": "<groupOrder.updatedAt>"
       },
       ...
     ]
@@ -257,15 +267,15 @@
   - **Response body**:
     ```json
     {
-        "_id": <groupOrder._id>,
-        "manager_id": <user._id>,
-        "name": <groupOrder.name>,
-        "country": <groupOrder.country>,
-        "deadline": <groupOrder.deadline>,
-        "status": 0,
-        "order_ids": [],
-        "createdAt": <groupOrder.createdAt>,
-        "updatedAt": <groupOrder.updatedAt>
+      "_id": "<groupOrder._id>",
+      "manager_id": "<user._id>",
+      "name": "<groupOrder.name>",
+      "country": "<groupOrder.country>",
+      "deadline": "<groupOrder.deadline>",
+      "status": 0,
+      "order_ids": [],
+      "createdAt": "<groupOrder.createdAt>",
+      "updatedAt": "<groupOrder.updatedAt>"
     },
     ```
 
@@ -284,33 +294,33 @@
   - **Response body**:
     ```json
     {
-        "_id": <groupOrder._id>,
-        "manager": [
-            {
-                "_id": <user._id>,
-                "name": <user._id>,
-                "email": <user._id>
-            }
-        ],
-        "name": <groupOrder.name>,
-        "country": <groupOrder.country>,
-        "deadline": <groupOrder.deadline>,
-        "createdAt": <groupOrder.createdAt>,
-        "updatedAt": <groupOrder.updatedAt>,
-        "orders": [
-          {
-            "_id": <order._id>,
-            "user_id": <user._id>,
-            "groupOrder_id": <groupOrder._id>,
-            "name": <order.name>,
-            "weight": <order.weight>,
-            "price": <order.price>,
-            "status": <order.status>,
-            "createdAt": <order.createdAt>,
-            "updatedAt": <order.updatedAt>,
-          },
-            ...
-        ]
+      "_id": "<groupOrder._id>",
+      "manager": [
+        {
+          "_id": "<user._id>",
+          "name": "<user.name>",
+          "email": "<user.email>"
+        }
+      ],
+      "name": "<groupOrder.name>",
+      "country": "<groupOrder.country>",
+      "deadline": "<groupOrder.deadline>",
+      "createdAt": "<groupOrder.createdAt>",
+      "updatedAt": "<groupOrder.updatedAt>",
+      "orders": [
+        {
+          "_id": "<order._id>",
+          "user_id": "<user._id>",
+          "groupOrder_id": "<groupOrder._id>",
+          "name": "<order.name>",
+          "weight": "<order.weight>",
+          "price": "<order.price>",
+          "status": "<order.status>",
+          "createdAt": "<order.createdAt>",
+          "updatedAt": "<order.updatedAt>"
+        },
+        // ... other orders
+      ]
     },
     ```
 
@@ -334,17 +344,17 @@
   - **Response body**:
     ```json
     {
-        "_id": <groupOrder._id>,
-        "manager_id": <user._id>,
-        "name": <groupOrder.name>,
-        "country": <groupOrder.country>,
-        "deadline": <groupOrder.deadline>,
+        "_id": "<groupOrder._id>",
+        "manager_id": "<user._id>",
+        "name": "<groupOrder.name>",
+        "country": "<groupOrder.country>",
+        "deadline": "<groupOrder.deadline>",
         "order_ids": [
-          <order._id>,
+          "<order._id>",
           ...
         ],
-        "createdAt": <order.createdAt>,
-        "updatedAt": <order.updatedAt>
+        "createdAt": "<order.createdAt>",
+        "updatedAt": "<order.updatedAt>"
     }
     ```
 
@@ -369,19 +379,170 @@
   - **Response body**:
     ```json
     {
-        "_id": <shipment._id>,
-        "first_name": <shipment.first_name>,
-        "last_name": <shipment.last_name>,
-        "address_1": <shipment.address_1>,
-        "address_2": <shipment.address_2>,
-        "state": <shipment.state>,
-        "city": <shipment.city>,
-        "zip_code": <shipment.zip_code>,
-        "createdAt": <shipment.createdAt>,
-        "updatedAt": <shipment.updatedAt>
+      "_id": "<shipment._id>",
+      "first_name": "<shipment.first_name>",
+      "last_name": "<shipment.last_name>",
+      "address_1": "<shipment.address_1>",
+      "address_2": "<shipment.address_2>",
+      "state": "<shipment.state>",
+      "city": "<shipment.city>",
+      "zip_code": "<shipment.zip_code>",
+      "createdAt": "<shipment.createdAt>",
+      "updatedAt": "<shipment.updatedAt>"
     }
     ```
 
+### Endpoints: Upsert shipment to user
+- **HTTP Method**: `POST`
+- **Path**: `/shipments/upsert`
+- **Description**: Create or update shipment to an exist user.
+- **Parameters**:
+  - **Request body**:
+    - `firstName`: Required first name of the shipment.
+    - `lastName`: Required last name of the shipment.
+    - `address1`: Required first line of address of the shipment.
+    - `address2`: Optional second line of address of the shipment.
+    - `state`: Required state of the shipment.
+    - `city`: Required city of the shipment.
+    - `zipCode`: Required zip code of the shipment.
+- **Response**:
+  - **Status codes**: 
+    - `201 CREATED`: Successfully added the shipment.
+    - `400 BAD REQUEST`: Invalid request body.
+  - **Response body**:
+    ```json
+    {
+      "_id": "<shipment._id>",
+      "first_name": "<shipment.first_name>",
+      "last_name": "<shipment.last_name>",
+      "address_1": "<shipment.address_1>",
+      "address_2": "<shipment.address_2>",
+      "state": "<shipment.state>",
+      "city": "<shipment.city>",
+      "zip_code": "<shipment.zip_code>",
+      "createdAt": "<shipment.createdAt>",
+      "updatedAt": "<shipment.updatedAt>"
+    }
+    ```
+
+## Payments APIs
+### Endpoints: Get Payment Information
+- **HTTP Method**: `GET`
+- **Path**: `/payments`
+- **Description**: Retrieves payment information for the current user.
+- **Parameters**: None
+- **Response**:
+  - **Status Codes**:
+    - `200 OK`: Successfully retrieved the payment information.
+    - `404 NOT FOUND`: Payment information not found for the user.
+    - `500 INTERNAL SERVER ERROR`: An error occurred on the server.
+  - **Response Body**:
+    ```json
+    {
+        "_id": "<payment._id>",
+        "card_type": "<payment.card_type>",
+        "card_number": "<payment.card_number>",
+        "bank_name": "<payment.bank_name>",
+        "bill_address_1": "<payment.bill_address_1>",
+        "bill_address_2": "<payment.bill_address_2>",
+        "state": "<payment.state>",
+        "city": "<payment.city>",
+        "zip_code": "<payment.zip_code>",
+        "createdAt": "<payment.createdAt>",
+        "updatedAt": "<payment.updatedAt>"
+    }
+    ```
+
+### Endpoints: Create Payment Information
+- **HTTP Method**: `POST`
+- **Path**: `/payments`
+- **Description**: Creates new payment information for the current user.
+- **Parameters**:
+  - **Request Body**:
+    - `cardType`: Required card type of the payment.
+    - `cardNumber`: Required card number of the payment.
+    - `bankName`: Required bank name associated with the payment.
+    - `billAddress1`: Required billing address line 1 of the payment.
+    - `billAddress2`: Optional billing address line 2 of the payment.
+    - `state`: Required state for the billing address.
+    - `city`: Required city for the billing address.
+    - `zipCode`: Required ZIP code for the billing address.
+- **Response**:
+  - **Status Codes**:
+    - `201 CREATED`: Successfully created the payment information.
+    - `442 UNPROCESSABLE ENTITY`: Failed to create payment information.
+    - `500 INTERNAL SERVER ERROR`: An error occurred on the server.
+  - **Response Body**:
+    ```json
+    {
+        "_id": "<payment._id>",
+        "card_type": "<payment.card_type>",
+        "card_number": "<payment.card_number>",
+        "bank_name": "<payment.bank_name>",
+        "bill_address_1": "<payment.bill_address_1>",
+        "bill_address_2": "<payment.bill_address_2>",
+        "state": "<payment.state>",
+        "city": "<payment.city>",
+        "zip_code": "<payment.zip_code>",
+        "createdAt": "<payment.createdAt>",
+        "updatedAt": "<payment.updatedAt>"
+    }
+    ```
+
+### Endpoints: Update Payment Information
+- **HTTP Method**: `PUT`
+- **Path**: `/payments`
+- **Description**: Updates existing payment information for the current user.
+- **Parameters**:
+  - **Request Body**: Same as "Create Payment Information."
+- **Response**:
+  - **Status Codes**:
+    - `200 OK`: Successfully updated the payment information.
+    - `404 NOT FOUND`: Payment information not found for the user.
+    - `500 INTERNAL SERVER ERROR`: An error occurred on the server.
+  - **Response Body**:
+    ```json
+    {
+        "_id": "<payment._id>",
+        "card_type": "<payment.card_type>",
+        "card_number": "<payment.card_number>",
+        "bank_name": "<payment.bank_name>",
+        "bill_address_1": "<payment.bill_address_1>",
+        "bill_address_2": "<payment.bill_address_2>",
+        "state": "<payment.state>",
+        "city": "<payment.city>",
+        "zip_code": "<payment.zip_code>",
+        "createdAt": "<payment.createdAt>",
+        "updatedAt": "<payment.updatedAt>"
+    }
+    ```
+
+### Endpoints: Upsert Payment Information
+- **HTTP Method**: `POST`
+- **Path**: `/payments/upsert`
+- **Description**: Creates or updates payment information for the current user.
+- **Parameters**:
+  - **Request Body**: Same as "Create Payment Information."
+- **Response**:
+  - **Status Codes**:
+    - `200 OK`: Successfully upserted the payment information.
+    - `500 INTERNAL SERVER ERROR`: An error occurred on the server.
+  - **Response Body**:
+    ```json
+    {
+        "_id": "<payment._id>",
+        "card_type": "<payment.card_type>",
+        "card_number": "<payment.card_number>",
+        "bank_name": "<payment.bank_name>",
+        "bill_address_1": "<payment.bill_address_1>",
+        "bill_address_2": "<payment.bill_address_2>",
+        "state": "<payment.state>",
+        "city": "<payment.city>",
+        "zip_code": "<payment.zip_code>",
+        "createdAt": "<payment.createdAt>",
+        "updatedAt": "<payment.updatedAt>"
+    }
+    ```
 
 ## Errors
 - `400 BAD REQUEST`: Invalid request body.

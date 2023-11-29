@@ -19,11 +19,14 @@ import {
     Row,
     Col,
 } from "reactstrap";
+import { GoogleLogin } from 'react-google-login';
 
 
 function Login() {
-    const [email, setEmail] = useState("yku4@jh.edu");
-    const [password, setPassword] = useState("ku850728");
+    // const [email, setEmail] = useState("yku4@jh.edu");
+    // const [password, setPassword] = useState("ku850728");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [role, setRole] = useState("0"); 
     const [loginError, setLoginError] = useState("");
     const [imageSize] = useState(60);
@@ -35,7 +38,7 @@ function Login() {
         formData.append('email', email);
         formData.append('password', password);
 
-        axios.post('http://localhost:8080/api/users/login', formData, { withCredentials: true })
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/api/users/login`, formData, { withCredentials: true })
         .then(res => {
             if (role === "1") {  // If the role is "shipper"
                 window.location.assign('/shipper/dashboard');  // Redirect to shipper's dashboard, this need to be changed
@@ -49,6 +52,10 @@ function Login() {
             }
         });
     };
+
+    const responseGoogle = (response) => {
+        console.log(response);
+    }
 
     const controls = useAnimation();
 
@@ -110,8 +117,8 @@ function Login() {
                                                     required
                                                     style={{ height: '50px', fontSize: '18px' }}
                                                     onChange={(e) => setEmail(e.target.value)}
-                                                    //defaultValue={"testUser@jhu.edu"}
-                                                    //readOnly
+                                                    // defaultValue={"testUser@jhu.edu"}
+                                                    // readOnly
                                                 />
                                             </FormGroup>
                                             <FormGroup>
@@ -124,8 +131,8 @@ function Login() {
                                                     autoComplete="off"
                                                     style={{ height: '50px', fontSize: '18px' }}
                                                     onChange={(e) => setPassword(e.target.value)}
-                                                    //defaultValue={"Default Password"}
-                                                    //readOnly
+                                                    // defaultValue={"Default Password"}
+                                                    // readOnly
                                                 />
                                                 <div className="text-warning" id="login_error"></div>
                                             </FormGroup>
@@ -134,6 +141,14 @@ function Login() {
                                                 Login
                                             </Button>
                                         </Form>
+                                        <hr />
+                                        <GoogleLogin
+                                            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                                            buttonText="Login with Google"
+                                            onSuccess={responseGoogle}
+                                            onFailure={responseGoogle}
+                                            cookiePolicy={'single_host_origin'}
+                                        />
                                         <hr />
                                         <div className="text-center">
                                             <h6 className="text-center my-3" style={{ fontSize: '14px' }}>Don't have an account yet?</h6>

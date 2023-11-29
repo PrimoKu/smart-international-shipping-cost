@@ -8,9 +8,11 @@ import {
 import { useAuth } from "../contexts/AuthContext.js";
 import { useNavigate } from 'react-router-dom';
 
+
 function OrderListItem({ident, name, deadline}) {
   const navigate = useNavigate();
   const {user} = useAuth();
+
   var deadlineDate = new Date(deadline);
 
   function convertTime(time) {
@@ -91,18 +93,28 @@ function OrderListItem({ident, name, deadline}) {
 
   var color = getDeadlineColor();
 
+  const image = countryCode === "" || countryCode === undefined || countryCode === null ? 
+    "https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg" : `https://flagsapi.com/${countryCode}/flat/64.png`;
+
+  const height = countryCode === "" || countryCode === undefined || countryCode === null ? "35px" : "50px";
+  const width = height == "40px" ? "50px" : "auto";
+
   return (
   <>
     <button className="item" onClick={() => onClick()}>
       <Row>
-        <Col>
-          <div className="order-box">
-            <img id="order-img" style={{float: "left", height: "20px", verticalAlign: "middle", paddingRight: "5px"}}  src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"></img>
-            <div id="order-text">
-              <div id="order-name" style={{fontSize: "larger", color: "white", fontFamily:"'Lucida Console', monospace"}}>{name}</div>
-              <div id="order-time" style={{fontSize: "small", color:"gray", fontFamily:"'Lucida Console', monospace"}}>Deadline: {convertTime(deadline)}</div>
-            </div>
-          </div>
+        <Col md={8}>
+          <Row>
+            <Col>
+              <div className="order-box">
+                <img id="order-img" style={{float: "left", height: `${height}`, width: `${width}`, verticalAlign: "middle", marginRight: "10px"}}  src={image}></img>
+                <div id="order-text" style={{float: "left"}}>
+                  <div id="order-name" style={{fontSize: "larger", color: "white", fontFamily:"'Lucida Console', monospace"}}>{name}</div>
+                  <div id="order-time" style={{fontSize: "small", color:"gray", fontFamily:"'Lucida Console', monospace"}}>Deadline: {convertTime(deadline)}</div>
+                </div>
+              </div>
+            </Col>
+          </Row>
         </Col>
         <Col>
           <div style={{fontSize: "medium", float: "right", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", marginRight: "10px", color:`${color}`}}>{getTimeRemaining()}</div>

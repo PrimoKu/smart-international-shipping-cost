@@ -5,7 +5,8 @@ const shipmentController = new ShipmentController();
 const { ShipmentCreateValidator } = require('../middlewares/Validators');
 const { requireAuth } = require('../middlewares/AuthMiddleware');
   
-router.route('/').post(requireAuth, ShipmentCreateValidator, shipmentController.createShipment);
-router.route('/:id').get(requireAuth, shipmentController.getShipment);
+router.route('/').post(requireAuth, ShipmentCreateValidator, shipmentController.createShipment).get(requireAuth, shipmentController.getShipment);
+router.route('/upsert').post(requireAuth, shipmentController.upsertShipment);
+
 
 module.exports = router;
