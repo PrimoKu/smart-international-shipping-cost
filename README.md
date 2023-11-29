@@ -185,7 +185,7 @@ REACT_APP_GOOGLE_CLIENT_ID=110092633486-irit56mv86as5eloift7coseep94icn6.apps.go
 REACT_APP_GOOGLE_CLIENT_SECRET=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
 
 Here is the link to our deployed app (may be behind the GitHub repo since I cannot directly use it due to organization permissions):
-https://bluejaysoose.onrender.com/
+[https://bluejaysoose.onrender.com/](https://render.bluejays.space/)
 
 Here are the credentials:
 
