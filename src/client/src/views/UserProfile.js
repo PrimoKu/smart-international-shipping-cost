@@ -69,7 +69,7 @@ function UserProfile() {
           console.log(error.response);
         }
       });
-  };
+  }
 
   const updatePayment = async () => {
     let formData = new FormData();

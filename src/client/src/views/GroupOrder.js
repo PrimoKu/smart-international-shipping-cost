@@ -26,7 +26,7 @@ import {
 //import ViewJoinersModal from './ViewJoinersModal';
 
 function GroupOrder(props) {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
     // Table of Orders in GroupOrder
@@ -306,11 +306,19 @@ function GroupOrder(props) {
         setCreateOrderModalCancelable(true);
     }
     const handleDisbandGroupOrder = async () => {
-        // API call to disband the group order
-        // Example: axios.post('api/groupOrders/disband', { id: groupOrder._id })
-        // Close the modal after the action
-        setIsDisbandModalOpen(false);
-        // Redirect or update UI as necessary
+        axios.delete(`http://localhost:8080/api/groupOrders/disband/${id}`, { withCredentials: true })
+        .then(response => {
+            setIsDisbandModalOpen(false);
+            navigate('/');
+        })
+        .catch((error) => {
+            if (error.response && error.response.data) {
+                console.log(error.response);
+            }
+            setIsDisbandModalOpen(false);
+        });
+        
+        
     };
 
     const handleInvite = async (e) => {

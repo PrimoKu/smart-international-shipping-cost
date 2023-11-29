@@ -159,6 +159,28 @@ class GroupOrderController {
         }
     });
 
+    //@des disband a group order
+    //@route PUT /api/groupOrders/disband/:id
+    //@access private
+    disbandGroupOrder = asyncHandler(async (req, res) => {
+        const groupOrder_Id = req.params.id;
+
+        try {
+            const groupOrder = await groupOrderRepo.get(groupOrder_Id);
+
+            if (!groupOrder) {
+                return res.status(404).json({ message: "Group Order not found!" });
+            }
+            const deletedOrders = await Order.deleteMany({ groupOrder_id: groupOrder_Id });
+            const deletedGroupOrder = await GroupOrder.deleteMany( { _id: groupOrder_Id });
+            
+            res.status(200).json({ deletedOrders, deletedGroupOrder });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Server Error!" });
+        }
+    });
+
 }
 
 module.exports = GroupOrderController;
