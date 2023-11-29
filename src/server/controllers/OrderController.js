@@ -18,6 +18,7 @@ class OrderController {
     //@route POST /api/orders
     //@access private
     createOrder = asyncHandler( async (req, res) => {
+        console.log(req.body);
         const { name, weight, price, groupOrder_id } = req.body;
         let order;
         try {
