@@ -313,9 +313,7 @@ function GroupOrder(props) {
     };
 
 
-    const location = useLocation();
-    const groupOrderId = location.state?.groupOrder_id;
-    // The Group Id is undefied!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    const groupOrderId = groupOrder?._id;
     console.log("Groupid", groupOrderId)
     const [order, setOrder] = useState({
       name: '',

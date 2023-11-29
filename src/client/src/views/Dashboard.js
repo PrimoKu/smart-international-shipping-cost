@@ -95,7 +95,7 @@ function Dashboard(props) {
     formData.append('country', group.country);
     // formData.append('deadline', group.deadline);
 
-    console.log(group.country)
+    console.log(formData);
 
 
     axios.post('http://localhost:8080/api/groupOrders/', formData, { withCredentials: true })
