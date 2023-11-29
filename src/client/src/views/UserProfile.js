@@ -61,8 +61,8 @@ function UserProfile() {
     formData.append('zipCode', shipmentDetails.zipCode);
   }
 
-  const submitShipmentData = async () => {
-    try {
+  /*const submitShipmentData = async () => {
+    //try {
         const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/shipments`, {
             firstName,
             lastName,
@@ -83,7 +83,9 @@ function UserProfile() {
           console.log(error.response);
         }
       });
-  };
+  } catch (err) {
+
+  }*/
 
   const updatePayment = async () => {
     let formData = new FormData();
