@@ -1,12 +1,17 @@
 Place code review reports here i.e.
 
-Code Review - Jiashu Yang, for Arthur Ku
+Code Review - Jiashu Yang
+
 *follow the rubric...*
 
 Try your best not to double-review a single file
 
-Code Review - Zixuan, for Jiashu
+Code Review - Zixuan
+
 Dashboard.js, Home.js
 
-Code Review - Jiashu , for Zixuan
+Code Review - Jiashu
+
 GroupOrder.js, Login.js, UserProfile.js
+
+GroupOrder.js: 
