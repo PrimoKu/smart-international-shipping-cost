@@ -350,7 +350,7 @@ function GroupOrder(props) {
     const [modalTitle, setModalTitle] = useState("");
     const [modalContent, setModalContent] = useState("");
     const [modalCancelable, setModalCancelable] = useState(true);
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
   
     const toggleModal = () => {
       if (modalCancelable) {
