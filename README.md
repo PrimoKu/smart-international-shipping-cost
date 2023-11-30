@@ -157,6 +157,11 @@ Configuration variables, such as database connection strings, or secret keys, ar
       node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
       ```
       Copy the output and paste it as the value for `ACCESS_TOKEN_SECRET`.
+    
+There is another `.env` file needed for the 'client' folder, with the following fields: 
+- REACT_APP_SERVER_URL=http://localhost:8080
+- REACT_APP_GOOGLE_CLIENT_ID=110092633486-irit56mv86as5eloift7coseep94icn6.apps.googleusercontent.com
+- REACT_APP_GOOGLE_CLIENT_SECRET=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
 
 #### 3. Starting App
 To launch the app correctly, you need to start both the `client` and `server` individually. \
