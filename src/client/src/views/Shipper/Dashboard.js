@@ -25,7 +25,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/orders`, { withCredentials: true });
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders`, { withCredentials: true });
         setOrders(response.data);
         setLoading(false);
       } catch (error) {
@@ -63,9 +63,9 @@ const Dashboard = () => {
         <Col xs="12">
           <Button color="primary" onClick={showAllHandler}>All Orders</Button>
           
-          <Button color="primary" onClick={showNotAcceptedHandler} >In Progress</Button>
+          <Button color="primary" onClick={showAcceptedHandler} >In Progress</Button>
 
-          <Button color="primary" onClick={showAcceptedHandler} >Completed</Button>
+          <Button color="primary" onClick={showNotAcceptedHandler} >Completed</Button>
         </Col>
 
       </Row>

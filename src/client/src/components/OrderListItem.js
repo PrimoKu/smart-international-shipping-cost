@@ -9,7 +9,7 @@ import { useAuth } from "../contexts/AuthContext.js";
 import { useNavigate } from 'react-router-dom';
 
 
-function OrderListItem({ident, name, deadline}) {
+function OrderListItem({ident, name, deadline, countryCode}) {
   const navigate = useNavigate();
   const {user} = useAuth();
 
