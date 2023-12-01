@@ -23,14 +23,13 @@ import { GoogleLogin } from 'react-google-login';
 
 
 function Login() {
-    // const [email, setEmail] = useState("yku4@jh.edu");
-    // const [password, setPassword] = useState("ku850728");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("0"); 
     const [loginError, setLoginError] = useState("");
     const [imageSize] = useState(60);
 
+    //handles submission of the login by posting to the backend
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -59,6 +58,7 @@ function Login() {
 
     const controls = useAnimation();
 
+    // controls the flying airplane animation
     useEffect(() => {
         const sequence = async () => {
             await controls.start({ pathOffset: 0 });

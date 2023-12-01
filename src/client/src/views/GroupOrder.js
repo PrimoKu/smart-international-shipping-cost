@@ -64,6 +64,7 @@ function GroupOrder(props) {
     const [email, setEmail] = useState("");
 
     var groupOrderStatus;
+    //gather group order data and set all variables
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -95,13 +96,14 @@ function GroupOrder(props) {
         fetchData();
     }, []);
 
+    // determines whether buttons are included once an order has been submitted
+    // i.e. a completed order should not have new orders added
     function setButtons(orderComplete) {
         if (orderComplete) {
             return (
                 <CardHeader>
                     <h2 tag='h2' style={{ width: "100%" }}> This order cannot be edited at this time.</h2>
                 </CardHeader>
-
             );
         } else {
             return (
@@ -110,9 +112,7 @@ function GroupOrder(props) {
                         <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleCreateOrderModal} disabled={groupOrder.status > 0}>
                             Add New Order
                         </Button>
-
                     </Col>
-
                     {user?._id && manager?._id && user._id === manager._id && (
                         <Col className='text-left' >
                             <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleInviteModal} disabled={groupOrder.status > 0}>
@@ -150,6 +150,7 @@ function GroupOrder(props) {
         }
     }
 
+    //sets text for column that displays weight of item
     const weightBodyTemplate = (rowData) => {
         return (
             <div className="flex align-items-center gap-2">
@@ -158,6 +159,7 @@ function GroupOrder(props) {
         );
     };
 
+    //sets text for column that displays weight of item
     const priceBodyTemplate = (rowData) => {
         return (
             <div className="flex align-items-center gap-2">
@@ -166,6 +168,7 @@ function GroupOrder(props) {
         );
     };
 
+    //similar to above functions...
     const userBodyTemplate = (rowData) => {
         const user = users.find(obj => obj._id === rowData.user_id);
         return (
@@ -186,11 +189,13 @@ function GroupOrder(props) {
         );
     };
 
+    //helper for statusBodyTemplate()
     const getTextFromValue = (value) => {
         const status = orderStatusList.find(obj => obj.value === value);
         return status ? status.text : null;
     }
 
+    //removes a member from a group
     const removeJoiner = async (joinerId) => {
         axios.delete(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/${id}/remove/${joinerId}`, { withCredentials: true })
         .then(response => {
@@ -203,7 +208,7 @@ function GroupOrder(props) {
         });
     };
     
-
+    //sets text for column that displays status of item
     const statusBodyTemplate = (rowData) => {
         return (
             <div className="flex align-items-center gap-2">
@@ -212,7 +217,6 @@ function GroupOrder(props) {
         );
     };
 
-    //todo edit?
     const managerBodyTemplate = (rowData) => {
         return (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
@@ -224,6 +228,7 @@ function GroupOrder(props) {
         );
     };
 
+    // includes the chart of pending orders if order is not submitted
     const pendingOrdersBody = (orderComplete) => {
         if (!orderComplete) {
             return (
@@ -258,6 +263,7 @@ function GroupOrder(props) {
         }
     }
 
+    //allows for an item request to be approved
     const approveOnClick = (e) => {
         const orderId = e.target.dataset.orderid;
 
@@ -274,6 +280,7 @@ function GroupOrder(props) {
         });
     }
 
+    // cancels an item from an order
     const cancelOnClick = (e) => {
         const orderId = e.target.dataset.orderid;
 
@@ -291,20 +298,24 @@ function GroupOrder(props) {
 
     }
 
+    // allows for inviting of new joiners
     const toggleInviteModal = () => {
         setInviteModal(!inviteModal);
         setInviteModalCancelable(true);
     }
 
+    // allows for searching of joiners in the group order
     const toggleJoinersModal = () => {
         setJoinersModal(!joinersModal);
         setJoinersModalCancelable(true);
     }
 
+    // opens the modal to add an order item
     const toggleCreateOrderModal = () => {
         setCreateOrderModal(!createOrderModal);
         setCreateOrderModalCancelable(true);
     }
+
     const handleDisbandGroupOrder = async () => {
         axios.delete(`http://localhost:8080/api/groupOrders/disband/${id}`, { withCredentials: true })
         .then(response => {
@@ -357,12 +368,15 @@ function GroupOrder(props) {
         setModal(!modal);
       }
     };
+
     const showModal = (title, content, cancelable = true) => {
       setModalTitle(title);
       setModalContent(content);
       setModalCancelable(cancelable);
       setModal(true);
     };
+
+    // handles adding a new item to the grouporder
     const handleSubmit = async () => {
       let formData = new FormData();
       formData.append('name', order.name);
@@ -381,13 +395,12 @@ function GroupOrder(props) {
       });
     };
 
+    //redirects the "close" button on the modal to the same group order to refresh it
     const handleModalClosed = () => {
         window.location.assign(`/admin/groupOrder/${groupOrderId}`);
-      }
-
+    }
 
     return (
-        // <PrimeReactProvider>
         <div className='content'>
             <Row sm='2' md='3' lg='4'>
                 <Col className='text-left' >
@@ -411,7 +424,6 @@ function GroupOrder(props) {
                 </Col>
                 )}
             </Row>
-
             {setButtons(groupOrderStatus)}
             {pendingOrdersBody(groupOrderStatus)}
             <Row>
@@ -576,7 +588,6 @@ function GroupOrder(props) {
                     </ModalFooter>
                 </Modal>
         </div>
-        // </PrimeReactProvider>
     );
 }
 
