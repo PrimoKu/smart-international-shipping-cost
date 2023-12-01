@@ -6,7 +6,7 @@ Code Review - Jiashu Yang: file1, file2, ...
 
 Try your best not to double-review a single file
 
-Code Review - Zixuan: Dashboard.js, Home.js
+Code Review - Zixuan: Dashboard.js, Home.js, OrderListItem.js, ConfirmationListItem.js
 
 Code Review - Jiashu: documentation, GroupOrder.js, Login.js, UserProfile.js
 
