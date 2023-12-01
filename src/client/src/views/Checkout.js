@@ -135,7 +135,9 @@ function Checkout() {
             </Card>
           </Col>
           <Col className='text-right'>
+          <Link to='/admin/dashboard'>
           <Button onClick={handleSubmit} disabled={groupOrder.status > 0}>Submit Order</Button>
+          </Link>
           </Col>
         </Row>
         <Row>

@@ -123,7 +123,7 @@ function GroupOrder(props) {
                     {user?._id && manager?._id && user._id === manager._id && (
                         <Col className='text-left' >
                             {groupOrder.status > 0 ? (
-                               <h3>Order submitted</h3> 
+                                <h3>Order submitted</h3>
                             ) : <Link to={`/admin/checkout/${id}`}>
                                 <Button color='info' size='lg' className='mr-3 mb-3'>
                                     Checkout
@@ -132,18 +132,18 @@ function GroupOrder(props) {
                         </Col>
                     )}
                     {user?._id && manager?._id && user._id === manager._id && (
-                    <Col className='text-left' >
-                          <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleJoinersModal}>
-                              Manage
-                          </Button>
-                    </Col>  
+                        <Col className='text-left' >
+                            <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleJoinersModal}>
+                                Manage
+                            </Button>
+                        </Col>
                     )}
                     {user?._id && manager?._id && user._id === manager._id && (
-                    <Col className='text-left' >
-                          <Button color="danger" onClick={() => setIsDisbandModalOpen(true)}>
-                              Disband Group Order
-                          </Button>
-                    </Col>  
+                        <Col className='text-left' >
+                            <Button color="danger" onClick={() => setIsDisbandModalOpen(true)}>
+                                Disband Group Order
+                            </Button>
+                        </Col>
                     )}
                 </Row>
             );
@@ -170,10 +170,10 @@ function GroupOrder(props) {
 
     //similar to above functions...
     const userBodyTemplate = (rowData) => {
-        const user = users.find(obj => obj._id === rowData.user_id);
+        const joiner = users.find(obj => obj._id === rowData.user_id);
         return (
             <div className="flex align-items-center gap-2">
-                <span>{user.name}</span>
+                <span>{joiner?.name || user.name}</span>
             </div>
         );
     };
@@ -181,11 +181,11 @@ function GroupOrder(props) {
     const joinersBodyTemplate = (rowData) => {
         return (
             <div className="flex align-items-center" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-            <span>{rowData.name}</span>
-            <Button style={{ whiteSpace: 'nowrap' }}  color='danger' onClick={() => removeJoiner(rowData._id)}>
-                Remove
-            </Button>
-        </div>
+                <span>{rowData.name}</span>
+                <Button style={{ whiteSpace: 'nowrap' }} color='danger' onClick={() => removeJoiner(rowData._id)}>
+                    Remove
+                </Button>
+            </div>
         );
     };
 
@@ -198,16 +198,16 @@ function GroupOrder(props) {
     //removes a member from a group
     const removeJoiner = async (joinerId) => {
         axios.delete(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/${id}/remove/${joinerId}`, { withCredentials: true })
-        .then(response => {
-            window.location.reload();
-        })
-        .catch((error) => {
-            if (error.response && error.response.data) {
-                console.log(error.response);
-            }
-        });
+            .then(response => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                if (error.response && error.response.data) {
+                    console.log(error.response);
+                }
+            });
     };
-    
+
     //sets text for column that displays status of item
     const statusBodyTemplate = (rowData) => {
         return (
@@ -271,13 +271,13 @@ function GroupOrder(props) {
         formData.append('status', orderStatusList[1].value);
 
         axios.put(`${process.env.REACT_APP_SERVER_URL}/api/orders/approve/${orderId}`, formData, { withCredentials: true })
-        .then(res => {
-            window.location.reload();
-        })
-        .catch((error) => {
-            if (error.response && error.response.data) {
-            }
-        });
+            .then(res => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                if (error.response && error.response.data) {
+                }
+            });
     }
 
     // cancels an item from an order
@@ -288,13 +288,13 @@ function GroupOrder(props) {
         formData.append('status', orderStatusList[1].value);
 
         axios.put(`${process.env.REACT_APP_SERVER_URL}/api/orders/cancel/${orderId}`, formData, { withCredentials: true })
-        .then(res => {
-            window.location.reload();
-        })
-        .catch((error) => {
-            if (error.response && error.response.data) {
-            }
-        });
+            .then(res => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                if (error.response && error.response.data) {
+                }
+            });
 
     }
 
@@ -318,18 +318,18 @@ function GroupOrder(props) {
 
     const handleDisbandGroupOrder = async () => {
         axios.delete(`http://localhost:8080/api/groupOrders/disband/${id}`, { withCredentials: true })
-        .then(response => {
-            setIsDisbandModalOpen(false);
-            navigate('/');
-        })
-        .catch((error) => {
-            if (error.response && error.response.data) {
-                console.log(error.response);
-            }
-            setIsDisbandModalOpen(false);
-        });
-        
-        
+            .then(response => {
+                setIsDisbandModalOpen(false);
+                navigate('/');
+            })
+            .catch((error) => {
+                if (error.response && error.response.data) {
+                    console.log(error.response);
+                }
+                setIsDisbandModalOpen(false);
+            });
+
+
     };
 
     const handleInvite = async (e) => {
@@ -339,60 +339,60 @@ function GroupOrder(props) {
         formData.append('userEmail', email);
 
         axios.post(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/invite/${groupOrder._id}`, formData, { withCredentials: true })
-        .then(res => {
-            window.location.reload();
-        })
-        .catch((error) => {
-            if (error.response && error.response.data) {
-            }
-        });
+            .then(res => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                if (error.response && error.response.data) {
+                }
+            });
     };
 
 
     const groupOrderId = groupOrder?._id;
     console.log("Groupid", groupOrderId)
     const [order, setOrder] = useState({
-      name: '',
-      price: '',
-      weight: '',
-      groupOrder_id: '',
+        name: '',
+        price: '',
+        weight: '',
+        groupOrder_id: '',
     });
     const [modal, setModal] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
     const [modalContent, setModalContent] = useState("");
     const [modalCancelable, setModalCancelable] = useState(true);
     //const navigate = useNavigate();
-  
+
     const toggleModal = () => {
-      if (modalCancelable) {
-        setModal(!modal);
-      }
+        if (modalCancelable) {
+            setModal(!modal);
+        }
     };
 
     const showModal = (title, content, cancelable = true) => {
-      setModalTitle(title);
-      setModalContent(content);
-      setModalCancelable(cancelable);
-      setModal(true);
+        setModalTitle(title);
+        setModalContent(content);
+        setModalCancelable(cancelable);
+        setModal(true);
     };
 
     // handles adding a new item to the grouporder
     const handleSubmit = async () => {
-      let formData = new FormData();
-      formData.append('name', order.name);
-      formData.append('price', order.price);
-      formData.append('weight', order.weight);
-      formData.append('groupOrder_id', groupOrderId);
-  
-      axios.post('http://localhost:8080/api/orders', formData, { withCredentials: true })
-      .then(response => {
-          showModal("Order", "Create succeeded!", true);
-      })
-      .catch((error) => {
-          if (error.response && error.response.data) {
-              console.log(error.response);
-          }
-      });
+        let formData = new FormData();
+        formData.append('name', order.name);
+        formData.append('price', order.price);
+        formData.append('weight', order.weight);
+        formData.append('groupOrder_id', groupOrderId);
+
+        axios.post('http://localhost:8080/api/orders', formData, { withCredentials: true })
+            .then(response => {
+                showModal("Order", "Create succeeded!", true);
+            })
+            .catch((error) => {
+                if (error.response && error.response.data) {
+                    console.log(error.response);
+                }
+            });
     };
 
     //redirects the "close" button on the modal to the same group order to refresh it
@@ -418,10 +418,10 @@ function GroupOrder(props) {
                     </Col>
                 )}
                 {user?._id && manager?._id && user._id === manager._id && (
-                <Col className='text-left' >
-                    <h5 className='card-category'>Manage</h5>
-                    <h1 tag='h1'>Joiners</h1>
-                </Col>
+                    <Col className='text-left' >
+                        <h5 className='card-category'>Manage</h5>
+                        <h1 tag='h1'>Joiners</h1>
+                    </Col>
                 )}
             </Row>
             {setButtons(groupOrderStatus)}
@@ -483,16 +483,16 @@ function GroupOrder(props) {
                 <Form id="form_invite" onSubmit={handleInvite}>
                     <ModalBody style={{ height: '75px' }}>
                         <div className="text-dark">
-                                <FormGroup>
-                                    <Input
-                                        type="email"
-                                        name="email"
-                                        placeholder="Email"
-                                        required
-                                        style={{ height: '50px', fontSize: '18px', color: 'black' }}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                    />
-                                </FormGroup>
+                            <FormGroup>
+                                <Input
+                                    type="email"
+                                    name="email"
+                                    placeholder="Email"
+                                    required
+                                    style={{ height: '50px', fontSize: '18px', color: 'black' }}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </FormGroup>
                         </div>
                     </ModalBody>
                     <ModalFooter style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
@@ -504,89 +504,86 @@ function GroupOrder(props) {
 
             <Modal isOpen={joinersModal} toggle={toggleJoinersModal}>
                 <ModalHeader toggle={toggleJoinersModal}>
-                    <div className="text-dark mb-0" style={{fontSize: '30px'}}>Joiners</div>
+                    <div className="text-dark mb-0" style={{ fontSize: '30px' }}>Joiners</div>
                 </ModalHeader>
                 <Form id="form_invite">
                     <ModalBody>
                         <DataTable value={users.filter(obj => obj._id !== manager._id)} paginator rows={5} dataKey="_id" filters={joinersFilters} filterDisplay="row" loading={loading} emptyMessage="No joiners found.">
-                            <Column header="Joiner" filterField="name" style={{ minWidth: '12rem' }} body={joinersBodyTemplate} filter filterPlaceholder="Search by joiner"/>
+                            <Column header="Joiner" filterField="name" style={{ minWidth: '12rem' }} body={joinersBodyTemplate} filter filterPlaceholder="Search by joiner" />
                         </DataTable>
                     </ModalBody>
-                    <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+                    <ModalFooter style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
                         <Button className="btn-secondary mx-1" onClick={toggleJoinersModal} style={createOrderModalCancelable ? {} : { display: 'none' }}>Close</Button>
                     </ModalFooter>
                 </Form>
             </Modal>
-    <Modal isOpen={createOrderModal} toggle={toggleCreateOrderModal}>
-    <ModalHeader toggle={toggleCreateOrderModal}>
-        <div className="text-dark mb-0" style={{fontSize: '30px'}}>Create Order</div>
-    </ModalHeader>
-    <ModalBody>
-        {/* <Card className='text-center'>
+            <Modal isOpen={createOrderModal} toggle={toggleCreateOrderModal}>
+                <ModalHeader toggle={toggleCreateOrderModal}>
+                    <div className="text-dark mb-0" style={{ fontSize: '30px' }}>Create Order</div>
+                </ModalHeader>
+                <ModalBody>
+                    {/* <Card className='text-center'>
             <CardBody>
                 <CardTitle tag='h3'>Fill Order Details</CardTitle> */}
-                <Form>
-                    <FormGroup>
-                        <Label for='name'>Order Name</Label>
-                        <Input
-                            type='text'
-                            id='name'
-                            placeholder='Enter order name'
-                            value={order.name}
-                            onChange={(e) => setOrder({ ...order, name: e.target.value })}
-                            style={{ height: '50px', fontSize: '18px', color: 'black' }}
-                        />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for='price'>Price</Label>
-                        <Input
-                            type='number'
-                            id='price'
-                            placeholder='Enter price'
-                            value={order.price}
-                            onChange={(e) => setOrder({ ...order, price: e.target.value })}
-                            style={{ height: '50px', fontSize: '18px', color: 'black' }}
-                        />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for='weight'>Weight</Label>
-                        <Input
-                            type='number'
-                            id='weight'
-                            placeholder='Enter weight'
-                            value={order.weight}
-                            onChange={(e) => setOrder({ ...order, weight: e.target.value })}
-                            style={{ height: '50px', fontSize: '18px', color: 'black' }}
-                        />
-                    </FormGroup>
-                    <Button color='info' size='lg' block onClick={handleSubmit} className="btn-success mx-1">
-                        Submit
-                    </Button>
-                </Form>
-                            {/* </CardBody>
-                        </Card> */}
-                    </ModalBody>
-                    <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
-                        <Button className="btn-secondary mx-1" onClick={toggleCreateOrderModal} style={createOrderModalCancelable ? {} : { display: 'none' }}>Close</Button>
-                    </ModalFooter>
-
+                    <Form>
+                        <FormGroup>
+                            <Label for='name'>Order Name</Label>
+                            <Input
+                                type='text'
+                                id='name'
+                                placeholder='Enter order name'
+                                value={order.name}
+                                onChange={(e) => setOrder({ ...order, name: e.target.value })}
+                                style={{ height: '50px', fontSize: '18px', color: 'black' }}
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for='price'>Price</Label>
+                            <Input
+                                type='number'
+                                id='price'
+                                placeholder='Enter price'
+                                value={order.price}
+                                onChange={(e) => setOrder({ ...order, price: e.target.value })}
+                                style={{ height: '50px', fontSize: '18px', color: 'black' }}
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for='weight'>Weight</Label>
+                            <Input
+                                type='number'
+                                id='weight'
+                                placeholder='Enter weight'
+                                value={order.weight}
+                                onChange={(e) => setOrder({ ...order, weight: e.target.value })}
+                                style={{ height: '50px', fontSize: '18px', color: 'black' }}
+                            />
+                        </FormGroup>
+                        <Button color='info' size='lg' block onClick={handleSubmit} className="btn-success mx-1">
+                            Submit
+                        </Button>
+                    </Form>
                     <Link to='/admin/dashboard'>
                         <Button className="btn-success mx-1">Return to Home</Button>
                     </Link>
+                    <Button className="btn-secondary mx-1" onClick={toggleCreateOrderModal} style={createOrderModalCancelable ? {float: 'right'} : { display: 'none' }}>Close</Button>
+                    {/* </CardBody>
+                        </Card> */}
+                </ModalBody>
+                <ModalFooter style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }} />
+            </Modal>
 
-                </Modal>
-
-                <Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
-                    <ModalHeader toggle={toggleModal}>
-                        <div className="text-dark mb-0" style={{fontSize: '30px'}}>{modalTitle}</div>
-                    </ModalHeader>
-                    <ModalBody>
-                        <p style={{fontSize: '20px'}}>{modalContent}</p>
-                    </ModalBody>
-                    <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
-                        <Button color="secondary" onClick={toggleModal} className="btn-secondary mx-1" style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
-                    </ModalFooter>
-                </Modal>
+            <Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
+                <ModalHeader toggle={toggleModal}>
+                    <div className="text-dark mb-0" style={{ fontSize: '30px' }}>{modalTitle}</div>
+                </ModalHeader>
+                <ModalBody>
+                    <p style={{ fontSize: '20px' }}>{modalContent}</p>
+                </ModalBody>
+                <ModalFooter style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
+                    <Button color="secondary" onClick={toggleModal} className="btn-secondary mx-1" style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
+                </ModalFooter>
+            </Modal>
         </div>
     );
 }
