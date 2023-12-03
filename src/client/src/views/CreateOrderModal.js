@@ -15,8 +15,6 @@ import {
 
 function CreateOrderModal({ isOpen, toggle, groupOrderId }) {
   const location = useLocation();
-  // const groupOrderId = location.state?.groupOrder_id;
-  // console.log(groupOrderId)
   const [order, setOrder] = useState({
     name: '',
     price: '',
@@ -101,15 +99,6 @@ function CreateOrderModal({ isOpen, toggle, groupOrderId }) {
                     onChange={(e) => setOrder({ ...order, weight: e.target.value })}
                   />
                 </FormGroup>
-                {/* <FormGroup>
-                  <Label for='date'>Date</Label>
-                  <Input
-                    type='date'
-                    id='date'
-                    value={order.date}
-                    onChange={(e) => setOrder({ ...order, date: e.target.value })}
-                  />
-                </FormGroup> */}
                 <Button color='info' size='lg' block onClick={handleSubmit}>
                   Submit
                 </Button>
@@ -129,7 +118,6 @@ function CreateOrderModal({ isOpen, toggle, groupOrderId }) {
                 <Button color="secondary" onClick={toggleModal} style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
             </ModalFooter>
           </Modal>
-
           <Link to='/admin/dashboard'>
         <Button>Return to Home</Button>
         </Link>
