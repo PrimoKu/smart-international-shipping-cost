@@ -10,6 +10,7 @@ import CreateOrderModal from './CreateOrderModal';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import {
+    Alert,
     Button,
     Card,
     CardHeader,
@@ -69,7 +70,6 @@ function GroupOrder(props) {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/${id}`, { withCredentials: true })
-                console.log(response.data.GroupOrder);
                 setGroupOrder(response.data.GroupOrder);
                 setOrderStatusList(response.data.OrderStatusList);
                 setManager(response.data.GroupOrder.manager);
@@ -124,7 +124,7 @@ function GroupOrder(props) {
                         <Col className='text-left' >
                             {groupOrder.status > 0 ? (
                                 <h3>Order submitted</h3>
-                            ) : <Link to={`/admin/checkout/${id}`}>
+                            ) : groupOrder.orders.filter(order => order.status === 1).length === 0 ? <Alert style={{fontWeight: 'bolder'}} color='danger' fade={false}>Empty Cart</Alert> : <Link to={`/admin/checkout/${id}`}>
                                 <Button color='info' size='lg' className='mr-3 mb-3'>
                                     Checkout
                                 </Button>
@@ -566,7 +566,7 @@ function GroupOrder(props) {
                     <Link to='/admin/dashboard'>
                         <Button className="btn-success mx-1">Return to Home</Button>
                     </Link>
-                    <Button className="btn-secondary mx-1" onClick={toggleCreateOrderModal} style={createOrderModalCancelable ? {float: 'right'} : { display: 'none' }}>Close</Button>
+                    <Button className="btn-secondary mx-1" onClick={toggleCreateOrderModal} style={createOrderModalCancelable ? { float: 'right' } : { display: 'none' }}>Close</Button>
                     {/* </CardBody>
                         </Card> */}
                 </ModalBody>
