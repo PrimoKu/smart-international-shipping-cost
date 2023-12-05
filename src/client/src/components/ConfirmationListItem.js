@@ -6,7 +6,7 @@ import {
 } from 'reactstrap';
 import { ListGroup } from 'reactstrap';
 
-function ConfirmationListItem({ident, name, lastUpdatedAt, status}) {
+function ConfirmationListItem({ident, name, lastUpdatedAt, status, countryCode}) {
 
   var color = getColor();
   function convertTime(time) {
@@ -42,12 +42,18 @@ function ConfirmationListItem({ident, name, lastUpdatedAt, status}) {
     }
   }
 
+  const image = countryCode === "" || countryCode === undefined || countryCode === null ? 
+    "https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg" : `https://flagsapi.com/${countryCode}/flat/64.png`;
+
+  const height = countryCode === "" || countryCode === undefined || countryCode === null ? "23px" : "32px";
+
+
   return (
   <>
     <button className="item" onClick={() => onClick()}>
       <Row>
         <Col>
-          <img id="order-img" style={{float: "left", height: "20px", verticalAlign: "middle", paddingRight: "5px", display: "flex", justifyContent: "center", alignItems: "center"}}  src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"></img>
+          <img id="order-img" style={{float: "left", height: `${height}`, verticalAlign: "middle", paddingRight: "5px", display: "flex", justifyContent: "center", alignItems: "center", marginRight: "5px"}}  src={image}></img>
           <div className="order-box">
             <div id="order-text">
               <div id="order-name" style={{fontSize: "larger", color: "white", fontFamily:"'Lucida Console', monospace"}}>{name}</div>
