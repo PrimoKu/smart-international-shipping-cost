@@ -6,9 +6,7 @@ import Home from './views/Home.js';
 import AdminLayout from "./layouts/Admin/Admin.js";
 import Login from "./views/Login.js";
 import Register from "./views/Register.js";
-import RoleConfirm from 'views/RoleConfirm.js';
 import Checkout from './views/Checkout.js';
-import ShipperMain from './views/ShipperMain.js';
 
 
 import { AuthProvider } from "contexts/AuthContext.js"; 
@@ -33,12 +31,11 @@ root.render(
     <BackgroundColorWrapper>
       <BrowserRouter>
       <PrimeReactProvider>
-        {/* <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}> */}
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
         <AuthProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/roleconfirm" element={<RoleConfirm />} />
             <Route path="/admin/*" element={<AdminLayout />} />
             <Route path='/' element={<Home />} />
             <Route path='/createorder' element={<CreateOrder />} />
@@ -47,7 +44,7 @@ root.render(
             <Route path='*' element={<Home />} /> {/* Default route */}
           </Routes>
         </AuthProvider>
-        {/* </GoogleOAuthProvider> */}
+        </GoogleOAuthProvider>
         </PrimeReactProvider>
       </BrowserRouter>
     </BackgroundColorWrapper>

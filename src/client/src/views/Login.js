@@ -17,19 +17,24 @@ import {
     Form,
     Input,
     Row,
-    Col,
+    Col, Modal, ModalHeader, ModalBody, ModalFooter,
 } from "reactstrap";
-import { GoogleLogin } from 'react-google-login';
-
+import { GoogleLogin } from '@react-oauth/google';
 
 function Login() {
-    // const [email, setEmail] = useState("yku4@jh.edu");
-    // const [password, setPassword] = useState("ku850728");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("0"); 
+    const [role, setRole] = useState(""); 
     const [loginError, setLoginError] = useState("");
     const [imageSize] = useState(60);
+
+    const [confirmModal, setConfirmModal] = useState(false);
+    const [confirmModalCancelable, setConfirmModalCancelable] = useState(true);
+
+    const toggleConfirmModal = () => {
+        setConfirmModal(!confirmModal);
+        setConfirmModalCancelable(true);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -53,8 +58,41 @@ function Login() {
         });
     };
 
-    const responseGoogle = (response) => {
-        console.log(response);
+    const googleSuccess = async (response) => {
+        // const userObject = jwtDecode(response.credential);
+        try {
+            const res = await axios.post("http://localhost:8080/api/auth/google", {token: response.credential} , { withCredentials: true });
+
+            if (res.data.isNewUser) {
+                toggleConfirmModal();
+            } else {
+                if (role === "1") {  // If the role is "shipper"
+                    window.location.assign('/shipper/dashboard');  // Redirect to shipper's dashboard, this need to be changed
+                } else {
+                    window.location.assign('/admin/dashboard');  // For regular users
+                }
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const confirmRoleRegister = async (e) => {
+        e.preventDefault();
+        
+        let formData = new FormData();
+        formData.append('role', role);
+        formData.append('google_login', true);
+
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/api/users/register`, formData, { withCredentials: true })
+        .then(response => {
+            window.location.assign('/admin/dashboard');
+        })
+        .catch((error) => {
+            if (error.response && error.response.data) {
+                console.log(error);
+            }
+        });
     }
 
     const controls = useAnimation();
@@ -144,11 +182,20 @@ function Login() {
                                         <hr />
                                         <GoogleLogin
                                             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-                                            buttonText="Login with Google"
-                                            onSuccess={responseGoogle}
-                                            onFailure={responseGoogle}
-                                            cookiePolicy={'single_host_origin'}
-                                        />
+                                            render={(renderProps) => (
+                                                <button
+                                                type="button"
+                                                className=""
+                                                onClick={renderProps.onClick}
+                                                disabled={renderProps.disabled}
+                                                >
+                                                Sign in with google
+                                                </button>
+                                            )}
+                                            onSuccess={googleSuccess}
+                                            // onFailure={}
+                                            cookiePolicy="single_host_origin"
+                                            />
                                         <hr />
                                         <div className="text-center">
                                             <h6 className="text-center my-3" style={{ fontSize: '14px' }}>Don't have an account yet?</h6>
@@ -161,6 +208,35 @@ function Login() {
                     </Card>
                 </Col>
             </Row>
+            <Modal isOpen={confirmModal} toggle={toggleConfirmModal}>
+                <ModalHeader toggle={toggleConfirmModal}>
+                    <div className="text-dark mb-0" style={{fontSize: '30px'}}>Welcome New User!</div>
+                </ModalHeader>
+                <Form id="form_invite" onSubmit={confirmRoleRegister}>
+                    <ModalBody style={{height: '75px'}}>
+                        <div className="text-dark">
+                            <FormGroup>
+                                <Input
+                                    type="select"
+                                    className="form-control-user"
+                                    style={{ height: '50px', fontSize: '18px', color: 'black' }}
+                                    value={role}
+                                    onChange={(e) => setRole(e.target.value)}
+                                    required
+                                >
+                                    <option value="" disabled selected>Choose your role</option>
+                                    <option value="0">Normal</option>
+                                    <option value="1">Shipper</option>
+                                </Input>
+                            </FormGroup>
+                        </div>
+                    </ModalBody>
+                    <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+                        <Button type="submit" className="btn-success mx-1">Confirm</Button>
+                        <Button className="btn-secondary mx-1" onClick={toggleConfirmModal} style={confirmModalCancelable ? {} : { display: 'none' }}>Close</Button>
+                    </ModalFooter>
+                </Form>
+            </Modal>
         </div>
     );
 }
