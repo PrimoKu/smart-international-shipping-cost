@@ -11,7 +11,6 @@ import { Column } from 'primereact/column';
 import { Card, CardHeader, CardBody, CardTitle, Row, Col, Button } from "reactstrap";
 import ConfirmationListItem from '../../components/ConfirmationListItem';
 import { ScrollPanel } from 'primereact/scrollpanel';
-//import { GroupOrderStatus } from '../../../../server/enums/GroupOrderStatus.js'
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const Dashboard = () => {
@@ -21,6 +20,42 @@ const Dashboard = () => {
   const [showAccepted, setShowAccepted] = useState(true);
   const [showNotAccepted, setShowNotAccepted] = useState(true);
   const navigate = useNavigate();
+
+  const countryCodes = {
+    "United States": "US",
+    "China": "CN",
+    "Japan": "JP",
+    "Canada": "CA",
+    "United Kingdom": "GB",
+    "Australia": "AU", 
+    "South Korea": "KR", 
+    "France": "FR",
+    "Italy": "IT",
+    "Russia": "RU",
+  };
+
+  const countryCodesReverse = {
+    "US": "United States",
+    "CN": "China",
+    "JP": "Japan",
+    "CA": "Canada",
+    "GB": "United Kingdom",
+    "AU": "Australia", 
+    "KR": "South Korea", 
+    "FR": "France",
+    "IT": "Italy",
+    "RU": "Russia",
+  };
+
+  function getCountryCode(country) {
+    if ((countryCodes[country] === undefined || countryCodes[country] === null) && (countryCodesReverse[country] === undefined || countryCodesReverse[country] === null)) {
+      return "";
+    } else if (countryCodes[country] !== undefined && (countryCodes[country] !== null)) {
+      return countryCodes[country];
+    } else {
+      return country;
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,10 +102,7 @@ const Dashboard = () => {
 
           <Button color="primary" onClick={showNotAcceptedHandler} >Completed</Button>
         </Col>
-
       </Row>
-
-
       {showAll && (
         <Row>
           <Col xs="12">
@@ -84,10 +116,8 @@ const Dashboard = () => {
               </CardHeader>
               <ScrollPanel style={{width: '100%', height: '500px'}}>
               <CardBody  style={{paddingTop: '5px', paddingBottom: '5px'}}>
-                
-                {
-                orders.map(order => (
-                  <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline} /**onClick={() => navigate(`/shipper/group-order-details/${order._id}`)}**//>
+                {orders.map(order => (
+                  <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline} countryCode={getCountryCode(order.country)}/>
                 ))}
               </CardBody>
               </ScrollPanel>
