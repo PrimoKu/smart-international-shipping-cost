@@ -17,8 +17,8 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState([]);
   const [showAll, setShowAll] = useState(true);
-  const [showAccepted, setShowAccepted] = useState(true);
-  const [showNotAccepted, setShowNotAccepted] = useState(true);
+  const [showAccepted, setShowAccepted] = useState(false);
+  const [showNotAccepted, setShowNotAccepted] = useState(false);
   const navigate = useNavigate();
 
   const countryCodes = {
