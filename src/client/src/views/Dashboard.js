@@ -171,7 +171,7 @@ function Dashboard(props) {
           <h5 className='card-category' style={{fontSize: "x-large", color: "white"}}>GO's You Manage</h5>
         </CardHeader>
         <CardBody>
-          <h5 className='card-category' style={{fontSize: "large", color: "darkgrey"}}>No orders here...</h5>
+          <h5 className='card-category' style={{fontSize: "large", color: "darkgrey", marginLeft: "15px"}}>No orders here...</h5>
         </CardBody>
       </Card>);
     } else if (data.length == 0 && !isManager) {
