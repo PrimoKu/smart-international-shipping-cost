@@ -1,8 +1,8 @@
-
 import React, { useState } from "react";
 import axios from 'axios';
 import classNames from "classnames";
 import { useAuth } from "contexts/AuthContext.js";
+import { useNavigate } from 'react-router-dom';
 
 import {
   Button,
@@ -102,6 +102,13 @@ function AdminNavbar(props) {
   const handleModalClosed = () => {
     window.location.assign('/');
   }
+  let navigate = useNavigate();
+  const navigateToProfile = () => {
+    navigate('/admin/user-profile'); // Your profile page route
+  };
+  const navigateToHome = () => {
+    navigate('/home'); // Your profile page route
+  };
   return (
     <>
       <Navbar className={classNames("navbar-absolute", color)} expand="lg">
@@ -129,12 +136,7 @@ function AdminNavbar(props) {
           </NavbarToggler>
           <Collapse navbar isOpen={collapseOpen}>
             <Nav className="ml-auto" navbar>
-              <InputGroup className="search-bar">
-                <Button color="link" onClick={toggleModalSearch}>
-                  <i className="tim-icons icon-zoom-split" />
-                  <span className="d-lg-none d-md-block">Search</span>
-                </Button>
-              </InputGroup>
+
               <UncontrolledDropdown nav>
                 <DropdownToggle
                   caret
@@ -167,15 +169,15 @@ function AdminNavbar(props) {
                     <p className="d-lg-none">Log out</p>
                   </DropdownToggle>
                   <DropdownMenu className="dropdown-navbar" right tag="ul">
-                    <NavLink tag="li">
+                    <NavLink tag="li" onClick={navigateToProfile}>
                       <DropdownItem className="nav-item">Profile</DropdownItem>
                     </NavLink>
-                    <NavLink tag="li">
+                    {/* <NavLink tag="li">
                       <DropdownItem className="nav-item">Settings</DropdownItem>
-                    </NavLink>
+                    </NavLink> */}
                     <DropdownItem divider tag="li" />
                     <NavLink tag="li">
-                      <DropdownItem className="nav-item" onClick={ handleLogout }> Log out </DropdownItem>
+                      <DropdownItem className="nav-item" onClick={ navigateToHome }> Log out </DropdownItem>
                     </NavLink>
                   </DropdownMenu>
                 </UncontrolledDropdown> 
