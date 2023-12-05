@@ -12,23 +12,52 @@ import {
   Table,
   Row,
   Col,
-  UncontrolledDropdown,
   Dropdown,
   DropdownMenu,
   DropdownToggle,
   DropdownItem,
-  ButtonGroup
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  Form,
 } from "reactstrap";
+import CouponListItem from 'components/CouponListItem';
+import { ScrollPanel } from 'primereact/scrollpanel';
 
 function Checkout() {
 
   const { id } = useParams();
   const { user } = useAuth();
+  const coupons = user.coupons || [
+    {
+      couponCode: "ABC123",
+      discountAmount: 20,
+      expirationDate: "2024-07-15"
+    },
+    {
+      couponCode: "XYZ456",
+      discountAmount: 15,
+      expirationDate: "2023-09-28"
+    },
+    {
+      couponCode: "DEF789",
+      discountAmount: 30,
+      expirationDate: "2024-06-10"
+    },
+    {
+      couponCode: "GHI321",
+      discountAmount: 25,
+      expirationDate: "2024-08-20"
+    }
+  ];
   const [groupOrder, setGroupOrder] = useState("");
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [joiners, setJoiners] = useState([]);
   const [joinerFilter, setJoinerFilter] = useState("");
+  const [couponModal, setCouponModal] = useState(false);
+  const [couponModalCancelable, setCouponModalCancelable] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,22 +89,54 @@ function Checkout() {
   const basePrice = filteredOrders.reduce((acc, order) => acc + order.price, 0);
   const totalShipping = filteredOrders.reduce((acc, order) => acc + (order.price + order.weight), 0);
 
+  // opens the modal to add an order item
+  const toggleCouponModal = () => {
+    setCouponModal(!couponModal);
+    setCouponModalCancelable(true);
+  }
+
   return (
     <>
       <div className="content">
-        <Row sm='2' md='3' lg='4'>
+      <CardTitle tag="h1">Checkout</CardTitle>
+        <Row sm='1' md='2'>
           <Col className='text-left'>
-            <CardTitle tag="h1">Checkout</CardTitle>
-          </Col>
-          <Col className='text-left' >
             <Dropdown isOpen={dropdownOpen} toggle={toggle}>
               <DropdownToggle caret>View Orders By Individual</DropdownToggle>
               <DropdownMenu>
                 <DropdownItem onClick={onDropdownClick} value={""}>All Joiners</DropdownItem>
                 <DropdownItem divider />
                 {joiners.map(joiner => <DropdownItem key={joiner._id} onClick={onDropdownClick} value={joiner._id}>{joiner.name}</DropdownItem>)}
+                <DropdownItem key={user._id} onClick={onDropdownClick} value={user._id}>{user.name}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
+          </Col>
+          <Col className='text-right'>
+            <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleCouponModal} disabled={orders.length === 0}>
+              Apply Coupon
+            </Button>
+            <Modal isOpen={couponModal} toggle={toggleCouponModal}>
+              <ModalHeader toggle={toggleCouponModal}>
+                <div className="text-dark mb-0" style={{ fontSize: '30px' }}>Apply Coupon</div>
+              </ModalHeader>
+              <ModalBody>
+                <Card className='card-chart' style={{ minHeight: '300px', maxHeight: '500px' }}>
+                  <CardHeader>
+                    <h5 className='title' style={{ fontSize: "x-large", color: "white" }}>Your Coupons</h5>
+                  </CardHeader>
+                  <ScrollPanel  style={{width: '100%', height: '250px'}}>
+                  <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
+                    {coupons.map(coupon => <CouponListItem key={coupon.couponCode} coupon={coupon}/>)}
+                  </CardBody>
+                  </ScrollPanel>
+                </Card>
+                <Link to='/admin/dashboard'>
+                  <Button className="btn-success mx-1">Return to Home</Button>
+                </Link>
+                <Button className="btn-secondary mx-1" onClick={toggleCouponModal} style={couponModalCancelable ? { float: 'right' } : { display: 'none' }}>Close</Button>
+              </ModalBody>
+              <ModalFooter style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }} />
+            </Modal>
           </Col>
         </Row>
         <Row>
@@ -98,14 +159,15 @@ function Checkout() {
                   <tbody>
                     {filteredOrders.map(order => (
                       <tr key={order._id}>
-                        <td>{joiners.map(joiner => { if(joiner._id == order.user_id) {
-                          return joiner.name
-                        }})}</td>
+                        <td>{user._id == order.user_id ? user.name : joiners.map(joiner => {
+                          if (joiner._id == order.user_id) {
+                            return joiner.name
+                          }
+                        })}</td>
                         <td>{order.name}</td>
-                        {console.log(orders)}
-                        <td>{order.weight}</td>
-                        <td className="text-center">{order.price}</td>
-                        <td className="text-center">{order.price + order.weight}</td>
+                        <td>{order.weight} lbs</td>
+                        <td className="text-center">${order.price}.00</td>
+                        <td className="text-center">${order.price + order.weight}.00</td>
                       </tr>
                     ))}
                   </tbody>
@@ -114,35 +176,38 @@ function Checkout() {
             </Card>
           </Col>
         </Row>
-        <Row sm='2' md='3' lg='4'>
-          <Col className='text-left'>
-          <Link to='/admin/dashboard'>
-            <Button>Return to Home</Button>
-          </Link>
-          </Col>
-          <Col className='text-center'>
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h2">Total Base Price: ${basePrice.toFixed(2)}</CardTitle>
-              </CardHeader>
-            </Card>
-          </Col>
-          <Col className='text-center'>
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h2">Total Shipping: ${totalShipping.toFixed(2)}</CardTitle>
-              </CardHeader>
-            </Card>
-          </Col>
-          <Col className='text-right'>
-          <Button onClick={handleSubmit} disabled={groupOrder.status > 0}>Submit Order</Button>
-          </Col>
-        </Row>
+        <Row xs='1' sm='2' lg='4'>
+  <Col className='text-left'>
+    <Link to='/admin/dashboard'>
+      <Button>Return to Home</Button>
+    </Link>
+  </Col>
+  <Col className='text-center'>
+    <Card>
+      <CardHeader>
+        <CardTitle tag="h2">Total Base Price: ${basePrice.toFixed(2)}</CardTitle>
+      </CardHeader>
+    </Card>
+  </Col>
+  <Col className='text-center'>
+    <Card>
+      <CardHeader>
+        <CardTitle tag="h2">Total Shipping: ${totalShipping.toFixed(2)}</CardTitle>
+      </CardHeader>
+    </Card>
+  </Col>
+  <Col className='text-right'>
+    <Link to='/admin/dashboard'>
+      <Button onClick={handleSubmit} disabled={groupOrder.status > 0}>Submit Order</Button>
+    </Link>
+  </Col>
+</Row>
+
         <Row>
-        <Col className='text-center'>
+          <Col className='text-center'>
             <Card>
               <CardHeader>
-                <CardTitle tag="h2">Total Price: ${(basePrice + totalShipping).toFixed(2)}</CardTitle>
+                <CardTitle tag="h2" style={{color: '#41dc83'}}>Total Price: ${(basePrice + totalShipping).toFixed(2)}</CardTitle>
               </CardHeader>
             </Card>
           </Col>

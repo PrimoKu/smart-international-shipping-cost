@@ -7,11 +7,11 @@ const GroupOrderStatus = {
 };
 
 const GroupOrderStatusList = [
-    { text: 'Pending', name:'pending', value: OrderStatus.PENDING },
-    { text: 'Canceled', name:'canceled', value: OrderStatus.CANCELED },
-    { text: 'Submitted', name:'submitted', value: OrderStatus.SUBMITTED },
-    { text: 'Shipping', name:'shipping', value: OrderStatus.SHIPPING },
-    { text: 'Delivered', name:'delivered', value: OrderStatus.DELIVERED },
+    { text: 'Pending', name:'pending', value: GroupOrderStatus.PENDING },
+    { text: 'Canceled', name:'canceled', value: GroupOrderStatus.CANCELED },
+    { text: 'Submitted', name:'submitted', value: GroupOrderStatus.SUBMITTED },
+    { text: 'Shipping', name:'shipping', value: GroupOrderStatus.SHIPPING },
+    { text: 'Delivered', name:'delivered', value: GroupOrderStatus.DELIVERED },
 ];
 
 module.exports = {

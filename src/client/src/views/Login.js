@@ -36,6 +36,7 @@ function Login() {
         setConfirmModalCancelable(true);
     }
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -97,6 +98,7 @@ function Login() {
 
     const controls = useAnimation();
 
+    // controls the flying airplane animation
     useEffect(() => {
         const sequence = async () => {
             await controls.start({ pathOffset: 0 });

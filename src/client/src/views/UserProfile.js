@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
-import { useAuth } from "contexts/AuthContext.js"; 
+import { useAuth } from "contexts/AuthContext.js";
 
 import {
   Button,
@@ -17,337 +17,421 @@ import {
   Col,
 } from "reactstrap";
 
-function UserProfile() { 
+function UserProfile() {
   const [showUserEdit, setShowUserEdit] = useState(false);
   const [showPaymentEdit, setShowPaymentEdit] = useState(false);
-  
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [address1, setAddress1] = useState("");
-  const [address2, setAddress2] = useState("");
-  const [state, setState] = useState("");
-  const [city, setCity] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  const [showShipmentEdit, setShowShipmentEdit] = useState(false);
+
   const { user } = useAuth();
 
+  const [shipmentDetails, setShipmentDetails] = useState({
+    // _id: '',
+    firstName: user.shipment.first_name,
+    lastName: user.shipment.last_name,
+    address1: user.shipment.address_1,
+    address2: user.shipment.address_2,
+    state: user.shipment.state,
+    city: user.shipment.city,
+    zipCode: user.shipment.zip_code,
+  });
+
+  const [paymentDetails, setPaymentDetails] = useState({
+    // _id: '',
+    cardType: user.payment.card_type,
+    cardNumber: user.payment.card_number,
+    bankName: user.payment.bank_name,
+    billAddress1: user.payment.bill_address_1,
+    billAddress2: user.payment.bill_address_2,
+    state: user.payment.state,
+    city: user.payment.city,
+    zipCode: user.payment.zip_code,
+  });
 
   console.log(user)
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get('http://localhost:8080/api/users/current', { withCredentials: true });
-  //       console.log(response.data);
-            
-  //       if (response.data && response.data.user) { 
-  //         if (response.data.user.shipment && response.data.user.shipment.length > 0) {
-  //           const shipmentData = response.data.user.shipment[0];
-  //           setFirstName(shipmentData.first_name);
-  //           setLastName(shipmentData.last_name);
-  //           setAddress1(shipmentData.address_1);
-  //           setAddress2(shipmentData.address_2 || "");
-  //           setState(shipmentData.state);
-  //           setCity(shipmentData.city);
-  //           setZipCode(shipmentData.zip_code);
-  //         } else {
-  //           // Reset the shipment related state variables if needed
-  //           setFirstName("");
-  //           setLastName("");
-  //           setAddress1("");
-  //           setAddress2("");
-  //           setState("");
-  //           setCity("");
-  //           setZipCode("");
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error("An error occurred while fetching data", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
 
-  const submitShipmentData = async () => {
-    try {
-        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/shipments`, {
-            firstName,
-            lastName,
-            address1,
-            address2,
-            state,
-            city,
-            zipCode
-        }, { withCredentials: true });
-        console.log(response.data);
+  const updateShipment = async () => {
+    let formData = new FormData();
+    // formData.append('id', user.shipment._id);
+    formData.append('firstName', shipmentDetails.firstName);
+    formData.append('lastName', shipmentDetails.lastName);
+    formData.append('address1', shipmentDetails.address1);
+    formData.append('address2', shipmentDetails.address2);
+    formData.append('state', shipmentDetails.state);
+    formData.append('city', shipmentDetails.city);
+    formData.append('zipCode', shipmentDetails.zipCode);
 
-        // // Optionally: Refetch user data after updating to reflect changes
-        // fetchData();
-    } catch (error) {
-        console.error("Error posting shipment data", error);
-    }
+    axios.post('http://localhost:8080/api/shipments/upsert', formData, { withCredentials: true })
+      .then(response => {
+          window.location.reload();
+      })
+      .catch((error) => {
+        if (error.response && error.response.data) {
+          console.log(error.response);
+        }
+      });
+  }
+
+  const updatePayment = async () => {
+    let formData = new FormData();
+    // formData.append('id', user.shipment._id);
+    formData.append('cardType', paymentDetails.cardType);
+    formData.append('cardNumber', paymentDetails.cardNumber);
+    formData.append('bankName', paymentDetails.bankName);
+    formData.append('billAddress1', paymentDetails.billAddress1);
+    formData.append('billAddress2', paymentDetails.billAddress2);
+    formData.append('state', paymentDetails.state);
+    formData.append('city', paymentDetails.city);
+    formData.append('zipCode', paymentDetails.zipCode);
+
+    axios.post('http://localhost:8080/api/payments/upsert', formData, { withCredentials: true })
+      .then(response => {
+          window.location.reload();
+      })
+      .catch((error) => {
+        if (error.response && error.response.data) {
+          console.log(error.response);
+        }
+      });
   };
 
   return (
     <>
       <div className="content">
         <Row>
-          <Col md="8">
+          <Col md="12">
             {/* User Information Card */}
             <Card>
               <CardHeader>
                 <h2 className="title">User Information</h2>
               </CardHeader>
               <CardBody>
-                {!showUserEdit ? (
-                  <div>
-                    <p>User ID: {user?._id ?? "defaultId"}</p>
-                    <p>User Name: {user?.name || 'Loading...'}</p>
-                    <p>Email: {user?.email || 'Loading...'}</p>
-                    {/* The below fields are just placeholders as they were not provided in the given API */}
-                    {/* <p>Password: [Your Password]</p> */}
-                    <p>Legal First Name: {user?.shipment.firstName || 'Loading...'}</p>
-                    <p>Legal Last Name: {user?.shipment.lastName || 'Loading...'}</p>
-                    <p>Legal ID: [Your Legal ID]</p>
-                    <p>Gender: [Your Gender]</p>
-                    <p>Birth Date: [Your Birth Date]</p>
-                  </div>
-                ) : (
                 <Form>
-                    <Row>
-                        {/* User ID & User Name */}
-                        <Col className="pr-md-1" md="6">
-                            <FormGroup>
-                                <Label>User ID</Label>
-                                <Input value={user?._id || ""} placeholder="User ID" type="text" disabled />
-                            </FormGroup>
-                        </Col>
-                        <Col className="pl-md-1" md="6">
-                            <FormGroup>
-                                <Label>User Name</Label>
-                                <Input value={user?.name || ""} placeholder="User Name" type="text" />
-                            </FormGroup>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        {/* Email & Password */}
-                        <Col className="pr-md-1" md="6">
-                            <FormGroup>
-                                <Label>Email</Label>
-                                <Input value={user?.email || ""} placeholder="Email" type="email" />
-                            </FormGroup>
-                        </Col>
-                        <Col className="pl-md-1" md="6">
-                            <FormGroup>
-                                <Label>Password</Label>
-                                <Input placeholder="Password" type="password" />
-                            </FormGroup>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        {/* Legal Name & Legal ID */}
-                        <Col className="pr-md-1" md="6">
-                            <FormGroup>
-                                <Label>Legal First Name</Label>
-                                <Input placeholder="Legal First Name" type="text" />
-                            </FormGroup>
-                        </Col>
-                        <Col className="pr-md-1" md="6">
-                            <FormGroup>
-                                <Label>Legal Last Name</Label>
-                                <Input placeholder="Legal Last Name" type="text" />
-                            </FormGroup>
-                        </Col>
-                        <Col className="pl-md-1" md="6">
-                            <FormGroup>
-                                <Label>Legal ID</Label>
-                                <Input placeholder="Legal ID" type="text" />
-                            </FormGroup>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        {/* Gender & Birth Date */}
-                        <Col className="pr-md-1" md="6">
-                            <FormGroup>
-                                <Label>Gender</Label>
-                                <Input type="select">
-                                    <option>Male</option>
-                                    <option>Female</option>
-                                    <option>Other</option>
-                                </Input>
-                            </FormGroup>
-                        </Col>
-                        <Col className="pl-md-1" md="6">
-                            <FormGroup>
-                                <Label>Birth Date</Label>
-                                <Input type="date" />
-                            </FormGroup>
-                        </Col>
-                    </Row>
+                  <Row>
+                    {/* User ID */}
+                    <Col className="pr-md-1" md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>User ID</Label>
+                        {!showUserEdit ? (
+                          <p className="form-control-static">{user?._id ?? "defaultId"}</p>
+                        ) : (
+                          <Input value={user?._id || ""} placeholder="User ID" type="text" disabled />
+                        )}
+                      </FormGroup>
+                    </Col>
+                    {/* User Name */}
+                    <Col className="pl-md-1" md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>User Name</Label>
+                        {!showUserEdit ? (
+                          <p className="form-control-static">{user?.name || 'Loading...'}</p>
+                        ) : (
+                          <Input value={user?.name || ""} placeholder="User Name" type="text" />
+                        )}
+                      </FormGroup>
+                    </Col>
+                    {/* Email */}
+                    <Col className="pr-md-1" md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Email</Label>
+                        {!showUserEdit ? (
+                          <p className="form-control-static">{user?.email || 'Loading...'}</p>
+                        ) : (
+                          <Input value={user?.email || ""} placeholder="Email" type="email" />
+                        )}
+                      </FormGroup>
+                    </Col>
+                  </Row>
                 </Form>
-                )}
               </CardBody>
-              <CardFooter>
-                <Button onClick={() => setShowUserEdit(!showUserEdit)}>
-                  {showUserEdit ? "Cancel" : "Edit"}
-                </Button>
-                {showUserEdit && <Button onClick={() => setShowUserEdit(false)}>Confirm</Button>}
-              </CardFooter>
             </Card>
 
-            {/* Payment Information Card */}
+            <Card>
+              <CardHeader>
+                <h2 className="title">Shipment Information</h2>
+              </CardHeader>
+              <CardBody>
+                <Form>
+                  <Row>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>First Name</Label>
+                        {!showShipmentEdit ? (
+                          <p className="form-control-static">{user?.shipment.first_name || '[None]'}</p>
+                        ) : (
+                          <Input
+                            type='text'
+                            id='firstName'
+                            placeholder='First Name'
+                            value={shipmentDetails.firstName}
+                            onChange={(e) => setShipmentDetails({ ...shipmentDetails, firstName: e.target.value })}
+                          />
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Last Name</Label>
+                        {!showShipmentEdit ? (
+                          <p className="form-control-static">{user?.shipment.last_name || '[None]'}</p>
+                        ) : (
+                          <Input
+                            type='text'
+                            id='lastName'
+                            placeholder='Last Name'
+                            value={shipmentDetails.lastName}
+                            onChange={(e) => setShipmentDetails({ ...shipmentDetails, lastName: e.target.value })}
+                          />
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Address 1</Label>
+                        {!showShipmentEdit ? (
+                          <p className="form-control-static">{user?.shipment.address_1 || '[None]'}</p>
+                        ) : (
+                          <Input
+                            type='text'
+                            id='address1'
+                            placeholder='Address 1'
+                            value={shipmentDetails.address1}
+                            onChange={(e) => setShipmentDetails({ ...shipmentDetails, address1: e.target.value })}
+                          />
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Address 2</Label>
+                        {!showShipmentEdit ? (
+                          <p className="form-control-static">{user?.shipment.address_2 || '[None]'}</p>
+                        ) : (
+                          <Input
+                            type='text'
+                            id='address2'
+                            placeholder='Address 2'
+                            value={shipmentDetails.address2}
+                            onChange={(e) => setShipmentDetails({ ...shipmentDetails, address2: e.target.value })}
+                          />
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>City</Label>
+                        {!showShipmentEdit ? (
+                          <p className="form-control-static">{user?.shipment.city || '[None]'}</p>
+                        ) : (
+                          <Input
+                            type='text'
+                            id='city'
+                            placeholder='City'
+                            value={shipmentDetails.city}
+                            onChange={(e) => setShipmentDetails({ ...shipmentDetails, city: e.target.value })}
+                          />
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>State</Label>
+                        {!showShipmentEdit ? (
+                          <p className="form-control-static">{user?.shipment.state || '[None]'}</p>
+                        ) : (
+                          <Input
+                            type='text'
+                            id='state'
+                            placeholder='Address 2'
+                            value={shipmentDetails.state}
+                            onChange={(e) => setShipmentDetails({ ...shipmentDetails, state: e.target.value })}
+                          />
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Zip Code</Label>
+                        {!showShipmentEdit ? (
+                          <p className="form-control-static">{user?.shipment.zip_code || '[None]'}</p>
+                        ) : (
+                          <Input
+                            type='text'
+                            id='zipCode'
+                            placeholder='Zip Code'
+                            value={shipmentDetails.state}
+                            onChange={(e) => setShipmentDetails({ ...shipmentDetails, zipCode: e.target.value })}
+                          />
+                        )}
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </Form>
+              </CardBody>
+              <CardFooter>
+                <Button onClick={() => setShowShipmentEdit(!showShipmentEdit)}>
+                  {showShipmentEdit ? "Cancel" : "Edit"}
+                </Button>
+                {showShipmentEdit && <Button onClick={() => {
+                    updateShipment(); 
+                    setShowShipmentEdit(false);
+                }}>Confirm</Button>}
+              </CardFooter>
+            </Card>
+        
+
             <Card>
               <CardHeader>
                 <h2 className="title">Payment Information</h2>
               </CardHeader>
               <CardBody>
-                {!showPaymentEdit ? (
-                  <div>
-                    {/* Displaying the shipment data if it exists */}
-                    <p>Credit Card Type: [Your Credit Card Type]</p>
-                    <p>Bank Name: [Your Bank Name]</p>
-                    <p>Bank Account Number: [Your Bank Account Number]</p>
-                    <p>Payment: [Your Payment]</p>
-                    <p>Address 1: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].address_1 : 'Loading...'}</p>
-                    <p>Address 2: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].address_2 : 'Loading...'}</p>
-                    <p>State: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].state : 'Loading...'}</p>
-                    <p>City: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].city : 'Loading...'}</p>
-                    <p>Zip Code: {user?.shipment && user?.shipment.length > 0 ? user?.shipment[0].zip_code : 'Loading...'}</p>
-                  </div>
-                ) : (
-                  <Form onSubmit={(e) => {
-                      e.preventDefault();
-                      const shipmentData = {
-                        address1, address2, state, city, zipCode
-                      };
-                      submitShipmentData(shipmentData);
-                    }}>
-                    <Row>
-                      <Col className="pr-md-1" md="5">
-                        <FormGroup>
-                          <Label>Credit Card Type</Label>
-                          {/* <Input
-                            value={creditCardType}
-                            onChange={e => setCreditCardType(e.target.value)}
-                            placeholder="Credit Card Type"
-                            type="text"
-                          /> */}
-                        </FormGroup>
-                      </Col>
-                      <Col className="px-md-1" md="3">
-                        <FormGroup>
-                          <Label>Bank Name</Label>
-                          {/* <Input
-                            value={bankName}
-                            onChange={e => setBankName(e.target.value)}
-                            placeholder="Bank Name"
-                            type="text"
-                          /> */}
-                        </FormGroup>
-                      </Col>
-                      <Col className="pl-md-1" md="4">
-                        <FormGroup>
-                          <Label>Bank Account Number</Label>
-                          {/* <Input
-                            value={bankAccountNumber}
-                            onChange={e => setBankAccountNumber(e.target.value)}
-                            placeholder="Bank Account Number"
-                            type="text"
-                          /> */}
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col className="pr-md-1" md="5">
-                        <FormGroup>
-                          <Label>Payment</Label>
-                          {/* <Input
-                            value={payment}
-                            onChange={e => setPayment(e.target.value)}
-                            placeholder="Payment"
-                            type="text"
-                          /> */}
-                        </FormGroup>
-                      </Col>
-                      <Col className="px-md-1" md="7">
-                        <FormGroup>
-                          <Label>Address 1</Label>
+                <Form>
+                  <Row>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Card Type</Label>
+                        {!showPaymentEdit ? (
+                          <p className="form-control-static">{user?.payment.card_type || '[None]'}</p>
+                        ) : (
                           <Input
-                            value={address1}
-                            onChange={e => setAddress1(e.target.value)}
-                            placeholder="Address 1"
-                            type="text"
+                            type='text'
+                            id='cardType'
+                            placeholder='Card Type'
+                            value={paymentDetails.cardType}
+                            onChange={(e) => setPaymentDetails({ ...paymentDetails, cardType: e.target.value })}
                           />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col className="pr-md-1" md="5">
-                        <FormGroup>
-                          <Label>Address 2</Label>
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Card Number</Label>
+                        {!showPaymentEdit ? (
+                          <p className="form-control-static">{user?.payment.card_number || '[None]'}</p>
+                        ) : (
                           <Input
-                            value={address2}
-                            onChange={e => setAddress2(e.target.value)}
-                            placeholder="Address 2 (optional)"
-                            type="text"
+                            type='text'
+                            id='cardNumber'
+                            placeholder='Card Number'
+                            value={paymentDetails.cardNumber}
+                            onChange={(e) => setPaymentDetails({ ...paymentDetails, cardNumber: e.target.value })}
                           />
-                        </FormGroup>
-                      </Col>
-                      <Col className="px-md-1" md="3">
-                        <FormGroup>
-                          <Label>State</Label>
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Bank Name</Label>
+                        {!showPaymentEdit ? (
+                          <p className="form-control-static">{user?.payment.bank_name || '[None]'}</p>
+                        ) : (
                           <Input
-                            value={state}
-                            onChange={e => setState(e.target.value)}
-                            placeholder="State"
-                            type="text"
+                            type='text'
+                            id='bankName'
+                            placeholder='Bank Name'
+                            value={paymentDetails.bankName}
+                            onChange={(e) => setPaymentDetails({ ...paymentDetails, bankName: e.target.value })}
                           />
-                        </FormGroup>
-                      </Col>
-                      <Col className="pl-md-1" md="4">
-                        <FormGroup>
-                          <Label>City</Label>
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Billing Address 1</Label>
+                        {!showPaymentEdit ? (
+                          <p className="form-control-static">{user?.payment.bill_address_1 || '[None]'}</p>
+                        ) : (
                           <Input
-                            value={city}
-                            onChange={e => setCity(e.target.value)}
-                            placeholder="City"
-                            type="text"
+                            type='text'
+                            id='billAddress1'
+                            placeholder='Billing Address 1'
+                            value={paymentDetails.billAddress1}
+                            onChange={(e) => setPaymentDetails({ ...paymentDetails, billAddress1: e.target.value })}
                           />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col className="pr-md-1" md="5">
-                        <FormGroup>
-                          <Label>Zip Code</Label>
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Billing Address 2</Label>
+                        {!showPaymentEdit ? (
+                          <p className="form-control-static">{user?.payment.bill_address_2 || '[None]'}</p>
+                        ) : (
                           <Input
-                            value={zipCode}
-                            onChange={e => setZipCode(e.target.value)}
-                            placeholder="Zip Code"
-                            type="text"
+                            type='text'
+                            id='billAddress2'
+                            placeholder='Billing Address 2'
+                            value={paymentDetails.billAddress2}
+                            onChange={(e) => setPaymentDetails({ ...paymentDetails, billAddress2: e.target.value })}
                           />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                  </Form>
-                )}
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>State</Label>
+                        {!showPaymentEdit ? (
+                          <p className="form-control-static">{user?.payment.state || '[None]'}</p>
+                        ) : (
+                          <Input
+                            type='text'
+                            id='state'
+                            placeholder='State'
+                            value={paymentDetails.state}
+                            onChange={(e) => setPaymentDetails({ ...paymentDetails, state: e.target.value })}
+                          />
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>City</Label>
+                        {!showPaymentEdit ? (
+                          <p className="form-control-static">{user?.payment.city || '[None]'}</p>
+                        ) : (
+                          <Input
+                            type='text'
+                            id='city'
+                            placeholder='City'
+                            value={paymentDetails.city}
+                            onChange={(e) => setPaymentDetails({ ...paymentDetails, city: e.target.value })}
+                          />
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Zip Code</Label>
+                        {!showPaymentEdit ? (
+                          <p className="form-control-static">{user?.payment.zip_code || '[None]'}</p>
+                        ) : (
+                          <Input
+                            type='text'
+                            id='zipCode'
+                            placeholder='Zip Code'
+                            value={paymentDetails.zipCode}
+                            onChange={(e) => setPaymentDetails({ ...paymentDetails, zipCode: e.target.value })}
+                          />
+                        )}
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </Form>
               </CardBody>
               <CardFooter>
                 <Button onClick={() => setShowPaymentEdit(!showPaymentEdit)}>
                   {showPaymentEdit ? "Cancel" : "Edit"}
                 </Button>
                 {showPaymentEdit && <Button onClick={() => {
-                    submitShipmentData(); 
+                    updatePayment();
                     setShowPaymentEdit(false);
                 }}>Confirm</Button>}
               </CardFooter>
-              </Card>
-              </Col>
-              </Row>
-              </div>
-              </>
-              );
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </>
+  );
 }
 
 export default UserProfile;

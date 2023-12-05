@@ -89,10 +89,10 @@ exports.GroupOrderCreateValidator = [
         .not()
         .isEmpty()
         .withMessage('Group Order country can not be empty!')
-        .bail()
-        .isLength({min: 3})
-        .withMessage('Group Order country requires a minimum 3 of characters!')
         .bail(),
+        // .isLength({min: 3})
+        // .withMessage('Group Order country requires a minimum 3 of characters!')
+        // .bail(),
    (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty())

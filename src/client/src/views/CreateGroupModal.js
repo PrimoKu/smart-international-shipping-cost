@@ -15,8 +15,6 @@ import {
 
 function CreateGroupModal({ isOpen, toggle, groupOrderId }) {
   const location = useLocation();
-  // const groupOrderId = location.state?.groupOrder_id;
-  // console.log(groupOrderId)
   const [group, setGroup] = useState({
     name: '',
     country: '',
@@ -54,7 +52,6 @@ function CreateGroupModal({ isOpen, toggle, groupOrderId }) {
         }
     });
   };
-
     
   const handleModalClosed = () => {
     window.location.assign(`/admin/groupOrder/${groupOrderId}`);
@@ -87,7 +84,6 @@ function CreateGroupModal({ isOpen, toggle, groupOrderId }) {
                     onChange={(e) => setGroup({ ...group, country: e.target.value })}
                   />
                 </FormGroup>
-          
                 <Button color='info' size='lg' block onClick={handleSubmit}>
                   Submit
                 </Button>
