@@ -82,8 +82,6 @@ function Dashboard(props) {
     formData.append('country', group.country);
     // formData.append('deadline', group.deadline);
 
-    console.log(formData);
-
 
     axios.post('http://localhost:8080/api/groupOrders/', formData, { withCredentials: true })
       .then(response => {
@@ -105,7 +103,6 @@ function Dashboard(props) {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/`, { withCredentials: true });
-        console.log(response);
         const fetchedData = (response.data.managed).concat((response.data.joined));
         setData(fetchedData);
         var sortedManaged = response.data.managed;
@@ -122,8 +119,6 @@ function Dashboard(props) {
         setJoined(sortedJoined);
 
         setSubmitted(fetchedData.filter(order => order.status !== 0))
-        console.log("HERE")
-        console.log(submitted);
 
       } catch (error) {
         console.error("An error occurred while fetching data", error);
@@ -145,13 +140,26 @@ function Dashboard(props) {
     "Russia": "RU",
   };
 
+  const countryCodesReverse = {
+    "US": "United States",
+    "CN": "China",
+    "JP": "Japan",
+    "CA": "Canada",
+    "GB": "United Kingdom",
+    "AU": "Australia", 
+    "KR": "South Korea", 
+    "FR": "France",
+    "IT": "Italy",
+    "RU": "Russia",
+  };
+
   function getCountryCode(country) {
-    console.log(country);
-    if (countryCodes[country] === undefined || countryCodes[country] === null) {
+    if ((countryCodes[country] === undefined || countryCodes[country] === null) && (countryCodesReverse[country] === undefined || countryCodesReverse[country] === null)) {
       return "";
-    } else {
-      console.log("HERE")
+    } else if (countryCodes[country] !== undefined && (countryCodes[country] !== null)) {
       return countryCodes[country];
+    } else {
+      return country;
     }
   }
 
@@ -160,20 +168,20 @@ function Dashboard(props) {
       return (
       <Card className='card-chart' style={{minHeight: '300px', maxHeight: '500px'}}>
         <CardHeader>
-          <h5 className='title' style={{fontSize: "x-large", color: "white"}}>GO's You Manage</h5>
+          <h5 className='card-category' style={{fontSize: "x-large", color: "white"}}>GO's You Manage</h5>
         </CardHeader>
         <CardBody>
-          <h5 className='title' style={{fontSize: "large", color: "darkgrey"}}>No orders here...</h5>
+          <h5 className='card-category' style={{fontSize: "large", color: "darkgrey"}}>No orders here...</h5>
         </CardBody>
       </Card>);
     } else if (data.length == 0 && !isManager) {
       return (
         <Card className='card-chart' style={{ minHeight: '300px', maxHeight: '300px', overflowY: 'scroll', overflow: 'auto' }}>
           <CardHeader>
-            <h5 className='card-category' style={{ fontSize: "x-large", color: "white", fontFamily: "'Lucida Console', monospace" }}>GO's You Joined</h5>
+            <h5 className='card-category' style={{ fontSize: "x-large", color: "white" }}>GO's You Joined</h5>
           </CardHeader>
           <CardBody>
-            <h5 className='card-category' style={{ fontSize: "large", color: "darkgrey", fontFamily: "'Lucida Console', monospace", marginLeft: "15px" }}>No orders here...</h5>
+            <h5 className='card-category' style={{ fontSize: "large", color: "darkgrey", marginLeft: "15px" }}>No orders here...</h5>
           </CardBody>
         </Card>);
     } else {
@@ -181,12 +189,12 @@ function Dashboard(props) {
         return (
         <Card className='card-chart' style={{minHeight: '300px', maxHeight:'300px'}}>
           <CardHeader>
-            <h5 className='title' style={{marginBottom: '0px', height: '40px', fontSize: "x-large", color: "white"}}>GO's You Manage</h5>
+            <h5 className='card-category' style={{marginBottom: '0px', height: '40px', fontSize: "x-large", color: "white"}}>GO's You Manage</h5>
           </CardHeader>
           <ScrollPanel style={{width: '100%', height: '250px'}}> 
             <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
-              {
-              managed.map(order => (
+              {console.log(managed)}
+              {managed.map(order => (
                 <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline} countryCode={getCountryCode(order.country)}/>
               ))}
             </CardBody>
@@ -196,7 +204,7 @@ function Dashboard(props) {
         return (
           <Card className='card-chart' style={{ minHeight: '300px' }}>
             <CardHeader>
-              <h5 className='card-category' style={{ fontSize: "x-large", color: "white", fontFamily: "'Lucida Console', monospace" }}>GO's You Joined</h5>
+              <h5 className='card-category' style={{ fontSize: "x-large", color: "white"}}>GO's You Joined</h5>
             </CardHeader>
             <ScrollPanel style={{width: '100%', height: '250px'}}> 
               <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
@@ -221,7 +229,7 @@ function Dashboard(props) {
       return (
         <Card className='card-chart' style={{minHeight: '400px', maxHeight:'400px'}}>
           <CardHeader>
-            <h5 className='title' style={{marginBottom: '0px', height: '40px', fontSize: "x-large", color: "white"}}>Submitted Orders</h5>
+            <h5 className='card-category' style={{marginBottom: '0px', height: '40px', fontSize: "x-large", color: "white"}}>Submitted Orders</h5>
           </CardHeader>
           <ScrollPanel style={{width: '100%', height: '350px'}}> 
             <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
@@ -236,10 +244,10 @@ function Dashboard(props) {
     return (
       <Card className='card-chart'>
         <CardHeader>
-          <h5 className='title' style={{marginBottom: '0px', height: '40px', fontSize: "x-large", color: "white"}}>Submitted Orders</h5>
+          <h5 className='card-category' style={{marginBottom: '0px', height: '40px', fontSize: "x-large", color: "white"}}>Submitted Orders</h5>
         </CardHeader>
         <CardBody>
-          <h5 className='title' style={{fontSize: "large", color: "darkgrey", marginLeft: "15px"}}>No orders here...</h5>
+          <h5 className='card-category' style={{fontSize: "large", color: "darkgrey", marginLeft: "15px"}}>No orders here...</h5>
         </CardBody>
       </Card>
     );
@@ -253,7 +261,6 @@ function Dashboard(props) {
             <Button color='info' size='lg' className='mr-3 mb-3' style={{ width: '30%' }} onClick={toggleCreateGroupOrderModal}>
               Add New Group Order
             </Button>
-            {/* <CreateGroupModal isOpen={isCreateOrderModalOpen} toggle={toggleCreateOrderModal} /> */}
           </Col>
         </Row>
         <Row>
