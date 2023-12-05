@@ -1,4 +1,4 @@
-const {check, validationResult} = require('express-validator');
+const { check, validationResult, oneOf, body } = require('express-validator');
 const GroupOrder = require("../models/GroupOrder");
 const { USStates } = require("../enums/USStatesEnums");
 
@@ -258,47 +258,103 @@ exports.PaymentCreateValidator = [
     },
 ];
 
+// exports.UserRegisterValidator = [
+//     check('name')
+//         .escape()
+//         .not()
+//         .isEmpty()
+//         .withMessage('Name can not be empty!')
+//         .bail()
+//         .isLength({ min: 5 })
+//         .withMessage('Name requires a minimum of 5 characters!')
+//         .bail()
+//         .matches(/^[A-Za-z0-9_. -]+$/)
+//         .withMessage('Name should only contain letters, numbers, hyphens, and underscores')
+//         .bail(),
+//     check('email')
+//         .escape()
+//         .not()
+//         .isEmpty()
+//         .withMessage('Email can not be empty!')
+//         .bail()
+//         .isLength({ min: 3 })
+//         .withMessage('Email requires a minimum of 3 characters!')
+//         .bail()
+//         .isEmail()
+//         .withMessage('Invalid email!')
+//         .bail()
+//         .normalizeEmail({ gmail_remove_dots: false }),
+//     oneOf([
+//         check('googleId').not().isEmpty(),
+//         check('password')
+//             .not()
+//             .isEmpty()
+//             .withMessage('Password can not be empty!')
+//             .matches(/^(?=.*\d)(?=.*[a-z])[0-9a-zA-Z@]{8,}$/, "i")
+//             .withMessage('Password must be at least 8 characters long and contain at least one letter and one number')
+//     ], 'Either googleId or password must be provided.'),
+//     (req, res, next) => {
+//         const errors = validationResult(req);
+//         if (!errors.isEmpty()) {
+//             return res.status(400).json({ errors: errors.array() });
+//         }
+//         next();
+//     },
+// ];
+
 exports.UserRegisterValidator = [
-    check('name')
-        .escape()
-        .not()
-        .isEmpty()
-        .withMessage('Name can not be empty!')
-        .bail()
-        .isLength({min: 5})
-        .withMessage('Name requires a minimum 5 of characters!')
-        .bail()
-        .matches(/^[A-Za-z0-9_. -]+$/)
-        .withMessage('Name should only contains letters, numbers, hyphens and underscores')
-        .bail(),
-    check('email')
-        .escape()
-        .not()
-        .isEmpty()
-        .withMessage('Email can not be empty!')
-        .bail()
-        .isLength({min: 3})
-        .withMessage('Email requires a minimum 5 of characters!')
-        .bail()
-        .isEmail()
-        .withMessage('Invalid email!')
-        .bail()
-        .normalizeEmail({ gmail_remove_dots: false }),
-    check('password')
-        .not()
-        .isEmpty()
-        .withMessage('Password can not be empty!')
-        .bail()
-        .matches(/^(?=.*\d)(?=.*[a-z])[0-9a-zA-Z@]{8,}$/, "i")
-        .withMessage('Password must be at least 8 characters long and contain at least one letter and one number')
-        .bail(),
-   (req, res, next) => {
+    // Custom validator to check google_login
+    body().custom((data) => {
+        if (data.google_login) {
+            // If google_login is true, skip other validations
+            return true;
+        } else {
+            // Apply validations for name and email if google_login is false
+            check('name')
+                .escape()
+                .not()
+                .isEmpty()
+                .withMessage('Name cannot be empty!')
+                .bail()
+                .isLength({ min: 5 })
+                .withMessage('Name requires a minimum of 5 characters!')
+                .bail()
+                .matches(/^[A-Za-z0-9_. -]+$/)
+                .withMessage('Name should only contain letters, numbers, hyphens, and underscores')
+                .bail();
+
+            check('email')
+                .escape()
+                .not()
+                .isEmpty()
+                .withMessage('Email cannot be empty!')
+                .bail()
+                .isLength({ min: 3 })
+                .withMessage('Email requires a minimum of 3 characters!')
+                .bail()
+                .isEmail()
+                .withMessage('Invalid email!')
+                .bail()
+                .normalizeEmail({ gmail_remove_dots: false });
+
+            check('password')
+                .not()
+                .isEmpty()
+                .withMessage('Password cannot be empty!')
+                .matches(/^(?=.*\d)(?=.*[a-z])[0-9a-zA-Z@]{8,}$/, "i")
+                .withMessage('Password must be at least 8 characters long and contain at least one letter and one number');
+        }
+        return true;
+    }),
+    (req, res, next) => {
         const errors = validationResult(req);
-        if (!errors.isEmpty())
-            return res.status(400).json({errors: errors.array()});
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         next();
     },
 ];
+
 
 exports.UserUpdateValidator = [
     check('name')
