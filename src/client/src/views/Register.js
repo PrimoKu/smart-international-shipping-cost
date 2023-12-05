@@ -71,6 +71,7 @@ function Register() {
         formData.append('email', email);
         formData.append('password', password);
         formData.append('role', role);
+        formData.append('google_login', false);
 
         axios.post(`${process.env.REACT_APP_SERVER_URL}/api/users/register`, formData, { withCredentials: true })
         .then(response => {
