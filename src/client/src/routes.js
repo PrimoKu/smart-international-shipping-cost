@@ -8,6 +8,7 @@ import Notifications from 'views/Notifications.js';
 import TableList from 'views/TableList.js';
 import Typography from 'views/Typography.js';
 import UserProfile from 'views/UserProfile.js';
+import Coupon from 'views/Coupon.js';
 import Home from 'views/Home.js';
 import GroupOrder from 'views/GroupOrder';
 import ShipperMain from 'views/ShipperMain.js';
@@ -57,6 +58,15 @@ var routes = [
     type: 0,
     icon: 'tim-icons icon-single-02',
     component: <UserProfile />,
+    layout: '/admin',
+    hidden: false,
+  },
+  {
+    path: '/coupon',
+    name: 'Coupon',
+    type: 0,
+    icon: 'tim-icons icon-gift-2',
+    component: <Coupon/>,
     layout: '/admin',
     hidden: false,
   },
