@@ -69,10 +69,10 @@ class GroupOrderController {
     //@route POST /api/groupOrders
     //@access private
     createGroupOrder = asyncHandler(async (req, res) => {
-        const { name, country } = req.body;
+        const { name, country, deadline } = req.body;
         let groupOrder;
         try {
-            groupOrder = await groupOrderRepo.create(req.user.id, name, country);
+            groupOrder = await groupOrderRepo.create(req.user.id, name, country, deadline);
             if (groupOrder) {
                 return res.status(201).json(groupOrder);
             } else {
