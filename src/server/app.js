@@ -65,6 +65,8 @@ app.use('/api/payments', require("./routes/PaymentRoutes"));
 app.use('/api/orders', require("./routes/OrderRoutes"));
 app.use('/api/groupOrders', require("./routes/GroupOrderRoutes"));
 app.use('/api/notifications', require("./routes/NotificationRoutes"));
+app.use('/api/coupons', require("./routes/CouponRoutes"));
+app.use('/api/userCoupons', require("./routes/UserCouponRoutes"));
 
 app.post('/api/auth/google', async (req, res) => {
   console.log(req.body.token);
