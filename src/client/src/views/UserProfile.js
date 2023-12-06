@@ -26,25 +26,25 @@ function UserProfile() {
 
   const [shipmentDetails, setShipmentDetails] = useState({
     // _id: '',
-    firstName: user.shipment.first_name,
-    lastName: user.shipment.last_name,
-    address1: user.shipment.address_1,
-    address2: user.shipment.address_2,
-    state: user.shipment.state,
-    city: user.shipment.city,
-    zipCode: user.shipment.zip_code,
+    firstName: user.shipment?.first_name,
+    lastName: user.shipment?.last_name,
+    address1: user.shipment?.address_1,
+    address2: user.shipment?.address_2,
+    state: user.shipment?.state,
+    city: user.shipment?.city,
+    zipCode: user.shipment?.zip_code,
   });
 
   const [paymentDetails, setPaymentDetails] = useState({
     // _id: '',
-    cardType: user.payment.card_type,
-    cardNumber: user.payment.card_number,
-    bankName: user.payment.bank_name,
-    billAddress1: user.payment.bill_address_1,
-    billAddress2: user.payment.bill_address_2,
-    state: user.payment.state,
-    city: user.payment.city,
-    zipCode: user.payment.zip_code,
+    cardType: user.payment?.card_type,
+    cardNumber: user.payment?.card_number,
+    bankName: user.payment?.bank_name,
+    billAddress1: user.payment?.bill_address_1,
+    billAddress2: user.payment?.bill_address_2,
+    state: user.payment?.state,
+    city: user.payment?.city,
+    zipCode: user.payment?.zip_code,
   });
 
   console.log(user)
@@ -52,13 +52,13 @@ function UserProfile() {
   const updateShipment = async () => {
     let formData = new FormData();
     // formData.append('id', user.shipment._id);
-    formData.append('firstName', shipmentDetails.firstName);
-    formData.append('lastName', shipmentDetails.lastName);
-    formData.append('address1', shipmentDetails.address1);
-    formData.append('address2', shipmentDetails.address2);
-    formData.append('state', shipmentDetails.state);
-    formData.append('city', shipmentDetails.city);
-    formData.append('zipCode', shipmentDetails.zipCode);
+    formData.append('firstName', shipmentDetails?.firstName);
+    formData.append('lastName', shipmentDetails?.lastName);
+    formData.append('address1', shipmentDetails?.address1);
+    formData.append('address2', shipmentDetails?.address2);
+    formData.append('state', shipmentDetails?.state);
+    formData.append('city', shipmentDetails?.city);
+    formData.append('zipCode', shipmentDetails?.zipCode);
 
     axios.post('http://localhost:8080/api/shipments/upsert', formData, { withCredentials: true })
       .then(response => {
@@ -74,14 +74,14 @@ function UserProfile() {
   const updatePayment = async () => {
     let formData = new FormData();
     // formData.append('id', user.shipment._id);
-    formData.append('cardType', paymentDetails.cardType);
-    formData.append('cardNumber', paymentDetails.cardNumber);
-    formData.append('bankName', paymentDetails.bankName);
-    formData.append('billAddress1', paymentDetails.billAddress1);
-    formData.append('billAddress2', paymentDetails.billAddress2);
-    formData.append('state', paymentDetails.state);
-    formData.append('city', paymentDetails.city);
-    formData.append('zipCode', paymentDetails.zipCode);
+    formData.append('cardType', paymentDetails?.cardType);
+    formData.append('cardNumber', paymentDetails?.cardNumber);
+    formData.append('bankName', paymentDetails?.bankName);
+    formData.append('billAddress1', paymentDetails?.billAddress1);
+    formData.append('billAddress2', paymentDetails?.billAddress2);
+    formData.append('state', paymentDetails?.state);
+    formData.append('city', paymentDetails?.city);
+    formData.append('zipCode', paymentDetails?.zipCode);
 
     axios.post('http://localhost:8080/api/payments/upsert', formData, { withCredentials: true })
       .then(response => {
@@ -109,18 +109,7 @@ function UserProfile() {
                   <Row>
                     {/* User ID */}
                     <Col className="pr-md-1" md="4">
-                      <FormGroup>
-                        <Label style={{ fontWeight: 'bold', color: 'white' }}>User ID</Label>
-                        {!showUserEdit ? (
-                          <p className="form-control-static">{user?._id ?? "defaultId"}</p>
-                        ) : (
-                          <Input value={user?._id || ""} placeholder="User ID" type="text" disabled />
-                        )}
-                      </FormGroup>
-                    </Col>
-                    {/* User Name */}
-                    <Col className="pl-md-1" md="4">
-                      <FormGroup>
+                    <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>User Name</Label>
                         {!showUserEdit ? (
                           <p className="form-control-static">{user?.name || 'Loading...'}</p>
@@ -129,8 +118,8 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                    {/* Email */}
-                    <Col className="pr-md-1" md="4">
+                    {/* User Name */}
+                    <Col className="pl-md-1" md="4">
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>Email</Label>
                         {!showUserEdit ? (
@@ -140,6 +129,17 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
+                    {/* Email
+                    <Col className="pr-md-1" md="4">
+                      <FormGroup>
+                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Email</Label>
+                        {!showUserEdit ? (
+                          <p className="form-control-static">{user?.email || 'Loading...'}</p>
+                        ) : (
+                          <Input value={user?.email || ""} placeholder="Email" type="email" />
+                        )}
+                      </FormGroup>
+                    </Col> */}
                   </Row>
                 </Form>
               </CardBody>
@@ -156,7 +156,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>First Name</Label>
                         {!showShipmentEdit ? (
-                          <p className="form-control-static">{user?.shipment.first_name || '[None]'}</p>
+                          <p className="form-control-static">{user?.shipment?.first_name || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
@@ -172,7 +172,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>Last Name</Label>
                         {!showShipmentEdit ? (
-                          <p className="form-control-static">{user?.shipment.last_name || '[None]'}</p>
+                          <p className="form-control-static">{user?.shipment?.last_name || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
@@ -188,7 +188,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>Address 1</Label>
                         {!showShipmentEdit ? (
-                          <p className="form-control-static">{user?.shipment.address_1 || '[None]'}</p>
+                          <p className="form-control-static">{user?.shipment?.address_1 || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
@@ -204,7 +204,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>Address 2</Label>
                         {!showShipmentEdit ? (
-                          <p className="form-control-static">{user?.shipment.address_2 || '[None]'}</p>
+                          <p className="form-control-static">{user?.shipment?.address_2 || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
@@ -220,7 +220,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>City</Label>
                         {!showShipmentEdit ? (
-                          <p className="form-control-static">{user?.shipment.city || '[None]'}</p>
+                          <p className="form-control-static">{user?.shipment?.city || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
@@ -236,7 +236,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>State</Label>
                         {!showShipmentEdit ? (
-                          <p className="form-control-static">{user?.shipment.state || '[None]'}</p>
+                          <p className="form-control-static">{user?.shipment?.state || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
@@ -252,7 +252,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>Zip Code</Label>
                         {!showShipmentEdit ? (
-                          <p className="form-control-static">{user?.shipment.zip_code || '[None]'}</p>
+                          <p className="form-control-static">{user?.shipment?.zip_code || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
@@ -290,7 +290,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>Card Type</Label>
                         {!showPaymentEdit ? (
-                          <p className="form-control-static">{user?.payment.card_type || '[None]'}</p>
+                          <p className="form-control-static">{user?.payment?.card_type || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
@@ -306,7 +306,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>Card Number</Label>
                         {!showPaymentEdit ? (
-                          <p className="form-control-static">{user?.payment.card_number || '[None]'}</p>
+                          <p className="form-control-static">{user?.payment?.card_number || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
@@ -322,7 +322,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>Bank Name</Label>
                         {!showPaymentEdit ? (
-                          <p className="form-control-static">{user?.payment.bank_name || '[None]'}</p>
+                          <p className="form-control-static">{user?.payment?.bank_name || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
@@ -338,7 +338,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>Billing Address 1</Label>
                         {!showPaymentEdit ? (
-                          <p className="form-control-static">{user?.payment.bill_address_1 || '[None]'}</p>
+                          <p className="form-control-static">{user?.payment?.bill_address_1 || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
@@ -354,7 +354,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>Billing Address 2</Label>
                         {!showPaymentEdit ? (
-                          <p className="form-control-static">{user?.payment.bill_address_2 || '[None]'}</p>
+                          <p className="form-control-static">{user?.payment?.bill_address_2 || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
@@ -370,7 +370,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>State</Label>
                         {!showPaymentEdit ? (
-                          <p className="form-control-static">{user?.payment.state || '[None]'}</p>
+                          <p className="form-control-static">{user?.payment?.state || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
@@ -386,7 +386,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>City</Label>
                         {!showPaymentEdit ? (
-                          <p className="form-control-static">{user?.payment.city || '[None]'}</p>
+                          <p className="form-control-static">{user?.payment?.city || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
@@ -402,7 +402,7 @@ function UserProfile() {
                       <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>Zip Code</Label>
                         {!showPaymentEdit ? (
-                          <p className="form-control-static">{user?.payment.zip_code || '[None]'}</p>
+                          <p className="form-control-static">{user?.payment?.zip_code || '[None]'}</p>
                         ) : (
                           <Input
                             type='text'
