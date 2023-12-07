@@ -30,6 +30,7 @@ function GroupOrder(props) {
     const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
+
     // Table of Orders in GroupOrder
     const [groupOrder, setGroupOrder] = useState("");
     const [pendingOrders, setPendingOrders] = useState([]);

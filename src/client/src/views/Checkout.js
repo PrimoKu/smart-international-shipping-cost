@@ -29,30 +29,9 @@ function Checkout() {
 
   const { id } = useParams();
   const { user } = useAuth();
-  const coupons = user.coupons || [
-    {
-      couponCode: "ABC123",
-      discountAmount: 20,
-      expirationDate: "2024-07-15"
-    },
-    {
-      couponCode: "XYZ456",
-      discountAmount: 15,
-      expirationDate: "2023-09-28"
-    },
-    {
-      couponCode: "DEF789",
-      discountAmount: 30,
-      expirationDate: "2024-06-10"
-    },
-    {
-      couponCode: "GHI321",
-      discountAmount: 25,
-      expirationDate: "2024-08-20"
-    }
-  ];
   const [groupOrder, setGroupOrder] = useState("");
   const [orders, setOrders] = useState([]);
+  const [coupons, setCoupons] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [joiners, setJoiners] = useState([]);
   const [joinerFilter, setJoinerFilter] = useState("");
@@ -72,6 +51,19 @@ function Checkout() {
       }
     }
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/coupons`, { withCredentials: true });
+        setCoupons(response.data);
+        console.log(response);
+      } catch (error) {
+        console.error("Error with fetching coupon");
+      }
+    }
+    fetchCoupons();
   }, []);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -112,7 +104,7 @@ function Checkout() {
             </Dropdown>
           </Col>
           <Col className='text-right'>
-            <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleCouponModal} disabled={orders.length === 0}>
+            <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleCouponModal} disabled={orders.length === 0 || coupons.length == 0}>
               Apply Coupon
             </Button>
             <Modal isOpen={couponModal} toggle={toggleCouponModal}>
@@ -126,7 +118,7 @@ function Checkout() {
                   </CardHeader>
                   <ScrollPanel  style={{width: '100%', height: '250px'}}>
                   <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
-                    {coupons.map(coupon => <CouponListItem key={coupon.couponCode} coupon={coupon}/>)}
+                    {coupons.map(coupon => <CouponListItem key={coupon.code} coupon={coupon}/>)}
                   </CardBody>
                   </ScrollPanel>
                 </Card>

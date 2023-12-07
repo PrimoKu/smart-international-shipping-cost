@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 function CouponListItem({coupon}) {
 
-  var expirationDate = new Date(coupon.expirationDate);
+  var expirationDate = new Date(coupon.expire_date);
 
   function convertTime(time) {
     var date = new Date(time).toLocaleDateString();
@@ -45,7 +45,7 @@ function CouponListItem({coupon}) {
               <div className="order-box">
                 <img id="order-img" style={{float: "left", height: `${height}`, width: `${width}`, verticalAlign: "middle", marginRight: "10px"}}  src={image}></img>
                 <div id="order-text" style={{float: "left"}}>
-                  <div id="order-name" style={{fontSize: "larger", color: "white", fontFamily:"'Lucida Console', monospace"}}>Code: {coupon.couponCode}</div>
+                  <div id="order-name" style={{fontSize: "larger", color: "white", fontFamily:"'Lucida Console', monospace"}}>Code: {coupon.code}</div>
                   <div id="order-time" style={{fontSize: "small", color: `${getTimeDiffDays() > 0 ? "gray" : "red"}`, fontFamily:"'Lucida Console', monospace"}}>Expiration Date: {convertTime(expirationDate)}</div>
                 </div>
               </div>
@@ -53,7 +53,7 @@ function CouponListItem({coupon}) {
           </Row>
         </Col>
         <Col>
-          <div style={{fontSize: "large", float: "right", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", marginRight: "10px", color:`${'#41dc83'}`}}>${coupon.discountAmount}.00</div>
+          <div style={{fontSize: "large", float: "right", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", marginRight: "10px", color:`${'#41dc83'}`}}>${coupon.discount}.00</div>
         </Col>
       </Row>
     </button>
