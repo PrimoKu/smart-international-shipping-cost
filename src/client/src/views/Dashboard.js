@@ -56,7 +56,7 @@ function Dashboard(props) {
 
   const [group, setGroup] = useState({
     name: '',
-    country: '',
+    country: 'US',
     // deadline: '',
   });
   const [modal, setModal] = useState(false);
