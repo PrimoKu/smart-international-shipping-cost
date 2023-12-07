@@ -544,6 +544,109 @@
     }
     ```
 
+
+## Coupons APIs
+### Endpoints: Add a new coupon
+- **HTTP Method**: `POST`
+- **Path**: `/coupons`
+- **Description**: Add a new coupon to the system
+- **Parameters**:
+  - **Request Body**:
+    - `name`: Required name of the coupon.
+    - `code`: Required code of the coupon.
+    - `discount`: Required discount of the coupon.
+    - `expire_date`: Required expiration date of the coupon.
+- **Response**:
+  - **Status Codes**:
+    - `200 OK`: Successfully add a new coupon.
+    - `500 INTERNAL SERVER ERROR`: An error occurred on the server.
+  - **Response Body**:
+    ```json
+    {
+        "name": "<coupon.name>",
+        "code": "<coupon.code>",
+        "discount": "<coupon.discount>",
+        "expire_date": "<coupon.expire_date>",
+        "createdAt": "<coupon.createdAt>",
+        "updatedAt": "<coupon.updatedAt>"
+    }
+    ```
+
+### Endpoints: List all coupons
+- **HTTP Method**: `GET`
+- **Path**: `/coupons`
+- **Description**: Retrieve a list of all coupons in the system.
+- **Parameters**: None
+- **Response**:
+  - **Status Codes**:
+    - `200 OK`: Successfully retrieve all the coupons.
+    - `500 INTERNAL SERVER ERROR`: An error occurred on the server.
+  - **Response Body**:
+    ```json
+    [
+      {
+        "name": "<coupon.name>",
+        "code": "<coupon.code>",
+        "discount": "<coupon.discount>",
+        "expire_date": "<coupon.expire_date>",
+        "createdAt": "<coupon.createdAt>",
+        "updatedAt": "<coupon.updatedAt>"
+      },
+      ...
+    ]
+    ```
+
+
+### Endpoints: User add Coupons
+- **HTTP Method**: `POST`
+- **Path**: `/userCoupons`
+- **Description**: Add coupons to user.
+- **Parameters**:
+  - **Request Body**:
+    - `coupon_code`: Required code of the coupon.
+- **Response**:
+  - **Status Codes**:
+    - `200 OK`: Successfully add the coupon to user.
+    - `500 INTERNAL SERVER ERROR`: An error occurred on the server.
+  - **Response Body**:
+    ```json
+    {
+        "_id": "<userCoupon._id>",
+        "user_id": "<user._id>",
+        "coupon_id": "<coupon._id>",
+        "createdAt": "<userCoupon.createdAt>",
+        "updatedAt": "<userCoupon.updatedAt>"
+    }
+    ```
+
+### Endpoints: Get all Coupons by User
+- **HTTP Method**: `GET`
+- **Path**: `/userCoupons`
+- **Description**: Retrieves all coupons' information for the current user.
+- **Parameters**: None
+- **Response**:
+  - **Status Codes**:
+    - `200 OK`: Successfully add the coupon to user.
+    - `500 INTERNAL SERVER ERROR`: An error occurred on the server.
+  - **Response Body**:
+    ```json
+    {
+      "user_id": "<user._id>",
+      "coupons": [
+        {
+          "_id": "<coupon._id>",
+          "name": "<coupon.name>",
+          "code": "<coupon.code>",
+          "discount": "<coupon.discount>",
+          "expire_date": "<coupon.expire_date>",
+          "createdAt": "<coupon.createdAt>",
+          "updatedAt": "<coupon.updatedAt>"
+        },
+        ...
+      ]
+    }
+    ```
+
 ## Errors
 - `400 BAD REQUEST`: Invalid request body.
 - `403 FORBIDDEN`: User has no permission to access the resource.

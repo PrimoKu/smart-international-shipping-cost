@@ -189,6 +189,15 @@ REACT_APP_SERVER_URL=http://localhost:8080
 REACT_APP_GOOGLE_CLIENT_ID=110092633486-irit56mv86as5eloift7coseep94icn6.apps.googleusercontent.com
 REACT_APP_GOOGLE_CLIENT_SECRET=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
 
+Iteration 5:
+1) Google login is complete
+2) Tested and refactored our code
+3) Code review complete
+4) Added additional polish...
+5) Added coupons, and a cool game to earn coupons
+6) Giving a big thank you to the professors and TA's of this course!
+7) Currently deploying latest version on render
+
 Here is the link to our deployed app (may be behind the GitHub repo since I cannot directly use it due to organization permissions):
 https://render.bluejays.space/
 

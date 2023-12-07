@@ -11,8 +11,8 @@ const getAllWithUser = async (user_id) => {
     return groupOrders;
 }
 
-const create = async (manager_id, name, country) => {
-    const groupOrders = await GroupOrder.create({ manager_id, name, country, user_ids:[manager_id] });
+const create = async (manager_id, name, country, deadline) => {
+    const groupOrders = await GroupOrder.create({ manager_id, name, country, deadline, user_ids:[manager_id] });
     return groupOrders;
 }
 

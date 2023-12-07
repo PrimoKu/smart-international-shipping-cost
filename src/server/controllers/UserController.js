@@ -13,9 +13,8 @@ class UserController {
     registerUser = asyncHandler(async (req, res) => {
         let name, email, password, role, google_login;
         google_login = req.body.google_login;
-        console.log(google_login);
 
-        if(google_login) {
+        if(google_login === "true") {
             const sessionData = req.session.oauthRegistrationData;
             name = sessionData.name;
             email = sessionData.email;
@@ -26,15 +25,13 @@ class UserController {
             password = req.body.password;
             role = req.body.role;
         }
-        // console.log({name, email, role, password, google_login});
         try {
             let user = await User.findOne({ email });
             if(user) {
                 res.status(400).json({ email_msg: "Email is already taken!" });
             }
-            const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
 
-            if(google_login) {
+            if(google_login  === "true") {
                 user = await User.create({
                     name,
                     email,
@@ -42,6 +39,7 @@ class UserController {
                     google_login,
                 });
             } else {
+                const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
                 user = await User.create({
                     name,
                     email,

@@ -124,7 +124,9 @@ function GroupOrder(props) {
                         <Col className='text-left' >
                             {groupOrder.status > 0 ? (
                                 <h3>Order submitted</h3>
-                            ) : groupOrder.orders.filter(order => order.status === 1).length === 0 ? <Alert style={{fontWeight: 'bolder'}} color='danger' fade={false}>Empty Cart</Alert> : <Link to={`/admin/checkout/${id}`}>
+                            ) : groupOrder.orders.filter(order => order.status === 1).length === 0 ? <Button color='info' size='lg' className='mr-3 mb-3' disabled>
+                                Checkout
+                            </Button> : <Link to={`/admin/checkout/${id}`}>
                                 <Button color='info' size='lg' className='mr-3 mb-3'>
                                     Checkout
                                 </Button>
