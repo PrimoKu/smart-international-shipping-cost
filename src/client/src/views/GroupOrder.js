@@ -136,14 +136,14 @@ function GroupOrder(props) {
                     )}
                     {user?._id && manager?._id && user._id === manager._id && (
                         <Col className='text-left' >
-                            <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleJoinersModal}>
+                            <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleJoinersModal} disabled={groupOrder.status > 0}>
                                 Manage
                             </Button>
                         </Col>
                     )}
                     {user?._id && manager?._id && user._id === manager._id && (
                         <Col className='text-left' >
-                            <Button color="danger" onClick={() => setIsDisbandModalOpen(true)}>
+                            <Button color="danger" onClick={() => setIsDisbandModalOpen(true)} disabled={groupOrder.status > 0}>
                                 Disband Group Order
                             </Button>
                         </Col>
@@ -360,27 +360,27 @@ function GroupOrder(props) {
         weight: '',
         groupOrder_id: '',
     });
-    const [modal, setModal] = useState(false);
-    const [modalTitle, setModalTitle] = useState("");
-    const [modalContent, setModalContent] = useState("");
-    const [modalCancelable, setModalCancelable] = useState(true);
+    //const [modal, setModal] = useState(false);
+    //const [modalTitle, setModalTitle] = useState("");
+    //const [modalContent, setModalContent] = useState("");
+    //const [modalCancelable, setModalCancelable] = useState(true);
     //const navigate = useNavigate();
 
-    const toggleModal = () => {
-        if (modalCancelable) {
-            setModal(!modal);
-        }
-    };
+    //const toggleModal = () => {
+        //if (modalCancelable) {
+            //setModal(!modal);
+        //}
+    //};
 
-    const showModal = (title, content, cancelable = true) => {
+    /*const showModal = (title, content, cancelable = true) => {
         setModalTitle(title);
         setModalContent(content);
         setModalCancelable(cancelable);
         setModal(true);
-    };
+    };*/
 
     // handles adding a new item to the grouporder
-    const handleSubmit = async () => {
+    /*const handleSubmit = async () => {
         let formData = new FormData();
         formData.append('name', order.name);
         formData.append('price', order.price);
@@ -396,12 +396,31 @@ function GroupOrder(props) {
                     console.log(error.response);
                 }
             });
-    };
+    };*/
+    const handleSubmit = async () => {
+      let formData = new FormData();
+      formData.append('name', order.name);
+      formData.append('price', order.price);
+      formData.append('weight', order.weight);
+      formData.append('groupOrder_id', groupOrderId);
+
+      try {
+        await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/orders`, formData, { withCredentials: true });
+        // Handle successful creation, e.g., close the modal or show a success message
+        setCreateOrderModal(false); // This closes the modal
+        // Optionally, refresh or update the list of orders
+        window.location.reload();
+      } catch (error) {
+          console.log(error.response ? error.response : error);
+        // Handle the error, e.g., show an error message
+      }
+  };
+
 
     //redirects the "close" button on the modal to the same group order to refresh it
-    const handleModalClosed = () => {
+    /*const handleModalClosed = () => {
         window.location.assign(`/admin/groupOrder/${groupOrderId}`);
-    }
+    }*/
 
     return (
         <div className='content'>
@@ -566,9 +585,9 @@ function GroupOrder(props) {
                             Submit
                         </Button>
                     </Form>
-                    <Link to='/admin/dashboard'>
+                    {/*<Link to='/admin/dashboard'>
                         <Button className="btn-success mx-1">Return to Home</Button>
-                    </Link>
+                    </Link>*/}
                     <Button className="btn-secondary mx-1" onClick={toggleCreateOrderModal} style={createOrderModalCancelable ? { float: 'right' } : { display: 'none' }}>Close</Button>
                     {/* </CardBody>
                         </Card> */}
@@ -576,7 +595,7 @@ function GroupOrder(props) {
                 <ModalFooter style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }} />
             </Modal>
 
-            <Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
+            {/*<Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
                 <ModalHeader toggle={toggleModal}>
                     <div className="text-dark mb-0" style={{ fontSize: '30px' }}>{modalTitle}</div>
                 </ModalHeader>
@@ -586,7 +605,7 @@ function GroupOrder(props) {
                 <ModalFooter style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
                     <Button color="secondary" onClick={toggleModal} className="btn-secondary mx-1" style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
                 </ModalFooter>
-            </Modal>
+            </Modal> */}
 
             <Modal isOpen={isDisbandModalOpen} toggle={() => setIsDisbandModalOpen(false)}>
                 <ModalHeader toggle={() => setIsDisbandModalOpen(false)}>Confirm Disband</ModalHeader>

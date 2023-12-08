@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import {
   Card,
@@ -10,7 +10,6 @@ import {
   Label,
   Input,
   Button,
-  Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
 
 function CreateOrder() {
@@ -20,26 +19,10 @@ function CreateOrder() {
     name: '',
     price: '',
     weight: '',
-    groupOrder_id: '',
-    // date: '',
+    groupOrder_id: groupOrderId, // Set this directly since it's coming from location state
   });
-  const [modal, setModal] = useState(false);
-  const [modalTitle, setModalTitle] = useState("");
-  const [modalContent, setModalContent] = useState("");
-  const [modalCancelable, setModalCancelable] = useState(true);
   const navigate = useNavigate();
 
-  const toggleModal = () => {
-    if (modalCancelable) {
-      setModal(!modal);
-    }
-  };
-  const showModal = (title, content, cancelable = true) => {
-    setModalTitle(title);
-    setModalContent(content);
-    setModalCancelable(cancelable);
-    setModal(true);
-  };
   const handleSubmit = async () => {
     let formData = new FormData();
     formData.append('name', order.name);
@@ -47,21 +30,15 @@ function CreateOrder() {
     formData.append('weight', order.weight);
     formData.append('groupOrder_id', groupOrderId);
 
-    axios.post(`${process.env.REACT_APP_SERVER_URL}/api/orders`, formData, { withCredentials: true })
-    .then(response => {
-        showModal("Order", "Create succeeded!", true);
-    })
-    .catch((error) => {
-        if (error.response && error.response.data) {
-            console.log(error.response);
-        }
-    });
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/orders`, formData, { withCredentials: true });
+      // If the request is successful, navigate to the admin dashboard or group order page.
+      navigate(`/admin/groupOrder/${groupOrderId}`); // This replaces window.location.assign
+    } catch (error) {
+      console.log(error.response ? error.response : error);
+    }
   };
 
-    
-  const handleModalClosed = () => {
-    window.location.assign(`/admin/groupOrder/${groupOrderId}`);
-  }
   return (
     <div className='wrapper'>
       <div className='main-panel'>
@@ -109,23 +86,10 @@ function CreateOrder() {
               </Form>
             </CardBody>
           </Card>
-          <Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
-            <ModalHeader toggle={toggleModal}>
-                <div className="text-dark mb-0" style={{fontSize: '30px'}}>{modalTitle}</div>
-            </ModalHeader>
-            <ModalBody style={{height: '75px'}}><p style={{fontSize: '20px'}}>{modalContent}</p></ModalBody>
-            <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
-                <Button color="secondary" onClick={toggleModal} style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
-            </ModalFooter>
-          </Modal>
         </div>
-        <Link to='/admin/dashboard'>
-        <Button>Return to Home</Button>
-        </Link>
       </div>
     </div>
   );
 }
 
 export default CreateOrder;
-
