@@ -23,6 +23,36 @@ import {
   ModalHeader, ModalBody, ModalFooter,
 } from "reactstrap";
 
+function linkify(inputText) {
+  const regex = /(\bhttps?:\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
+  const url = inputText.match(regex);
+
+  if (url) {
+    // If a URL is found, return a button element with the message text
+    return <button style={buttonStyle} onClick={() => window.open(url[0], "_blank")}>{inputText.replace(url[0], '')}</button>;
+  } else {
+    // If no URL, return the text as is
+    return inputText;
+  }
+}
+
+// Style for the button
+const buttonStyle = {
+  padding: '5px 10px',
+  backgroundColor: '#007bff', // Example blue background
+  color: 'white',
+  border: 'none',
+  borderRadius: '5px',
+  fontSize: '0.8rem', // Smaller font size
+  cursor: 'pointer',
+  textDecoration: 'none',
+  display: 'block',
+  width: '100%',
+  textAlign: 'left',
+};
+
+
+
 function AdminNavbar(props) {
   const { user, setUser, isAuthenticated, setIsAuthenticated } = useAuth();
   const [collapseOpen, setcollapseOpen] = React.useState(false);
@@ -149,14 +179,18 @@ function AdminNavbar(props) {
                   <p className="d-lg-none">Notifications</p>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-navbar" right tag="ul">
-                    {notifications.map((notifications, index) => (
+                  {notifications.length === 0 ? (
+                    <DropdownItem className="nav-item">No notifications</DropdownItem>
+                  ) : (
+                    notifications.map((notification, index) => (
                       <NavLink tag="li" key={index}>
                         <DropdownItem className="nav-item">
-                          {notifications.message} {/* Display the message from notifications */}
+                          {linkify(notification.message)}
                         </DropdownItem>
                       </NavLink>
-                    ))}
-                  </DropdownMenu>
+                    ))
+                  )}
+                </DropdownMenu>
               </UncontrolledDropdown>
               {isAuthenticated 
                 ? 
