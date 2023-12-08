@@ -24,6 +24,59 @@ function UserProfile() {
 
   const { user } = useAuth();
 
+  const USStates = {
+    ALABAMA: 'AL',
+    ALASKA: 'AK',
+    ARIZONA: 'AZ',
+    ARKANSAS: 'AR',
+    CALIFORNIA: 'CA',
+    COLORADO: 'CO',
+    CONNECTICUT: 'CT',
+    DELAWARE: 'DE',
+    FLORIDA: 'FL',
+    GEORGIA: 'GA',
+    HAWAII: 'HI',
+    IDAHO: 'ID',
+    ILLINOIS: 'IL',
+    INDIANA: 'IN',
+    IOWA: 'IA',
+    KANSAS: 'KS',
+    KENTUCKY: 'KY',
+    LOUISIANA: 'LA',
+    MAINE: 'ME',
+    MARYLAND: 'MD',
+    MASSACHUSETTS: 'MA',
+    MICHIGAN: 'MI',
+    MINNESOTA: 'MN',
+    MISSISSIPPI: 'MS',
+    MISSOURI: 'MO',
+    MONTANA: 'MT',
+    NEBRASKA: 'NE',
+    NEVADA: 'NV',
+    NEW_HAMPSHIRE: 'NH',
+    NEW_JERSEY: 'NJ',
+    NEW_MEXICO: 'NM',
+    NEW_YORK: 'NY',
+    NORTH_CAROLINA: 'NC',
+    NORTH_DAKOTA: 'ND',
+    OHIO: 'OH',
+    OKLAHOMA: 'OK',
+    OREGON: 'OR',
+    PENNSYLVANIA: 'PA',
+    RHODE_ISLAND: 'RI',
+    SOUTH_CAROLINA: 'SC',
+    SOUTH_DAKOTA: 'SD',
+    TENNESSEE: 'TN',
+    TEXAS: 'TX',
+    UTAH: 'UT',
+    VERMONT: 'VT',
+    VIRGINIA: 'VA',
+    WASHINGTON: 'WA',
+    WEST_VIRGINIA: 'WV',
+    WISCONSIN: 'WI',
+    WYOMING: 'WY'
+};
+
   const [shipmentDetails, setShipmentDetails] = useState({
     // _id: '',
     firstName: user.shipment?.first_name,
@@ -129,17 +182,6 @@ function UserProfile() {
                         )}
                       </FormGroup>
                     </Col>
-                    {/* Email
-                    <Col className="pr-md-1" md="4">
-                      <FormGroup>
-                        <Label style={{ fontWeight: 'bold', color: 'white' }}>Email</Label>
-                        {!showUserEdit ? (
-                          <p className="form-control-static">{user?.email || 'Loading...'}</p>
-                        ) : (
-                          <Input value={user?.email || ""} placeholder="Email" type="email" />
-                        )}
-                      </FormGroup>
-                    </Col> */}
                   </Row>
                 </Form>
               </CardBody>
@@ -233,18 +275,20 @@ function UserProfile() {
                       </FormGroup>
                     </Col>
                     <Col md="4">
-                      <FormGroup>
+                    <FormGroup>
                         <Label style={{ fontWeight: 'bold', color: 'white' }}>State</Label>
                         {!showShipmentEdit ? (
                           <p className="form-control-static">{user?.shipment?.state || '[None]'}</p>
                         ) : (
-                          <Input
-                            type='text'
-                            id='state'
-                            placeholder='Address 2'
+                          <select
                             value={shipmentDetails.state}
                             onChange={(e) => setShipmentDetails({ ...shipmentDetails, state: e.target.value })}
-                          />
+                            className="form-control"
+                          >
+                            {Object.entries(USStates).map(([stateName, stateAbbreviation]) => (
+                              <option key={stateAbbreviation} value={stateAbbreviation}>{stateName}</option>
+                            ))}
+                          </select>
                         )}
                       </FormGroup>
                     </Col>
@@ -367,20 +411,22 @@ function UserProfile() {
                       </FormGroup>
                     </Col>
                     <Col md="4">
-                      <FormGroup>
-                        <Label style={{ fontWeight: 'bold', color: 'white' }}>State</Label>
-                        {!showPaymentEdit ? (
-                          <p className="form-control-static">{user?.payment?.state || '[None]'}</p>
-                        ) : (
-                          <Input
-                            type='text'
-                            id='state'
-                            placeholder='State'
-                            value={paymentDetails.state}
-                            onChange={(e) => setPaymentDetails({ ...paymentDetails, state: e.target.value })}
-                          />
-                        )}
-                      </FormGroup>
+                    <FormGroup>
+                      <Label style={{ fontWeight: 'bold', color: 'white' }}>State</Label>
+                      {!showPaymentEdit ? (
+                        <p className="form-control-static">{user?.payment?.state || '[None]'}</p>
+                      ) : (
+                        <select
+                          value={paymentDetails.state}
+                          onChange={(e) => setPaymentDetails({ ...paymentDetails, state: e.target.value })}
+                          className="form-control"
+                        >
+                          {Object.entries(USStates).map(([stateName, stateAbbreviation]) => (
+                            <option key={stateAbbreviation} value={stateAbbreviation}>{stateName}</option>
+                          ))}
+                        </select>
+                      )}
+                    </FormGroup>
                     </Col>
                     <Col md="4">
                       <FormGroup>
