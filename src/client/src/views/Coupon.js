@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useAuth } from "contexts/AuthContext.js";
 import { Button, Card, CardHeader, CardBody, FormGroup, Form, Input, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Label } from "reactstrap";
+import SnakeGame from "components/SnakeGame";
+import CouponListItem from "components/CouponListItem";
 
 function Coupon() {
   const { user } = useAuth();
@@ -9,18 +11,23 @@ function Coupon() {
   const [coupons, setCoupons] = useState([]);
   const [couponCode, setCouponCode] = useState("");
   const [modal, setModal] = useState(false); // State to control modal visibility
+  const [snakeModal, setSnakeModal] = useState(false);
 
   useEffect(() => {
-    axios.get('/userCoupons')
-      .then(response => {
-        if (response.status === 200) {
-          setCoupons(response.data.coupons);
-        }
-      })
-      .catch(error => console.error("Error fetching coupons:", error));
+    const fetchCoupons = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/coupons`, { withCredentials: true });
+        setCoupons(response.data);
+        console.log(response);
+      } catch (error) {
+        console.error("Error with fetching coupon");
+      }
+    }
+    fetchCoupons();
   }, []);
 
   const toggleModal = () => setModal(!modal); // Function to toggle modal visibility
+  const toggleSnakeModal = () => setSnakeModal(!snakeModal);
 
   const handleAddCoupon = (e) => {
     e.preventDefault();
@@ -44,18 +51,12 @@ function Coupon() {
               <CardHeader>
                 <h2 className="title">Your Coupons</h2>
                 <Button color="primary" onClick={toggleModal}>Add Coupon</Button> {/* Button to open modal */}
+                <Button color="success" onClick={toggleSnakeModal}>Earn More Coupons</Button>
               </CardHeader>
               <CardBody>
                 {/* Coupon Display */}
                 {coupons.length > 0 ? (
-                  coupons.map(coupon => (
-                    <div key={coupon._id}>
-                      <p>Name: {coupon.name}</p>
-                      <p>Code: {coupon.code}</p>
-                      <p>Discount: {coupon.discount}</p>
-                      <p>Expires on: {coupon.expire_date}</p>
-                    </div>
-                  ))
+                  coupons.filter(coupon => coupon.used === false).map(coupon => <CouponListItem key={coupon.code} coupon={coupon}/>)
                 ) : (
                   <p>No coupons available.</p>
                 )}
@@ -64,6 +65,17 @@ function Coupon() {
           </Col>
         </Row>
       </div>
+
+      {/* Modal for Snake Game */}
+      <Modal isOpen={snakeModal} toggle={toggleSnakeModal}>
+        <SnakeGame
+        color1="#248ec2"
+        color2="#1d355e"
+        backgroundColor="#ebebeb"
+        setSnakeModal={setSnakeModal}
+        />
+        {/* </ModalBody> */}
+      </Modal>
 
       {/* Modal for Adding Coupon */}
       <Modal isOpen={modal} toggle={toggleModal}>
@@ -83,11 +95,6 @@ function Coupon() {
               />
             </FormGroup>
           </ModalBody>
-{/* 
-          <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
-                  <Button color="secondary" onClick={toggleCreateGroupOrderModal} className="btn-secondary mx-1" style={createGroupOrderModalCancelable ? {} : { display: 'none' }}>Close</Button>
-              </ModalFooter> */}
-
           <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
             <Button color="primary" type="submit" className="btn-secondary mx-1">Add Coupon</Button>{' '}
             <Button color="secondary" onClick={toggleModal} className="btn-secondary mx-1">Cancel</Button>

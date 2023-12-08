@@ -32,11 +32,15 @@ function Checkout() {
   const [groupOrder, setGroupOrder] = useState("");
   const [orders, setOrders] = useState([]);
   const [coupons, setCoupons] = useState([]);
+  const [coupon, setCoupon] = useState({});
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [joiners, setJoiners] = useState([]);
   const [joinerFilter, setJoinerFilter] = useState("");
   const [couponModal, setCouponModal] = useState(false);
   const [couponModalCancelable, setCouponModalCancelable] = useState(true);
+  const [submitModal, setSubmitModal] = useState(false);
+  const [submitModalCancelable, setSubmitModalCancelable] = useState(true);
+  const discountApplied = () => Object.keys(coupon).length !== 0
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,7 +61,7 @@ function Checkout() {
     const fetchCoupons = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/coupons`, { withCredentials: true });
-        setCoupons(response.data);
+        setCoupons(response.data.filter(coupon => coupon.used === false));
         console.log(response);
       } catch (error) {
         console.error("Error with fetching coupon");
@@ -75,8 +79,23 @@ function Checkout() {
 
   const handleSubmit = async () => {
     groupOrder.status = 2;
-    axios.put(`http://localhost:8080/api/groupOrders/${id}`, groupOrder, { withCredentials: true });
+    if (discountApplied()) {
+      coupon.used = true;
+      try {
+        const response = axios.put(`${process.env.REACT_APP_SERVER_URL}/api/coupons/${coupon._id}`, coupon, { withCredentials: true });
+        setCoupon(response.data);
+      } catch (error) {
+        console.error("Error using coupon");
+      }
+    }
+    try {
+      const response = axios.put(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/${id}`, groupOrder, { withCredentials: true });
+      setGroupOrder(response.data.groupOrder);
+    } catch (error) {
+      console.error("Error with submitting order");
+    } 
 
+    toggleSubmitModal();
   };
   const basePrice = filteredOrders.reduce((acc, order) => acc + order.price, 0);
   const totalShipping = filteredOrders.reduce((acc, order) => acc + (order.price + order.weight), 0);
@@ -87,24 +106,28 @@ function Checkout() {
     setCouponModalCancelable(true);
   }
 
+  const toggleSubmitModal = () => {
+    setSubmitModal(!submitModal);
+    setSubmitModalCancelable(true);
+  }
+
   return (
     <>
       <div className="content">
-      <CardTitle tag="h1">Checkout</CardTitle>
+        <CardTitle tag="h1">Checkout</CardTitle>
         <Row sm='1' md='2'>
           <Col className='text-left'>
-            <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-              <DropdownToggle caret>View Orders By Individual</DropdownToggle>
+            <Dropdown isOpen={dropdownOpen} toggle={toggle} >
+              <DropdownToggle caret color="primary">View Orders By Individual</DropdownToggle>
               <DropdownMenu>
                 <DropdownItem onClick={onDropdownClick} value={""}>All Joiners</DropdownItem>
                 <DropdownItem divider />
                 {joiners.map(joiner => <DropdownItem key={joiner._id} onClick={onDropdownClick} value={joiner._id}>{joiner.name}</DropdownItem>)}
-                <DropdownItem key={user._id} onClick={onDropdownClick} value={user._id}>{user.name}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </Col>
           <Col className='text-right'>
-            <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleCouponModal} disabled={orders.length === 0 || coupons.length == 0}>
+            <Button color='info' size='lg' className='mr-3 mb-3' onClick={toggleCouponModal} disabled={orders.length === 0 || coupons.length == 0 || discountApplied()}>
               Apply Coupon
             </Button>
             <Modal isOpen={couponModal} toggle={toggleCouponModal}>
@@ -114,12 +137,12 @@ function Checkout() {
               <ModalBody>
                 <Card className='card-chart' style={{ minHeight: '300px', maxHeight: '500px' }}>
                   <CardHeader>
-                    <h5 className='title' style={{ fontSize: "x-large", color: "white" }}>Your Coupons</h5>
+                    <h5 className='title' style={{ fontSize: "x-large", color: "white" }}>Your Active Coupons</h5>
                   </CardHeader>
-                  <ScrollPanel  style={{width: '100%', height: '250px'}}>
-                  <CardBody style={{paddingTop: '5px', paddingBottom: '5px'}}>
-                    {coupons.map(coupon => <CouponListItem key={coupon.code} coupon={coupon}/>)}
-                  </CardBody>
+                  <ScrollPanel style={{ width: '100%', height: '250px' }}>
+                    <CardBody style={{ paddingTop: '5px', paddingBottom: '5px' }}>
+                      {coupons.map(coupon => <CouponListItem key={coupon.code} coupon={coupon} checkout toggleCouponModal={toggleCouponModal} setCoupon={setCoupon} />)}
+                    </CardBody>
                   </ScrollPanel>
                 </Card>
                 <Link to='/admin/dashboard'>
@@ -168,38 +191,58 @@ function Checkout() {
             </Card>
           </Col>
         </Row>
+        {discountApplied() && <Row><Col md="12" className='text-center'>
+          <Card>
+            <CardHeader>
+              <CardTitle tag="h4">Coupon Discount: ${coupon.discount.toFixed(2)}</CardTitle>
+            </CardHeader>
+          </Card>
+        </Col></Row>}
         <Row xs='1' sm='2' lg='4'>
-  <Col className='text-left'>
-    <Link to='/admin/dashboard'>
-      <Button>Return to Home</Button>
-    </Link>
-  </Col>
-  <Col className='text-center'>
-    <Card>
-      <CardHeader>
-        <CardTitle tag="h2">Total Base Price: ${basePrice.toFixed(2)}</CardTitle>
-      </CardHeader>
-    </Card>
-  </Col>
-  <Col className='text-center'>
-    <Card>
-      <CardHeader>
-        <CardTitle tag="h2">Total Shipping: ${totalShipping.toFixed(2)}</CardTitle>
-      </CardHeader>
-    </Card>
-  </Col>
-  <Col className='text-right'>
-    <Link to='/admin/dashboard'>
-      <Button onClick={handleSubmit} disabled={groupOrder.status > 0}>Submit Order</Button>
-    </Link>
-  </Col>
-</Row>
-
+          <Col className='text-left'>
+            <Link to='/admin/dashboard'>
+              <Button>Return to Home</Button>
+            </Link>
+          </Col>
+          <Col className='text-center'>
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h2">Total Base Price: ${basePrice.toFixed(2)}</CardTitle>
+              </CardHeader>
+            </Card>
+          </Col>
+          <Col className='text-center'>
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h2">Total Shipping: ${totalShipping.toFixed(2)}</CardTitle>
+              </CardHeader>
+            </Card>
+          </Col>
+          <Col className='text-right'>
+              <Button onClick={toggleSubmitModal} disabled={groupOrder.status > 0} color="success">Submit Order</Button>
+              <Modal isOpen={submitModal} toggle={toggleSubmitModal}>
+                <ModalHeader toggle={toggleSubmitModal}>
+                  <div className="text-dark mb-0" style={{ fontSize: '30px' }}>Confirm Checkout</div>
+                </ModalHeader>
+                <ModalBody>
+                  <div style={{ fontSize: '20px' }}>Base Price: ${basePrice.toFixed(2)}</div>
+                  <div style={{ fontSize: '20px' }}>Shipping: ${totalShipping.toFixed(2)}</div>
+                  {discountApplied() && <div style={{ fontSize: '20px' }}>Coupon Discount: ${coupon.discount.toFixed(2)}</div>}
+                  <hr style={{height: '2px', borderWidth: 0, color: 'gray', backgroundColor: 'gray'}}/>
+                  <div style={{ fontSize: '30px' }}>Total: ${(basePrice + totalShipping - (discountApplied() ? coupon.discount : 0)).toFixed(2)}</div>
+                  <Link to='/admin/dashboard'>
+                  <Button className="btn-secondary mx-1" color='success' onClick={handleSubmit} style={submitModalCancelable ? { float: 'right' } : { display: 'none' }}>Submit</Button>
+                  </Link>
+                </ModalBody>
+                <ModalFooter style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }} />
+              </Modal>
+          </Col>
+        </Row>
         <Row>
           <Col className='text-center'>
             <Card>
               <CardHeader>
-                <CardTitle tag="h2" style={{color: '#41dc83'}}>Total Price: ${(basePrice + totalShipping).toFixed(2)}</CardTitle>
+                <CardTitle tag="h2" style={{ color: '#41dc83' }}>Total Price: ${(basePrice + totalShipping - (discountApplied() ? coupon.discount : 0)).toFixed(2)}</CardTitle>
               </CardHeader>
             </Card>
           </Col>

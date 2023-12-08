@@ -15,6 +15,11 @@ const get = async (id) => {
     return coupon;
 }
 
+const update = async (id, data) => {
+    const coupon = await Coupon.findByIdAndUpdate(id, data, { new: true });
+    return coupon;
+}
+
 const getByCode = async(code) => {
     const coupon = await Coupon.find({code: code});
     return coupon[0];
@@ -24,5 +29,6 @@ module.exports = {
     create,
     get,
     getAll,
-    getByCode
+    getByCode,
+    update
 }
