@@ -13,6 +13,7 @@ import Home from 'views/Home.js';
 import GroupOrder from 'views/GroupOrder';
 import ShipperMain from 'views/ShipperMain.js';
 import GroupOrderDetails from 'views/Shipper/GroupOrderDetails.js';
+import ShipperProfile from 'views/Shipper/ShipperProfile.js';
 
 
 var routes = [ 
@@ -58,6 +59,15 @@ var routes = [
     type: 0,
     icon: 'tim-icons icon-single-02',
     component: <UserProfile />,
+    layout: '/admin',
+    hidden: false,
+  },
+  {
+    path: '/user-profile',
+    name: 'User Profile',
+    type: 1, //shipper
+    icon: 'tim-icons icon-single-02',
+    component: <ShipperProfile />,
     layout: '/admin',
     hidden: false,
   },
