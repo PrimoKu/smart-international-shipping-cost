@@ -302,7 +302,7 @@ function UserProfile() {
                             type='text'
                             id='zipCode'
                             placeholder='Zip Code'
-                            value={shipmentDetails.state}
+                            value={shipmentDetails.zipCode}
                             onChange={(e) => setShipmentDetails({ ...shipmentDetails, zipCode: e.target.value })}
                           />
                         )}
