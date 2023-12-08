@@ -69,6 +69,7 @@ class GroupOrderController {
     //@route POST /api/groupOrders
     //@access private
     createGroupOrder = asyncHandler(async (req, res) => {
+        console.log(req.body);
         const { name, country, deadline } = req.body;
         let groupOrder;
         try {

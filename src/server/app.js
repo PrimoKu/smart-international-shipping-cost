@@ -69,7 +69,6 @@ app.use('/api/coupons', require("./routes/CouponRoutes"));
 app.use('/api/userCoupons', require("./routes/UserCouponRoutes"));
 
 app.post('/api/auth/google', async (req, res) => {
-  console.log(req.body.token);
   const token = req.body.token;
   try {
     const ticket = await client.verifyIdToken({
@@ -77,7 +76,6 @@ app.post('/api/auth/google', async (req, res) => {
       audience: process.env.GOOGLE_CLIENT_ID,
     })
     const userObject = ticket.getPayload();
-    console.log(userObject);
     let user = await User.findOne({ email: userObject.email });
     if (!user) {
         req.session.oauthRegistrationData = {

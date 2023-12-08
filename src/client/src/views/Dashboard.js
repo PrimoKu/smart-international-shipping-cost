@@ -57,7 +57,7 @@ function Dashboard(props) {
   const [group, setGroup] = useState({
     name: '',
     country: 'US',
-    // deadline: '',
+    deadline: '',
   });
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
@@ -80,7 +80,7 @@ function Dashboard(props) {
     let formData = new FormData();
     formData.append('name', group.name);
     formData.append('country', group.country);
-    // formData.append('deadline', group.deadline);
+    formData.append('deadline', group.deadline);
 
 
     axios.post('http://localhost:8080/api/groupOrders/', formData, { withCredentials: true })
@@ -315,17 +315,17 @@ function Dashboard(props) {
                                       ))}
                                   </Input>
                               </FormGroup>
-                              {/* <FormGroup>
+                              <FormGroup>
                                   <Label for='name'>Deadline</Label>
                                   <Input
-                                      type='text'
+                                      type='date'
                                       id='deadline'
                                       placeholder='Enter deadline'
                                       value={group.deadline}
                                       onChange={(e) => setGroup({ ...group, deadline: e.target.value })}
                                       style={{ height: '50px', fontSize: '18px', color: 'black' }}
                                   />
-                              </FormGroup> */}
+                              </FormGroup>
                               <Button color='info' size='lg' block onClick={handleSubmit} className="btn-success mx-1">
                                   Submit
                               </Button>
