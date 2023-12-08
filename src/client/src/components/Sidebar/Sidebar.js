@@ -94,8 +94,8 @@ function Sidebar(props) {
   }
   return (
     <BackgroundColorContext.Consumer>
-      {({ color }) => (
-        <div className="sidebar" data={color}>
+      {({ color,c}) => (
+        <div className="sidebar" data={user?.role===0?color:c}>
           <div className="sidebar-wrapper" ref={sidebarRef}>
             {logoImg !== null || logoText !== null ? (
               <div className="logo">

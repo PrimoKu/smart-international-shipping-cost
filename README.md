@@ -157,6 +157,11 @@ Configuration variables, such as database connection strings, or secret keys, ar
       node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
       ```
       Copy the output and paste it as the value for `ACCESS_TOKEN_SECRET`.
+    
+There is another `.env` file needed for the 'client' folder, with the following fields: 
+- REACT_APP_SERVER_URL=http://localhost:8080
+- REACT_APP_GOOGLE_CLIENT_ID=110092633486-irit56mv86as5eloift7coseep94icn6.apps.googleusercontent.com
+- REACT_APP_GOOGLE_CLIENT_SECRET=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
 
 #### 3. Starting App
 To launch the app correctly, you need to start both the `client` and `server` individually. \
@@ -175,6 +180,41 @@ Iteration 3:
 3) Group management has been implemented, and now individual users can join orders, request additions, and so on.
 5) ...many more changes, both big and small. Refer to the project backlog!
 
+Iteration 4:
+1) Shipper interfaces are now complete
+2) Added additional group management features
+3) Deployed app to (URL)
+4) Added environmental variables for src/client, as below:
+REACT_APP_SERVER_URL=http://localhost:8080
+REACT_APP_GOOGLE_CLIENT_ID=110092633486-irit56mv86as5eloift7coseep94icn6.apps.googleusercontent.com
+REACT_APP_GOOGLE_CLIENT_SECRET=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
+
+Iteration 5:
+1) Google login is complete
+2) Tested and refactored our code
+3) Code review complete
+4) Added additional polish...
+5) Added coupons, and a cool game to earn coupons
+6) Giving a big thank you to the professors and TA's of this course!
+7) Currently deploying latest version on render
+
+Here is the link to our deployed app (may be behind the GitHub repo since I cannot directly use it due to organization permissions):
+https://render.bluejays.space/
+
+Here are the credentials:
+
+Regular User:
+
+U: yku4@jh.edu
+
+P: ku850728
+
+Shipper:
+
+U: shipper@jhu.edu
+
+P: a12344321
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -191,9 +231,10 @@ Iteration 3:
 - [x] Adding group functionality
 - [x] Create a home page for order management
 - [x] Fleshing out iteration 2 interfaces with additional information and inputs
-- [ ] Shipper perspective and individual order management on both ends
+- [x] Shipper perspective and individual order management on both ends
 - [ ] Enforcing styling among multiple interfaces
-- [ ] UI improvements 
+- [x] UI improvements
+- [x] Deployment 
 
 See the [open issues](https://github.com/jhu-oose-f23/team-BlueJay/issues) for a full list of proposed features (and known issues).
 

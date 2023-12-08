@@ -71,8 +71,9 @@ function Register() {
         formData.append('email', email);
         formData.append('password', password);
         formData.append('role', role);
+        formData.append('google_login', false);
 
-        axios.post('http://localhost:8080/api/users/register', formData, { withCredentials: true })
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/api/users/register`, formData, { withCredentials: true })
         .then(response => {
             showModal("BlueJay", "Register succeeded!", true);
         })

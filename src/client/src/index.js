@@ -8,6 +8,7 @@ import Login from "./views/Login.js";
 import Register from "./views/Register.js";
 import Checkout from './views/Checkout.js';
 import ShipperMain from './views/ShipperMain.js';
+import GroupOrderDetail from './views/Shipper/GroupOrderDetails.js'
 
 
 import { AuthProvider } from "contexts/AuthContext.js"; 
@@ -23,12 +24,16 @@ import BackgroundColorWrapper from './components/BackgroundColorWrapper/Backgrou
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <ThemeContextWrapper>
     <BackgroundColorWrapper>
       <BrowserRouter>
       <PrimeReactProvider>
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
         <AuthProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
@@ -36,11 +41,11 @@ root.render(
             <Route path="/admin/*" element={<AdminLayout />} />
             <Route path='/' element={<Home />} />
             <Route path='/createorder' element={<CreateOrder />} />
-            {/* <Route path="/ShipperMain" element={<ShipperMain />} /> */}
             <Route path="/checkout" element={<Checkout />} />
             <Route path='*' element={<Home />} /> {/* Default route */}
           </Routes>
         </AuthProvider>
+        </GoogleOAuthProvider>
         </PrimeReactProvider>
       </BrowserRouter>
     </BackgroundColorWrapper>

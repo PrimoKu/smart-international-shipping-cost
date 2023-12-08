@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "6.4.0",
+    "@react-oauth/google": "^0.11.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -12,6 +13,7 @@
     "chart.js": "3.9.1",
     "classnames": "^2.3.2",
     "framer-motion": "^10.16.4",
+    "jwt-decode": "^4.0.0",
     "perfect-scrollbar": "1.5.5",
     "primeicons": "^6.0.1",
     "primereact": "^10.0.3",
@@ -19,6 +21,7 @@
     "react": "^18.2.0",
     "react-chartjs-2": "3.3.0",
     "react-dom": "^18.2.0",
+    "react-google-login": "^5.2.2",
     "react-notification-alert": "0.0.13",
     "react-router-dom": "6.11.1",
     "react-scripts": "5.0.1",

@@ -12,11 +12,15 @@ const userSchema = mongoose.Schema({
         },
         password: {
             type: String,
-            required: [true, "Please add user password"],
+            required: function() { return !this.google_login; },
         },
         role: {
             type: Number,
-            required: [true, "Please add user role"],
+            required: false,
+        }, 
+        google_login: {
+            type: Boolean,
+            default: false,
         }
     }, 
     {

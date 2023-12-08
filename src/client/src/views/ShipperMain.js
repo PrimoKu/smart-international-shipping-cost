@@ -21,7 +21,7 @@ function ShipperMain() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/groupOrders/', { withCredentials: true });
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/`, { withCredentials: true });
                 console.log(response.data);
                 setData(response.data);
 

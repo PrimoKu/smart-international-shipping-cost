@@ -50,7 +50,7 @@ const AuthProvider = ({ children }) => {
         const segments = link.split('/');
         const groupOrderId = segments.pop();
         console.log(groupOrderId);
-        axios.put(`http://localhost:8080/api/groupOrders/add/${groupOrderId}`, {}, { withCredentials: true })
+        axios.put(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/add/${groupOrderId}`, {}, { withCredentials: true })
         .then(response => {
             window.location.href = `http://localhost:3000/admin/groupOrder/${groupOrderId}`;
         })
@@ -64,13 +64,13 @@ const AuthProvider = ({ children }) => {
     React.useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await axios.get('http://localhost:8080/api/users/current', { withCredentials: true });
+                const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/users/current`, { withCredentials: true });
                 if (res.data) {
                     // console.log(res.data);
                     setUser(res.data);
                     setIsAuthenticated(true);
                     if(!socket) {
-                        const socketInstance = io('http://localhost:8080');
+                        const socketInstance = io(`${process.env.REACT_APP_SERVER_URL}`);
                         setSocket(socketInstance);
 
                         socketInstance.on('connect', () => {

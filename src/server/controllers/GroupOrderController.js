@@ -5,11 +5,52 @@ const groupOrderRepo = require("../repositories/GroupOrderRepository");
 const userRepo = require("../repositories/UserRepository");
 const notificationRepo = require("../repositories/NotificationRepository");
 const { OrderStatus, OrderStatusList } = require("../enums/OrderStatusEnums");
+const { GroupOrderStatus, GroupOrderStatusList } = require("../enums/GroupOrderStatusEnums");
 const { UserRole, UserRoleList } = require("../enums/UserRoleEnums");
 const { sendNotificationToUser } = require("../socketManager");
 
 class GroupOrderController {
 
+    //@des Accept group order by shipper
+    //@route PUT /api/groupOrders/accept/:id
+    //@access private (Shipper Only)
+    acceptGroupOrder = asyncHandler(async (req, res) => {
+      console.log(req.params.id);
+        const groupOrder = await groupOrderRepo.get(req.params.id);
+        if (!groupOrder) {
+            return res.status(404).json({ message: "Group Order not found!" });
+       }
+        if (req.user.role !== UserRole.SHIPPER) {
+            return res.status(403).json({ message: "Only shippers can accept orders." });
+        }
+        if (groupOrder.status === GroupOrderStatus.SUBMITTED) {
+            const updatedGroupOrder = await groupOrderRepo.update(req.params.id, { status: GroupOrderStatus.SHIPPING });
+            res.status(200).json(updatedGroupOrder);
+        } else {
+            res.status(400).json({ message: "Order cannot be accepted at this stage." });
+        }
+    });
+    
+    //@des Complete group order by shipper
+    //@route PUT /api/groupOrders/complete/:id
+    //@access private (Shipper Only)
+    completeGroupOrder = asyncHandler(async (req, res) => {
+        const groupOrder = await groupOrderRepo.get(req.params.id);
+        if (!groupOrder) {
+            return res.status(404).json({ message: "Group Order not found!" });
+        }
+        if (req.user.role !== UserRole.SHIPPER) {
+            return res.status(403).json({ message: "Only shippers can complete orders." });
+        }
+        if (groupOrder.status === GroupOrderStatus.SHIPPING) {
+            const updatedGroupOrder = await groupOrderRepo.update(req.params.id, { status: GroupOrderStatus.DELIVERED });
+            res.status(200).json(updatedGroupOrder);
+        } else {
+            res.status(400).json({ message: "Order cannot be completed at this stage." });
+        }
+    });
+
+    
     //@des Get all group orders
     //@route GET /api/groupOrders
     //@access private
@@ -28,10 +69,10 @@ class GroupOrderController {
     //@route POST /api/groupOrders
     //@access private
     createGroupOrder = asyncHandler(async (req, res) => {
-        const { name, country } = req.body;
+        const { name, country, deadline } = req.body;
         let groupOrder;
         try {
-            groupOrder = await groupOrderRepo.create(req.user.id, name, country);
+            groupOrder = await groupOrderRepo.create(req.user.id, name, country, deadline);
             if (groupOrder) {
                 return res.status(201).json(groupOrder);
             } else {
@@ -52,9 +93,10 @@ class GroupOrderController {
             if (!groupOrder) {
                 return res.status(404).json({ message: "Group Order not found!" });
             }
-            if (!groupOrder.users.some(user => user._id.toString() === req.user.id) && groupOrder.manager._id.toString() !== req.user.id) {
+            /**if (!groupOrder.users.some(user => user._id.toString() === req.user.id) && groupOrder.manager._id.toString() !== req.user.id) {
                 return res.status(403).json({ message: "User don't have permission to update other user's order" });
-            }
+            }**/
+            console.log(groupOrder);
             res.status(200).json({
                 GroupOrder: groupOrder,
                 OrderStatusList: OrderStatusList

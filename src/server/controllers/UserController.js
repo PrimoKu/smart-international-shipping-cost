@@ -11,17 +11,44 @@ class UserController {
     //@route POST /api/users/register
     //@access public
     registerUser = asyncHandler(async (req, res) => {
-        const { name, email, password, role } = req.body;
-        console.log(req.body);
-        let user;
+        let name, email, password, role, google_login;
+        google_login = req.body.google_login;
+
+        if(google_login === "true") {
+            const sessionData = req.session.oauthRegistrationData;
+            name = sessionData.name;
+            email = sessionData.email;
+            role = req.body.role;
+        } else {
+            name = req.body.name;
+            email = req.body.email;
+            password = req.body.password;
+            role = req.body.role;
+        }
         try {
-            user = await User.findOne({ email });
+            let user = await User.findOne({ email });
             if(user) {
                 res.status(400).json({ email_msg: "Email is already taken!" });
             }
-            const hashedPassword = await bcrypt.hash(password, 10);
-            console.log("Hashed Password: ", hashedPassword);
-            user = await User.create({ name, email, password: hashedPassword, role });
+
+            if(google_login  === "true") {
+                user = await User.create({
+                    name,
+                    email,
+                    role,
+                    google_login,
+                });
+            } else {
+                const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
+                user = await User.create({
+                    name,
+                    email,
+                    password: hashedPassword,
+                    role,
+                    google_login,
+                });
+            }
+    
             if(user != null && user != undefined) {
                 const accessToken = jwt.sign({
                     user: {
@@ -42,6 +69,9 @@ class UserController {
                     signed: true,
                     sameSite: 'Strict'
                 });
+                
+                req.session.oauthRegistrationData = null;
+
                 res.status(201).json({ _id: user.id, email: user.email});
             } else {
                 res.status(442).json({ message: "Create user failed!" });

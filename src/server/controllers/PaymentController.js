@@ -59,12 +59,13 @@ class PaymentController {
     //@route POST /api/payments/upsert
     //@access private
     upsertPayment = asyncHandler(async (req, res) => {
+        console.log(req.body);
         const { cardType, cardNumber, bankName, billAddress1, billAddress2, state, city, zipCode } = req.body;
         try {
             let payment = await paymentRepo.get(req.user.id);
 
             if (payment) {
-                payment = await paymentRepo.update(req.user.id, { cardType, cardNumber, bankName, billAddress1, billAddress2, state, city, zipCode });
+                payment = await paymentRepo.update(req.user.id, { card_type: cardType, card_number: cardNumber, bank_name: bankName, bill_address_1: billAddress1, bill_address_2: billAddress2, state: state, city: city, zip_code: zipCode });
             } else {
                 payment = await paymentRepo.create(req.user.id, cardType, cardNumber, bankName, billAddress1, billAddress2, state, city, zipCode);
             }

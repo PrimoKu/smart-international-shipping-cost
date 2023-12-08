@@ -15,8 +15,6 @@ import {
 
 function CreateGroupModal({ isOpen, toggle, groupOrderId }) {
   const location = useLocation();
-  // const groupOrderId = location.state?.groupOrder_id;
-  // console.log(groupOrderId)
   const [group, setGroup] = useState({
     name: '',
     country: '',
@@ -44,7 +42,7 @@ function CreateGroupModal({ isOpen, toggle, groupOrderId }) {
     formData.append('country', group.country);
     
 
-    axios.post('http://localhost:8080/api/groupOrders', formData, { withCredentials: true })
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders`, formData, { withCredentials: true })
     .then(response => {
         showModal("Group", "Create succeeded!", true);
     })
@@ -54,7 +52,6 @@ function CreateGroupModal({ isOpen, toggle, groupOrderId }) {
         }
     });
   };
-
     
   const handleModalClosed = () => {
     window.location.assign(`/admin/groupOrder/${groupOrderId}`);
@@ -87,7 +84,6 @@ function CreateGroupModal({ isOpen, toggle, groupOrderId }) {
                     onChange={(e) => setGroup({ ...group, country: e.target.value })}
                   />
                 </FormGroup>
-          
                 <Button color='info' size='lg' block onClick={handleSubmit}>
                   Submit
                 </Button>
