@@ -587,6 +587,17 @@ function GroupOrder(props) {
                     <Button color="secondary" onClick={toggleModal} className="btn-secondary mx-1" style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
                 </ModalFooter>
             </Modal>
+
+            <Modal isOpen={isDisbandModalOpen} toggle={() => setIsDisbandModalOpen(false)}>
+                <ModalHeader toggle={() => setIsDisbandModalOpen(false)}>Confirm Disband</ModalHeader>
+                    <ModalBody>
+                    <p style={{ fontSize: '20px' }}>Are you sure you want to disband this group order?</p>
+                    </ModalBody>
+                <ModalFooter style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
+                    <Button color="danger" onClick={handleDisbandGroupOrder} className="btn-secondary mx-1">Disband</Button>
+                    <Button color="secondary" onClick={() => setIsDisbandModalOpen(false)} className="btn-secondary mx-1">Cancel</Button>
+                </ModalFooter>
+            </Modal>
         </div>
     );
 }
