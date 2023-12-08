@@ -35,6 +35,24 @@ class CouponController {
         }
     });
 
+    //@des Update coupon by id
+    //@route PUT /api/coupons/:id
+    //@access private
+    updateCoupon = asyncHandler( async (req, res) => { 
+        const coupon = await couponRepo.get(req.params.id);
+        try {
+            if(!coupon) {
+                return res.status(404).json({ message: "Coupon not found!" });
+            } 
+            console.log(coupon);
+            const updatedCoupon = await couponRepo.update(req.params.id, req.body);
+            res.status(200).json(updatedCoupon);
+        } catch (error) {
+            res.status(500);
+            throw new Error("Server Error!");
+        }
+    });
+
     //@des Get coupon by id
     //@route GET /api/coupons/:id
     //@access private

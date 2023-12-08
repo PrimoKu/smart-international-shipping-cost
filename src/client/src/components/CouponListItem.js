@@ -9,7 +9,7 @@ import { useAuth } from "../contexts/AuthContext.js";
 import { useNavigate } from 'react-router-dom';
 
 
-function CouponListItem({coupon}) {
+function CouponListItem({coupon, checkout, toggleCouponModal, setCoupon}) {
 
   var expirationDate = new Date(coupon.expire_date);
 
@@ -19,8 +19,10 @@ function CouponListItem({coupon}) {
   }
 
   function onClick() {
-    //TODO: apply coupon
-    console.log("Coupon applied");
+    if (checkout) {
+      setCoupon(coupon);
+      toggleCouponModal();
+    }
     // window.location.assign(`groupOrder/${ident}`)
     
   }
@@ -37,7 +39,7 @@ function CouponListItem({coupon}) {
 
   return (
   <>
-    <button className="item" onClick={() => onClick()}>
+    <button className="item" onClick={onClick}>
       <Row>
         <Col md={8}>
           <Row>
