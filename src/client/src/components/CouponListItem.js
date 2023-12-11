@@ -4,13 +4,13 @@ import '../assets/css/OrderItem.css';
 import {
   Row,
   Col,
+  Button,
 } from 'reactstrap';
 import { useAuth } from "../contexts/AuthContext.js";
 import { useNavigate } from 'react-router-dom';
 
 
 function CouponListItem({coupon, checkout, toggleCouponModal, setCoupon}) {
-
   var expirationDate = new Date(coupon.expire_date);
 
   function convertTime(time) {
@@ -39,7 +39,7 @@ function CouponListItem({coupon, checkout, toggleCouponModal, setCoupon}) {
 
   return (
   <>
-    <button className="item" onClick={onClick}>
+    <Button className="item" onClick={onClick}>
       <Row>
         <Col md={8}>
           <Row>
@@ -58,7 +58,7 @@ function CouponListItem({coupon, checkout, toggleCouponModal, setCoupon}) {
           <div style={{fontSize: "large", float: "right", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", marginRight: "10px", color:`${'#41dc83'}`}}>${coupon.discount}.00</div>
         </Col>
       </Row>
-    </button>
+    </Button>
   </>
   );
 };

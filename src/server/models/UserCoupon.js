@@ -11,6 +11,10 @@ const userCouponSchema = mongoose.Schema({
             required: true,
             ref: "Coupon",
         },
+        used: {
+            type: Boolean,
+            default: false,
+        }
     }, 
     {
         timestamps: true,

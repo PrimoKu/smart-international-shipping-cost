@@ -12,13 +12,13 @@ function Coupon() {
   const [couponCode, setCouponCode] = useState("");
   const [modal, setModal] = useState(false); // State to control modal visibility
   const [snakeModal, setSnakeModal] = useState(false);
+  const [addError, setAddError] = useState("");
 
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/coupons`, { withCredentials: true });
-        setCoupons(response.data);
-        console.log(response);
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/userCoupons`, { withCredentials: true });
+        setCoupons(response.data.coupons);
       } catch (error) {
         console.error("Error with fetching coupon");
       }
@@ -31,15 +31,16 @@ function Coupon() {
 
   const handleAddCoupon = (e) => {
     e.preventDefault();
-    axios.post('/userCoupons', { coupon_code: couponCode })
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/api/userCoupons`, { coupon_code: couponCode }, { withCredentials: true })
       .then(response => {
-        if (response.status === 200) {
-          setCoupons([...coupons, response.data]);
-          setCouponCode("");
-          toggleModal(); // Close the modal after adding the coupon
-        }
+        window.location.reload();
       })
-      .catch(error => console.error("Error adding coupon:", error));
+      .catch((error) => {
+        if (error.response && error.response.data) {
+          setAddError(error.response.data.message);
+          console.log(error.response.data);
+        }
+    });
   };
 
   return (
@@ -55,7 +56,7 @@ function Coupon() {
               </CardHeader>
               <CardBody>
                 {/* Coupon Display */}
-                {coupons.length > 0 ? (
+                {coupons?.length > 0 ? (
                   coupons.filter(coupon => coupon.used === false).map(coupon => <CouponListItem key={coupon.code} coupon={coupon}/>)
                 ) : (
                   <p>No coupons available.</p>
@@ -93,6 +94,7 @@ function Coupon() {
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value)}
               />
+            <div className="text-danger" id="add_error">{addError}</div>
             </FormGroup>
           </ModalBody>
           <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>

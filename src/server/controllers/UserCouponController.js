@@ -16,7 +16,7 @@ class UserCouponController {
 
             userCoupon = await userCouponRepo.getByBoth(req.user.id, coupon._id);
             if(userCoupon) {
-                return res.status(442).json({ message: "Already added!" });
+                return res.status(442).json({ message: "Coupon Already added!" });
             } else {
                 userCoupon = await userCouponRepo.create(req.user.id, coupon._id);
                 return res.status(201).json(userCoupon);             

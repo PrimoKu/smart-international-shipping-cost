@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import '../assets/css/Snake.css';
 import axios from 'axios';
+import {
+    Button, Modal, ModalHeader, ModalBody, ModalFooter,
+} from "reactstrap";
 
 const SnakeGame = (props) => {
     const [dim, setDim] = useState(0);
@@ -9,6 +12,10 @@ const SnakeGame = (props) => {
     const [fruit, setFruit] = useState(26);
     const [points, setPoints] = useState(0);
     const [game, setGame] = useState(false);
+    const [modal, setModal] = useState(false);
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalContent, setModalContent] = useState("");
+    const [modalCancelable, setModalCancelable] = useState(true);
     const speedRef = useRef(100);
     const setSnakeModal = props.setSnakeModal;
     let width;
@@ -19,21 +26,32 @@ const SnakeGame = (props) => {
         }
     ]);
 
+    const toggleModal = () => {
+        if (modalCancelable) {
+          setModal(!modal);
+        }
+    };
+    const showModal = (title, content, cancelable = true) => {
+        setModalTitle(title);
+        setModalContent(content);
+        setModalCancelable(cancelable);
+        setModal(true);
+    };
+
     const claimCoupon = async () => {
         const couponCode = Date.now().toString();
         try {
-            await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/coupons`, { name: "SnakeGame", code: couponCode, discount: points, expire_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toDateString()})
+            await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/coupons`, { name: "SnakeGame", code: couponCode, discount: points, expire_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toDateString()}, { withCredentials: true })
             .then(response => {
-                console.log(response.status);
-                if (response.status == 201) {
-                    console.log(response);
-                    console.log("Coupon Claimed");
-                    setSnakeModal(false);
-                }
+                showModal("BlueJay", "Coupon Claimed!", true);
             });
           } catch (error) {
             console.error("Error with fetching coupon");
           }
+    }
+
+    const handleModalClosed = () => {
+        window.location.reload();
     }
 
     const reset = () => {
@@ -311,6 +329,15 @@ const SnakeGame = (props) => {
                 </div>
             </div>
             }
+            <Modal isOpen={modal} toggle={toggleModal} keyboard={modalCancelable} onClosed={handleModalClosed}>
+                <ModalHeader toggle={toggleModal}>
+                    <div className="text-dark mb-0" style={{fontSize: '30px'}}>{modalTitle}</div>
+                </ModalHeader>
+                <ModalBody style={{height: '75px'}}><p style={{fontSize: '20px'}}>{modalContent}</p></ModalBody>
+                <ModalFooter style={{display: 'flex', justifyContent: 'flex-end', padding: '1rem'}}>
+                    <Button color="secondary" onClick={toggleModal} style={modalCancelable ? {} : { display: 'none' }}>Close</Button>
+                </ModalFooter>
+            </Modal>
         </div>
     )
 }

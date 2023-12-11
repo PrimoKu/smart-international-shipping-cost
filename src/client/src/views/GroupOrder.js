@@ -5,7 +5,6 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import axios from 'axios';
 import { useAuth } from "contexts/AuthContext.js";
-import CreateOrderModal from './CreateOrderModal';
 
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 

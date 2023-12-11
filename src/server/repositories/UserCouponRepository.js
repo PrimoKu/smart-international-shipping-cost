@@ -7,6 +7,7 @@ const create = async (user_id, coupon_id) => {
 }
 
 const getByUser = async (user_id) => {
+    // const userCoupons = await UserCoupon.find({user_id: user_id});
     const userId = new ObjectId(user_id);
     const userCoupons = await UserCoupon.aggregate([
         { 
@@ -17,14 +18,25 @@ const getByUser = async (user_id) => {
                 from: 'coupons',
                 localField: 'coupon_id',
                 foreignField: '_id',
-                as: 'coupons'
+                as: 'coupon'
             }
         },
-        { $unwind: '$coupons' },
+        { $unwind: '$coupon' },
         {
             $group: {
                 _id: '$user_id',
-                coupons: { $push: '$coupons' }
+                coupons: { 
+                    $push: {
+                        used: '$used',
+                        createdAt: '$createdAt',
+                        updatedAt: '$updatedAt',
+                        __v: '$__v',
+                        name: '$coupon.name',
+                        code: '$coupon.code',
+                        discount: '$coupon.discount',
+                        expire_date: '$coupon.expire_date',
+                    }
+                }
             }
         },
         {
@@ -36,7 +48,7 @@ const getByUser = async (user_id) => {
         }
     ]);
 
-    return userCoupons;
+    return userCoupons[0];
 }
 
 const getByBoth = async (user_id, coupon_id) => {

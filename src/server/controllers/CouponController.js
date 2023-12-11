@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const couponRepo = require("../repositories/CouponRepository");
+const userCouponRepo = require("../repositories/UserCouponRepository");
 
 class CouponController {
 
@@ -25,6 +26,9 @@ class CouponController {
         try {
             coupon = await couponRepo.create(name, code, discount, expire_date);
             if(coupon) {
+                if(name === "SnakeGame") {
+                    await userCouponRepo.create(req.user.id, coupon._id);
+                }
                 return res.status(201).json(coupon);
             } else {
                 return res.status(442).json({ message: "Create coupon failed!" });
@@ -44,7 +48,6 @@ class CouponController {
             if(!coupon) {
                 return res.status(404).json({ message: "Coupon not found!" });
             } 
-            console.log(coupon);
             const updatedCoupon = await couponRepo.update(req.params.id, req.body);
             res.status(200).json(updatedCoupon);
         } catch (error) {

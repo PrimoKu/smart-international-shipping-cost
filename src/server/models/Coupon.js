@@ -18,10 +18,6 @@ const couponSchema = mongoose.Schema({
             type: Date,
             required: [true, "Please add coupon expiration date"],
         },
-        used: {
-            type: Boolean,
-            default: false,
-        }
     }, 
     {
         timestamps: true,
