@@ -15,7 +15,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
-  const [orders, setOrders] = useState([]);
+  const [submittedOrders, setSubmittedOrders] = useState([]);
+  const [progressOrders, setProgressOrders] = useState([]);
+  const [completedorders, setCompletedOrders] = useState([]);
   const [showAll, setShowAll] = useState(true);
   const [showAccepted, setShowAccepted] = useState(false);
   const [showNotAccepted, setShowNotAccepted] = useState(false);
@@ -61,7 +63,12 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders`, { withCredentials: true });
-        setOrders(response.data);
+        let orders = response.data;
+        setSubmittedOrders(orders.filter(order => order.status === 2));
+        setProgressOrders(orders.filter(order => order.status === 3));
+        setCompletedOrders(orders.filter(order => order.status === 4));
+        console.log(response.data);
+        // setOrders(response.data);
         setLoading(false);
       } catch (error) {
         console.error("An error occurred while fetching data", error);
@@ -70,9 +77,6 @@ const Dashboard = () => {
     };
     fetchData();
   }, []);
-
-  const acceptedOrders = orders.filter(order => order.status === 3);
-  const notAcceptedOrders = orders.filter(order => order.status === 4);
 
   const showAllHandler = () => {
     setShowAll(true);
@@ -116,7 +120,7 @@ const Dashboard = () => {
               </CardHeader>
               <ScrollPanel style={{width: '100%', height: '500px'}}>
               <CardBody  style={{paddingTop: '5px', paddingBottom: '5px'}}>
-                {orders.map(order => (
+                {submittedOrders.map(order => (
                   <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline} countryCode={getCountryCode(order.country)}/>
                 ))}
               </CardBody>
@@ -142,7 +146,7 @@ const Dashboard = () => {
                 
           
                   {
-                acceptedOrders.map(order => (
+                progressOrders.map(order => (
                   <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline} />
                 ))}
                 
@@ -168,7 +172,7 @@ const Dashboard = () => {
               <CardBody  style={{paddingTop: '5px', paddingBottom: '5px'}}>
                 
                   {
-                notAcceptedOrders.map(order => (
+                completedorders.map(order => (
                   <OrderListItem key={order._id} ident={order._id} name={order.name} deadline={order.deadline}/>
                 ))}
                 
