@@ -23,7 +23,6 @@ import {
     Label,
     Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
-//import ViewJoinersModal from './ViewJoinersModal';
 
 function GroupOrder(props) {
     const navigate = useNavigate();
@@ -359,43 +358,7 @@ function GroupOrder(props) {
         weight: '',
         groupOrder_id: '',
     });
-    //const [modal, setModal] = useState(false);
-    //const [modalTitle, setModalTitle] = useState("");
-    //const [modalContent, setModalContent] = useState("");
-    //const [modalCancelable, setModalCancelable] = useState(true);
-    //const navigate = useNavigate();
 
-    //const toggleModal = () => {
-        //if (modalCancelable) {
-            //setModal(!modal);
-        //}
-    //};
-
-    /*const showModal = (title, content, cancelable = true) => {
-        setModalTitle(title);
-        setModalContent(content);
-        setModalCancelable(cancelable);
-        setModal(true);
-    };*/
-
-    // handles adding a new item to the grouporder
-    /*const handleSubmit = async () => {
-        let formData = new FormData();
-        formData.append('name', order.name);
-        formData.append('price', order.price);
-        formData.append('weight', order.weight);
-        formData.append('groupOrder_id', groupOrderId);
-
-        axios.post('http://localhost:8080/api/orders', formData, { withCredentials: true })
-            .then(response => {
-                showModal("Order", "Create succeeded!", true);
-            })
-            .catch((error) => {
-                if (error.response && error.response.data) {
-                    console.log(error.response);
-                }
-            });
-    };*/
     const handleSubmit = async () => {
       let formData = new FormData();
       formData.append('name', order.name);
