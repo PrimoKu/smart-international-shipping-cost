@@ -52,7 +52,7 @@ const AuthProvider = ({ children }) => {
         console.log(groupOrderId);
         axios.put(`${process.env.REACT_APP_SERVER_URL}/api/groupOrders/add/${groupOrderId}`, {}, { withCredentials: true })
         .then(response => {
-            window.location.href = `http://localhost:3000/admin/groupOrder/${groupOrderId}`;
+            window.location.assign(`http://localhost:3000/admin/groupOrder/${groupOrderId}`);
         })
         .catch((error) => {
             if (error.response && error.response.data) {

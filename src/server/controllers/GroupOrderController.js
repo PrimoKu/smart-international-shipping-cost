@@ -24,7 +24,7 @@ class GroupOrderController {
             return res.status(403).json({ message: "Only shippers can accept orders." });
         }
         if (groupOrder.status === GroupOrderStatus.SUBMITTED) {
-            const updatedGroupOrder = await groupOrderRepo.update(req.params.id, { status: GroupOrderStatus.SHIPPING });
+            const updatedGroupOrder = await groupOrderRepo.update(req.params.id, { shipper_id: req.user.id, status: GroupOrderStatus.SHIPPING });
             res.status(200).json(updatedGroupOrder);
         } else {
             res.status(400).json({ message: "Order cannot be accepted at this stage." });
@@ -57,7 +57,8 @@ class GroupOrderController {
     getGroupOrders = asyncHandler(async (req, res) => {
         if (req.user.role == UserRole.SHIPPER) {
             const groupOrder = await groupOrderRepo.getAll();
-            return res.status(200).json(groupOrder);
+            let groupOrders = groupOrder.filter(group => group.shipper_id == req.user.id || group.status === 2);
+            return res.status(200).json(groupOrders);
         } else {
             const groupOrders_managed = await groupOrderRepo.getAllWithUser(req.user.id);
             const groupOrders_joined = await groupOrderRepo.getOrdersWhereUserIsNotManager(req.user.id);
