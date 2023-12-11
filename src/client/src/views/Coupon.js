@@ -12,12 +12,26 @@ function Coupon() {
   const [couponCode, setCouponCode] = useState("");
   const [modal, setModal] = useState(false); // State to control modal visibility
   const [snakeModal, setSnakeModal] = useState(false);
+  const [snakeGame, setSnakeGame] = useState(true);
   const [addError, setAddError] = useState("");
 
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/userCoupons`, { withCredentials: true });
+        const coupons = response.data.coupons;
+        const today = new Date(); // Current date
+        const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+        coupons.forEach(coupon => {
+          const createdAtDate = new Date(coupon.createdAt);
+          const couponDate = new Date(createdAtDate.getFullYear(), createdAtDate.getMonth(), createdAtDate.getDate()); // Date part only
+
+          if (coupon.name === "SnakeGame" && couponDate.getTime() === todayDate.getTime()) {
+              setSnakeGame(false);
+          }
+        });
+
         setCoupons(response.data.coupons);
       } catch (error) {
         console.error("Error with fetching coupon");
@@ -52,7 +66,7 @@ function Coupon() {
               <CardHeader>
                 <h2 className="title">Your Coupons</h2>
                 <Button color="primary" onClick={toggleModal}>Add Coupon</Button> {/* Button to open modal */}
-                <Button color="success" onClick={toggleSnakeModal}>Earn More Coupons</Button>
+                <Button color="success" onClick={toggleSnakeModal} disabled={!snakeGame}>Earn More Coupons</Button>
               </CardHeader>
               <CardBody>
                 {/* Coupon Display */}
